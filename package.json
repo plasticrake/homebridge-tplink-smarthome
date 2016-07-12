@@ -13,7 +13,13 @@
     "email": "code@plasticrake.com"
   },
   "keywords": [
-    "homebridge-plugin"
+    "homebridge-plugin",
+    "homebridge",
+    "tplink",
+    "hs100",
+    "hs110",
+    "home",
+    "smartplug"
   ],
   "engines": {
     "node": ">4.0.0",
