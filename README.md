@@ -17,7 +17,7 @@ TPLink HS100/HS110 WiFi Smart Plug plugin for [Homebridge](https://github.com/nf
 
 ## Sample Configuration
 
-Configuration for 3 bulbs. Name defaults to the name set in the Kasa app but can be overridden here.
+Configuration for 3 plugs. Name defaults to the name set in the Kasa app but can be overridden here.
 ```json
 "platforms": [{
     "platform": "Hs100",
