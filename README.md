@@ -1,12 +1,12 @@
 # homebridge-hs100
 [![NPM Version](https://img.shields.io/npm/v/homebridge-hs100.svg)](https://www.npmjs.com/package/homebridge-hs100)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?st
-  
+
 TPLink HS100/HS110 WiFi Smart Plug plugin for [Homebridge](https://github.com/nfarina/homebridge).
 
 # Installation
 
-1. Install homebridge using: `npm install -g homebridge`
+1. Install Homebridge using: `npm install -g homebridge`
 2. Install this plugin using: `npm install -g homebridge-hs100`
 3. Update your configuration file. See the sample below.
 
@@ -18,7 +18,7 @@ TPLink HS100/HS110 WiFi Smart Plug plugin for [Homebridge](https://github.com/nf
 
 ## Sample Configuration
 
-Configuration for 3 plugs. Name defaults to the name set in the Kasa app but can be overridden here.
+Configuration for 3 plugs. The name set in the Kasa App will be used as the name in Homebridge.
 ```json
 "platforms": [{
     "platform": "Hs100",
@@ -29,7 +29,6 @@ Configuration for 3 plugs. Name defaults to the name set in the Kasa app but can
         "host": "10.0.1.3",
         "port": 9999
     }, {
-        "name": "My Custom Name",
         "host": "10.0.1.4",
         "port": 9999
     }]
