@@ -12,22 +12,22 @@ module.exports = function (homebridge) {
   homebridge.registerPlatform('homebridge-hs100', 'Hs100', Hs100Platform, true);
 };
 
-function Hs100Platform (log, config, api) {
-  this.log = log;
-  this.config = config || {};
-  this.api = api;
-  this.plugs = config['plugs'] || [];
-  this.accessories = new Map();
+class Hs100Platform {
+  constructor (log, config, api) {
+    this.log = log;
+    this.config = config || {};
+    this.api = api;
+    this.plugs = config['plugs'] || [];
+    this.accessories = new Map();
 
-  this.api.on('didFinishLaunching', this.didFinishLaunching.bind(this));
-}
+    this.api.on('didFinishLaunching', this.didFinishLaunching.bind(this));
+  }
 
-Hs100Platform.prototype = {
-  configureAccessory: function (accessory) {
+  configureAccessory (accessory) {
     this.accessories.set(accessory.UUID, new Hs100Accessory(this.log, accessory));
-  },
+  }
 
-  didFinishLaunching: function () {
+  didFinishLaunching () {
     // Cached Accessories
     Promise.all(
       Array.from(this.accessories.values(), (accessory) => {
@@ -81,9 +81,9 @@ Hs100Platform.prototype = {
     }).catch((reason) => {
       this.log(reason);
     });
-  },
+  }
 
-  addAccessory: function (config, sysInfo) {
+  addAccessory (config, sysInfo) {
     const name = sysInfo.alias || config.host;
     this.log('Adding: %s', name);
 
@@ -108,30 +108,31 @@ Hs100Platform.prototype = {
     }).catch((reason) => {
       this.log(reason);
     });
-  },
+  }
 
-  removeAccessory: function (accessory) {
+  removeAccessory (accessory) {
     this.log('Removing: %s', accessory.accessory.displayName);
 
     this.accessories.delete(accessory.accessory.UUID);
     this.api.unregisterPlatformAccessories('homebridge-hs100', 'Hs100', [accessory.accessory]);
   }
-};
 
-function Hs100Accessory (log, accessory, hs100api) {
-  this.log = log;
-
-  this.accessory = accessory;
-  this.hs100api = new Hs100Api({host: accessory.context.host, port: accessory.context.port});
 }
 
-Hs100Accessory.prototype = {
-  identify: function (callback) {
+class Hs100Accessory {
+  constructor (log, accessory, hs100api) {
+    this.log = log;
+
+    this.accessory = accessory;
+    this.hs100api = new Hs100Api({host: accessory.context.host, port: accessory.context.port});
+  }
+
+  identify (callback) {
     // TODO
     callback();
-  },
+  }
 
-  configure: function (sysInfo) {
+  configure (sysInfo) {
     this.log('Configuring: %s', this.accessory.displayName);
 
     sysInfo = sysInfo ? Promise.resolve(sysInfo) : this.hs100api.getSysInfo();
@@ -171,9 +172,9 @@ Hs100Accessory.prototype = {
     }).catch((reason) => {
       this.log(reason);
     });
-  },
+  }
 
-  refresh: function (sysInfo) {
+  refresh (sysInfo) {
     sysInfo = sysInfo ? Promise.resolve(sysInfo) : this.hs100api.getSysInfo();
 
     return sysInfo.then((si) => {
@@ -200,4 +201,4 @@ Hs100Accessory.prototype = {
       this.log(reason);
     });
   }
-};
+}
