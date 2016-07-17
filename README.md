@@ -22,7 +22,7 @@ Configuration for 3 plugs. The name set in the Kasa App will be used as the name
 ```json
 "platforms": [{
     "platform": "Hs100",
-    "accessories": [{
+    "plugs": [{
         "host": "10.0.1.2",
         "port": 9999
     }, {
