@@ -43,7 +43,7 @@ class Hs100Platform {
       }));
     }).then(() => {
       // Configured Accessories
-      var promises = this.plugs.map((plug) => {
+      const promises = this.plugs.map((plug) => {
         const hs100 = new Hs100Api({host: plug.host, port: plug.port || 9999});
 
         return hs100.getSysInfo().then((si) => {
@@ -90,7 +90,7 @@ class Hs100Platform {
     const platformAccessory = new Accessory(name, UUIDGen.generate(sysInfo.deviceId), 7 /* Accessory.Categories.OUTLET */);
     platformAccessory.addService(Service.Outlet, name);
 
-    var infoService = platformAccessory.getService(Service.AccessoryInformation);
+    const infoService = platformAccessory.getService(Service.AccessoryInformation);
     infoService.addCharacteristic(Characteristic.FirmwareRevision);
     infoService.addCharacteristic(Characteristic.HardwareRevision);
 
@@ -138,11 +138,11 @@ class Hs100Accessory {
     sysInfo = sysInfo ? Promise.resolve(sysInfo) : this.hs100api.getSysInfo();
 
     return sysInfo.then((si) => {
-      var pa = this.accessory;
+      const pa = this.accessory;
 
       this.refresh(sysInfo);
 
-      var outletService = pa.getService(Service.Outlet);
+      const outletService = pa.getService(Service.Outlet);
       outletService.getCharacteristic(Characteristic.On)
         .on('get', (callback) => {
           this.hs100api.getSysInfo().then((si) => {
@@ -183,10 +183,10 @@ class Hs100Accessory {
       const name = si.alias || this.accessory.context.host;
       this.accessory.displayName = name;
 
-      var outletService = this.accessory.getService(Service.Outlet);
+      const outletService = this.accessory.getService(Service.Outlet);
       outletService.setCharacteristic(Characteristic.Name, name);
 
-      var infoService = this.accessory.getService(Service.AccessoryInformation);
+      const infoService = this.accessory.getService(Service.AccessoryInformation);
       infoService
         .setCharacteristic(Characteristic.Name, name)
         .setCharacteristic(Characteristic.Manufacturer, 'TP-Link')
