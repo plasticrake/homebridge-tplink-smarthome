@@ -101,7 +101,6 @@ class Hs100Platform {
     const accessory = new Hs100Accessory(this.log, platformAccessory);
 
     return accessory.configure(sysInfo).then(() => {
-      this.log('Adding to platform: %s', name);
       this.accessories.set(platformAccessory.UUID, accessory);
       this.api.registerPlatformAccessories('homebridge-hs100', 'Hs100', [platformAccessory]);
       return accessory;
