@@ -1,6 +1,6 @@
 'use strict';
 
-const Hs100Api = require('Hs100-api');
+const Hs100Api = require('hs100-api');
 var Accessory, Service, Characteristic, UUIDGen;
 
 module.exports = function (homebridge) {
