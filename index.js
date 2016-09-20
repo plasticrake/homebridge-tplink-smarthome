@@ -20,88 +20,72 @@ class Hs100Platform {
     this.plugs = config['plugs'] || [];
     this.accessories = new Map();
 
+    this.client = new Hs100Api.Client();
+
+    this.client.on('plug-offline', (plug) => {
+      var accessory = this.accessories.get(plug.deviceId);
+      if (accessory !== undefined) {
+        if (accessory instanceof Hs100Accessory) {
+          this.log('Offline: %s [%s]', accessory.accessory.displayName, accessory.deviceId);
+          accessory.accessory.updateReachability(false);
+        }
+      }
+    });
+
+    this.client.on('plug-online', (plug) => {
+      var accessory = this.accessories.get(plug.deviceId);
+      if (accessory === undefined) {
+        this.addAccessory(plug);
+      } else {
+        if (accessory instanceof Hs100Accessory) {
+          this.log('Online: %s [%s]', accessory.accessory.displayName, plug.deviceId);
+          accessory.accessory.updateReachability(true);
+        }
+      }
+    });
+
+    this.client.on('plug-new', (plug) => {
+      var accessory = this.accessories.get(plug.deviceId);
+      if (accessory === undefined) {
+        this.addAccessory(plug);
+      } else {
+        this.log('New Plug Online: %s [%s]', accessory.displayName, plug.deviceId);
+        var hs100Acc = new Hs100Accessory(this.log, accessory, this.client);
+        this.accessories.set(plug.deviceId, hs100Acc);
+        hs100Acc.configure(plug);
+      }
+    });
+
     this.api.on('didFinishLaunching', this.didFinishLaunching.bind(this));
   }
 
   configureAccessory (accessory) {
-    this.accessories.set(accessory.UUID, new Hs100Accessory(this.log, accessory));
+    this.accessories.set(accessory.context.deviceId, accessory);
   }
 
   didFinishLaunching () {
-    // Cached Accessories
-    Promise.all(
-      Array.from(this.accessories.values(), (accessory) => {
-        return accessory.configure().then(() => {
-          return accessory;
-        }).catch((reason) => {
-          this.log(reason);
-        });
-      })
-    ).then((values) => {
-      this.log('Done Configuring Cached Accessories: %j', values.map((e) => {
-        return e.accessory.displayName;
-      }));
-    }).then(() => {
-      // Configured Accessories
-      const promises = this.plugs.map((plug) => {
-        const hs100 = new Hs100Api({host: plug.host, port: plug.port || 9999});
-
-        return hs100.getSysInfo().then((si) => {
-          // Check if configured plug is already in the cache
-          var acc = this.accessories.get(UUIDGen.generate(si.deviceId));
-
-          if (acc) {
-            acc.inConfig = true;
-          } else {
-            // New plug
-            acc = this.addAccessory(plug, si).then((acc) => {
-              acc.inConfig = true;
-              return acc;
-            });
-          }
-
-          return acc;
-        });
-      });
-
-      Promise.all(promises).then((values) => {
-        this.log('Done Configuring Accessories: %j', values.map((e) => {
-          return e.accessory.displayName;
-        }));
-      }).catch((reason) => {
-        this.log(reason);
-      }).then(() => {
-        // Removing Cached Accessories not in Config
-        this.accessories.forEach((acc) => {
-          if (!acc.inConfig) {
-            this.removeAccessory(acc);
-          }
-        });
-      });
-    }).catch((reason) => {
-      this.log(reason);
-    });
+    this.client.startDiscovery();
   }
 
-  addAccessory (config, sysInfo) {
-    const name = sysInfo.alias || config.host;
+  addAccessory (plug) {
+    const name = plug.name;
     this.log('Adding: %s', name);
 
-    const platformAccessory = new Accessory(name, UUIDGen.generate(sysInfo.deviceId), 7 /* Accessory.Categories.OUTLET */);
+    const platformAccessory = new Accessory(name, UUIDGen.generate(plug.deviceId), 7 /* Accessory.Categories.OUTLET */);
     platformAccessory.addService(Service.Outlet, name);
 
     const infoService = platformAccessory.getService(Service.AccessoryInformation);
     infoService.addCharacteristic(Characteristic.FirmwareRevision);
     infoService.addCharacteristic(Characteristic.HardwareRevision);
 
-    platformAccessory.context.deviceId = sysInfo.deviceId;
-    platformAccessory.context.host = config.host;
-    platformAccessory.context.port = config.port || 9999;
+    platformAccessory.context.deviceId = plug.deviceId;
+    platformAccessory.context.host = plug.host;
+    platformAccessory.context.port = plug.port || 9999;
 
-    const accessory = new Hs100Accessory(this.log, platformAccessory);
+    const accessory = new Hs100Accessory(this.log, platformAccessory, this.client);
 
-    return accessory.configure(sysInfo).then(() => {
-      this.accessories.set(platformAccessory.UUID, accessory);
+    return accessory.configure(plug).then(() => {
+      this.accessories.set(plug.deviceId, accessory);
       this.api.registerPlatformAccessories('homebridge-hs100', 'Hs100', [platformAccessory]);
       return accessory;
     }).catch((reason) => {
@@ -112,18 +96,21 @@ class Hs100Platform {
   removeAccessory (accessory) {
     this.log('Removing: %s', accessory.accessory.displayName);
 
-    this.accessories.delete(accessory.accessory.UUID);
+    this.accessories.delete(accessory.accessory.deviceId);
     this.api.unregisterPlatformAccessories('homebridge-hs100', 'Hs100', [accessory.accessory]);
   }
 
 }
 
 class Hs100Accessory {
-  constructor (log, accessory, hs100api) {
+  constructor (log, accessory, client) {
     this.log = log;
 
     this.accessory = accessory;
-    this.hs100api = new Hs100Api({host: accessory.context.host, port: accessory.context.port});
+    this.client = client;
+    this.plug = client.getPlug({host: accessory.context.host, port: accessory.context.port});
+    this.deviceId = accessory.context.deviceId;
+  // this.hs100api = hs100api ; // || new Hs100Api({host: accessory.context.host, port: accessory.context.port})
   }
 
   identify (callback) {
@@ -131,20 +118,20 @@ class Hs100Accessory {
     callback();
   }
 
-  configure (sysInfo) {
+  configure (plug) {
     this.log('Configuring: %s', this.accessory.displayName);
 
-    sysInfo = sysInfo ? Promise.resolve(sysInfo) : this.hs100api.getSysInfo();
+    let plugInfo = plug ? Promise.resolve(plug.getInfo) : this.plug.getInfo();
 
-    return sysInfo.then((si) => {
+    return plugInfo.then((info) => {
       const pa = this.accessory;
 
-      this.refresh(sysInfo);
+      this.refresh(info.sysInfo);
 
       const outletService = pa.getService(Service.Outlet);
       outletService.getCharacteristic(Characteristic.On)
         .on('get', (callback) => {
-          this.hs100api.getSysInfo().then((si) => {
+          this.plug.getSysInfo().then((si) => {
             this.refresh(si);
             callback(null, si.relay_state === 1);
           }).catch((reason) => {
@@ -152,7 +139,7 @@ class Hs100Accessory {
           });
         })
         .on('set', (value, callback) => {
-          this.hs100api.setPowerState(value).then(() => {
+          this.plug.setPowerState(value).then(() => {
             callback();
           }, (reason) => {
             this.log(reason);
@@ -161,7 +148,7 @@ class Hs100Accessory {
 
       outletService.getCharacteristic(Characteristic.OutletInUse)
         .on('get', (callback) => {
-          this.hs100api.getSysInfo().then((si) => {
+          this.plug.getSysInfo().then((si) => {
             this.refresh(si);
             callback(null, si.relay_state === 1);
           }).catch((reason) => {
@@ -174,7 +161,7 @@ class Hs100Accessory {
   }
 
   refresh (sysInfo) {
-    sysInfo = sysInfo ? Promise.resolve(sysInfo) : this.hs100api.getSysInfo();
+    sysInfo = sysInfo ? Promise.resolve(sysInfo) : this.plug.getSysInfo();
 
     return sysInfo.then((si) => {
       this.accessory.updateReachability(true);

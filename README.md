@@ -18,20 +18,10 @@ TPLink HS100/HS110 WiFi Smart Plug plugin for [Homebridge](https://github.com/nf
 
 ## Sample Configuration
 
-Configuration for 3 plugs. The name set in the Kasa App will be used as the name in Homebridge.
+The name set in the Kasa App will be used as the name in Homebridge.
 ```json
 "platforms": [{
-    "platform": "Hs100",
-    "plugs": [{
-        "host": "10.0.1.2",
-        "port": 9999
-    }, {
-        "host": "10.0.1.3",
-        "port": 9999
-    }, {
-        "host": "10.0.1.4",
-        "port": 9999
-    }]
+    "platform": "Hs100"
 }],
 ```
 

@@ -9,17 +9,7 @@
     "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
 
     "platforms": [{
-        "platform": "Hs100",
-        "plugs": [{
-            "host": "10.0.1.2",
-            "port": 9999
-        }, {
-            "host": "10.0.1.3",
-            "port": 9999
-        }, {
-            "host": "10.0.1.4",
-            "port": 9999
-        }]
+        "platform": "Hs100"
     }],
 
     "accessories": []
