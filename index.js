@@ -150,7 +150,15 @@ class Hs100Accessory {
         .on('get', (callback) => {
           this.plug.getSysInfo().then((si) => {
             this.refresh(si);
-            callback(null, si.relay_state === 1);
+            // On HS110 model we'll check the current power consumption to determinate the state
+            if(si.model.toLowerCase().indexOf("hs110")) {
+              this.plug.getConsumption().then((consumption) => {
+                callback(null, consumption.get_realtime.power > 0);
+              });
+            // On HS100 we can just use relay state
+            } else {
+              callback(null, si.relay_state === 1);
+            }
           }).catch((reason) => {
             this.log(reason);
           });
