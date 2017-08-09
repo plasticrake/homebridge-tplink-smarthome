@@ -17,7 +17,7 @@ class Hs100Platform {
     this.log = log;
     this.config = config || {};
     this.api = api;
-    this.plugs = config['plugs'] || [];
+    this.plugs = this.config['plugs'] || [];
     this.accessories = new Map();
 
     this.client = new Hs100Api.Client();
