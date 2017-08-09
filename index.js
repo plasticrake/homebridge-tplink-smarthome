@@ -99,7 +99,6 @@ class Hs100Platform {
     this.accessories.delete(accessory.accessory.deviceId);
     this.api.unregisterPlatformAccessories('homebridge-hs100', 'Hs100', [accessory.accessory]);
   }
-
 }
 
 class Hs100Accessory {
@@ -151,7 +150,7 @@ class Hs100Accessory {
           this.plug.getSysInfo().then((si) => {
             this.refresh(si);
             // On HS110 model we'll check the current power consumption to determinate the state
-            if(si.model.toLowerCase().indexOf("hs110")) {
+            if (si.model.toLowerCase().indexOf('hs110')) {
               this.plug.getConsumption().then((consumption) => {
                 callback(null, consumption.get_realtime.power > 0);
               });
