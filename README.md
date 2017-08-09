@@ -27,4 +27,4 @@ The name set in the Kasa App will be used as the name in Homebridge.
 
 ## Credits
 Thanks to George Georgovassilis and Thomas Baust for reverse engineering the HS1XX protocol.
-https://georgovassilis.blogspot.com/2016/05/controlling-tp-link-hs100-wi-fi-smart.html
+https://blog.georgovassilis.com/2016/05/07/controlling-the-tp-link-hs100-wi-fi-smart-plug/
