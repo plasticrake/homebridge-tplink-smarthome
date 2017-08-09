@@ -50,7 +50,7 @@ class Hs100Platform {
         this.addAccessory(plug);
       } else {
         this.log('New Plug Online: %s [%s]', accessory.displayName, plug.deviceId);
-        var hs100Acc = new Hs100Accessory(this.log, accessory, this.client);
+        var hs100Acc = new Hs100Accessory(this.log, this.config, accessory, this.client);
         this.accessories.set(plug.deviceId, hs100Acc);
         hs100Acc.configure(plug);
       }
@@ -82,7 +82,7 @@ class Hs100Platform {
     platformAccessory.context.host = plug.host;
     platformAccessory.context.port = plug.port || 9999;
 
-    const accessory = new Hs100Accessory(this.log, platformAccessory, this.client);
+    const accessory = new Hs100Accessory(this.log, this.config, platformAccessory, this.client);
 
     return accessory.configure(plug).then(() => {
       this.accessories.set(plug.deviceId, accessory);
@@ -103,13 +103,18 @@ class Hs100Platform {
 }
 
 class Hs100Accessory {
-  constructor (log, accessory, client) {
+  constructor (log, config, accessory, client) {
     this.log = log;
-
+    this.config = config;
+    if(config['threshold'])
+      this.threshold = config['threshold'];
+    else 
+      this.threshold = 0;
     this.accessory = accessory;
     this.client = client;
     this.plug = client.getPlug({host: accessory.context.host, port: accessory.context.port});
     this.deviceId = accessory.context.deviceId;
+    this.cacheOutletInUse = false;
   // this.hs100api = hs100api ; // || new Hs100Api({host: accessory.context.host, port: accessory.context.port})
   }
 
@@ -151,18 +156,22 @@ class Hs100Accessory {
           this.plug.getSysInfo().then((si) => {
             this.refresh(si);
             // On HS110 model we'll check the current power consumption to determinate the state
-            if(si.model.toLowerCase().indexOf("hs110")) {
-              this.plug.getConsumption().then((consumption) => {
-                callback(null, consumption.get_realtime.power > 0);
+            if(si.model.toLowerCase().indexOf("hs110") != -1) {
+              this.plug.getConsumption().then((consumption) => {          
+                callback(null, consumption.get_realtime.power > this.threshold);
               });
             // On HS100 we can just use relay state
             } else {
-              callback(null, si.relay_state === 1);
+               callback(null, si.relay_state === 1);
             }
           }).catch((reason) => {
             this.log(reason);
           });
         });
+
+      // Start to track if Outlet is in use  
+      this.updateOutletInUse(outletService);
+
     }).catch((reason) => {
       this.log(reason);
     });
@@ -194,5 +203,33 @@ class Hs100Accessory {
     }).catch((reason) => {
       this.log(reason);
     });
+  }
+
+  updateOutletInUse(outletService) { 
+    this.plug.getSysInfo().then((si) => {
+            this.refresh(si);
+            // On HS110 model we'll check the current power consumption to determinate the state
+            if(si.model.toLowerCase().indexOf("hs110") != -1) {
+              this.plug.getConsumption().then((consumption) => {    
+                var inUse = consumption.get_realtime.power > this.threshold;  
+                if(inUse != null && inUse != this.cacheOutletInUse) {
+                  this.cacheOutletInUse = inUse;
+                  outletService.getCharacteristic(Characteristic.OutletInUse).setValue(this.cacheOutletInUse);
+                }
+                
+              });
+            // On HS100 we can just use relay state
+            } else {
+              var inUse = si.relay_state === 1;
+              if(inUse != null && inUse != this.cacheOutletInUse) {
+                  this.cacheOutletInUse = inUse;
+                  outletService.getCharacteristic(Characteristic.OutletInUse).setValue(this.cacheOutletInUse);
+              }
+            }
+            setTimeout(Hs100Accessory.prototype.updateOutletInUse.bind(this, outletService), 10000);
+
+          }).catch((reason) => {
+            this.log(reason);
+          });
   }
 }

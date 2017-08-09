@@ -21,9 +21,11 @@ TPLink HS100/HS110 WiFi Smart Plug plugin for [Homebridge](https://github.com/nf
 The name set in the Kasa App will be used as the name in Homebridge.
 ```json
 "platforms": [{
-    "platform": "Hs100"
+    "platform": "Hs100",
+    "threshold": "5"
 }],
 ```
+Threshold: This value refers to the current power consumption. Everything smaller than this value will set the Characteristic OutletInUse to false (e.g. useful for power supplies or devices in standby, that constantly drain a small amount of power) - Optional, Default: 0
 
 ## Credits
 Thanks to George Georgovassilis and Thomas Baust for reverse engineering the HS1XX protocol.
