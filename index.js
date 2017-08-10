@@ -26,7 +26,6 @@ class Hs100Platform {
       if (accessory !== undefined) {
         if (accessory instanceof Hs100Accessory) {
           this.log('Offline: %s [%s]', accessory.accessory.displayName, accessory.deviceId);
-          accessory.accessory.updateReachability(false);
         }
       }
     });
@@ -38,7 +37,6 @@ class Hs100Platform {
       } else {
         if (accessory instanceof Hs100Accessory) {
           this.log('Online: %s [%s]', accessory.accessory.displayName, plug.deviceId);
-          accessory.accessory.updateReachability(true);
         }
       }
     });
@@ -173,8 +171,6 @@ class Hs100Accessory {
     sysInfo = sysInfo ? Promise.resolve(sysInfo) : this.plug.getSysInfo();
 
     return sysInfo.then((si) => {
-      this.accessory.updateReachability(true);
-
       const name = si.alias || this.accessory.context.host;
       this.accessory.displayName = name;
 
