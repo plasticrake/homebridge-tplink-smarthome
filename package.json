@@ -26,10 +26,10 @@
     "homebridge": ">=0.3.0"
   },
   "dependencies": {
-    "hs100-api": "^0.3.0"
+    "hs100-api": "^0.4.0"
   },
   "devDependencies": {
-    "semistandard": "^9.0.0"
+    "semistandard": "^11.0.0"
   },
   "scripts": {
     "debug": "DEBUG=* homebridge --debug --plugin-path .",
