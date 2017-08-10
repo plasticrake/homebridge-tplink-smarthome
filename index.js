@@ -17,7 +17,6 @@ class Hs100Platform {
     this.log = log;
     this.config = config || {};
     this.api = api;
-    this.plugs = this.config['plugs'] || [];
     this.accessories = new Map();
 
     this.client = new Hs100Api.Client();
@@ -50,6 +49,8 @@ class Hs100Platform {
         this.addAccessory(plug);
       } else {
         this.log('New Plug Online: %s [%s]', accessory.displayName, plug.deviceId);
+        accessory.context.host = plug.host;
+        accessory.context.port = plug.port;
         var hs100Acc = new Hs100Accessory(this.log, accessory, this.client);
         this.accessories.set(plug.deviceId, hs100Acc);
         hs100Acc.configure(plug);
@@ -59,6 +60,7 @@ class Hs100Platform {
     this.api.on('didFinishLaunching', this.didFinishLaunching.bind(this));
   }
 
+  // Function invoked when homebridge tries to restore cached accessory
   configureAccessory (accessory) {
     this.accessories.set(accessory.context.deviceId, accessory);
   }
