@@ -22,11 +22,11 @@
     "smartplug"
   ],
   "engines": {
-    "node": ">=4.4.0",
-    "homebridge": ">=0.3.0"
+    "node": ">=6.0.0",
+    "homebridge": ">=0.4.0"
   },
   "dependencies": {
-    "hs100-api": "^0.4.0"
+    "hs100-api": "^0.5.0"
   },
   "devDependencies": {
     "semistandard": "^11.0.0"

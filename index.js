@@ -17,15 +17,18 @@ class Hs100Platform {
     this.log = log;
     this.config = config || {};
     this.api = api;
+
+    this.debug = !!(this.config.debug);
+
     this.accessories = new Map();
 
-    this.client = new Hs100Api.Client();
+    this.client = new Hs100Api.Client({ debug: this.debug });
 
     this.client.on('plug-offline', (plug) => {
       var accessory = this.accessories.get(plug.deviceId);
       if (accessory !== undefined) {
         if (accessory instanceof Hs100Accessory) {
-          this.log('Offline: %s [%s]', accessory.accessory.displayName, accessory.deviceId);
+          if (this.debug) { this.log('Offline: %s [%s]', accessory.accessory.displayName, accessory.deviceId); }
         }
       }
     });
@@ -36,7 +39,7 @@ class Hs100Platform {
         this.addAccessory(plug);
       } else {
         if (accessory instanceof Hs100Accessory) {
-          this.log('Online: %s [%s]', accessory.accessory.displayName, plug.deviceId);
+          if (this.debug) { this.log('Online: %s [%s]', accessory.accessory.displayName, plug.deviceId); }
         }
       }
     });
@@ -49,7 +52,7 @@ class Hs100Platform {
         this.log('New Plug Online: %s [%s]', accessory.displayName, plug.deviceId);
         accessory.context.host = plug.host;
         accessory.context.port = plug.port;
-        var hs100Acc = new Hs100Accessory(this.log, accessory, this.client);
+        var hs100Acc = new Hs100Accessory(this.log, this.config, accessory, this.client, plug);
         this.accessories.set(plug.deviceId, hs100Acc);
         hs100Acc.configure(plug);
       }
@@ -82,7 +85,7 @@ class Hs100Platform {
     platformAccessory.context.host = plug.host;
     platformAccessory.context.port = plug.port || 9999;
 
-    const accessory = new Hs100Accessory(this.log, platformAccessory, this.client);
+    const accessory = new Hs100Accessory(this.log, this.config, platformAccessory, this.client, plug);
 
     return accessory.configure(plug).then(() => {
       this.accessories.set(plug.deviceId, accessory);
@@ -102,19 +105,41 @@ class Hs100Platform {
 }
 
 class Hs100Accessory {
-  constructor (log, accessory, client) {
+  constructor (log, config, accessory, client, plug) {
     this.log = log;
 
     this.accessory = accessory;
     this.client = client;
-    this.plug = client.getPlug({host: accessory.context.host, port: accessory.context.port});
+    this.config = config;
+
+    this.debug = !!(this.config.debug);
+
+    this.plug = plug;
     this.deviceId = accessory.context.deviceId;
-  // this.hs100api = hs100api ; // || new Hs100Api({host: accessory.context.host, port: accessory.context.port})
+
+    this.plug.on('power-on', (plug) => { this.setOn(true); });
+    this.plug.on('power-off', (plug) => { this.setOn(false); });
+    this.plug.on('in-use', (plug) => { this.setOutletInUse(true); });
+    this.plug.on('not-in-use', (plug) => { this.setOutletInUse(false); });
   }
 
   identify (callback) {
     // TODO
     callback();
+  }
+
+  setOn (value) {
+    if (this.debug) { this.log('DEBUG: setOn(%s)', value); }
+    const outletService = this.accessory.getService(Service.Outlet);
+    const characteristic = outletService.getCharacteristic(Characteristic.On);
+    characteristic.setValue(value);
+  }
+
+  setOutletInUse (value) {
+    if (this.debug) { this.log('DEBUG: setOutletInUse(%s)', value); }
+    const outletService = this.accessory.getService(Service.Outlet);
+    const characteristic = outletService.getCharacteristic(Characteristic.OutletInUse);
+    characteristic.setValue(value);
   }
 
   configure (plug) {
