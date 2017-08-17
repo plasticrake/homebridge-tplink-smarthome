@@ -34,7 +34,7 @@ All options with defaults:
 }]
 ```
 
-By default only smart plugs are configured. I've heard reports that this can work with switches and lightbulbs, but I don't have any to test myself. Add the other deviceTypes to configure those as well. If anyone knows what those are please let me know so I can update this documentation.
+By default only smart plugs are configured. I've heard reports that this can work with switches and lightbulbs, but I don't have any to test myself. Add the other deviceTypes to configure those as well or set deviceTypes to null to try to configure all devices. If anyone knows what those are please let me know so I can update this documentation.
 
 ## Credits
 Thanks to George Georgovassilis and Thomas Baust for reverse engineering the HS1XX protocol.
