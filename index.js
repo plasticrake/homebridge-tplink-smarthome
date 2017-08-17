@@ -77,8 +77,12 @@ class Hs100Platform {
     platformAccessory.addService(Service.Outlet, name);
 
     const infoService = platformAccessory.getService(Service.AccessoryInformation);
-    infoService.addCharacteristic(Characteristic.FirmwareRevision);
-    infoService.addCharacteristic(Characteristic.HardwareRevision);
+    if (!infoService.getCharacteristic(Characteristic.FirmwareRevision)) {
+      infoService.addCharacteristic(Characteristic.FirmwareRevision);
+    }
+    if (!infoService.getCharacteristic(Characteristic.HardwareRevision)) {
+      infoService.addCharacteristic(Characteristic.HardwareRevision);
+    }
 
     platformAccessory.context.deviceId = plug.deviceId;
 
