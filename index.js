@@ -118,16 +118,16 @@ class Hs100Accessory {
     this.deviceId = accessory.context.deviceId;
 
     this.plug = plug;
+    this._plug.on('power-on', (plug) => { this.setOn(true); });
+    this._plug.on('power-off', (plug) => { this.setOn(false); });
+    this._plug.on('in-use', (plug) => { this.setOutletInUse(true); });
+    this._plug.on('not-in-use', (plug) => { this.setOutletInUse(false); });
   }
 
   get plug () { return this._plug; }
 
   set plug (plug) {
     this._plug = plug;
-    this._plug.on('power-on', (plug) => { this.setOn(true); });
-    this._plug.on('power-off', (plug) => { this.setOn(false); });
-    this._plug.on('in-use', (plug) => { this.setOutletInUse(true); });
-    this._plug.on('not-in-use', (plug) => { this.setOutletInUse(false); });
   }
 
   identify (callback) {
@@ -183,7 +183,7 @@ class Hs100Accessory {
             this.refresh(si);
             if (plug.supportsConsumption) {
               this.plug.getConsumption().then((consumption) => {
-                callback(null, consumption.get_realtime.power > 0);
+                callback(null, consumption.power > 0);
               });
             } else {
               // On plugs that don't support consumption we use relay state
