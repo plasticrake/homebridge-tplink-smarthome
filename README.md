@@ -29,7 +29,7 @@ All options with defaults:
 ```json
 "platforms": [{
     "platform": "Hs100",
-    "deviceTypes": ['IOT.SMARTPLUGSWITCH'],
+    "deviceTypes": ["IOT.SMARTPLUGSWITCH"],
     "debug": false
 }]
 ```
