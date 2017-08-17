@@ -22,7 +22,7 @@ class Hs100Platform {
 
     this.accessories = new Map();
 
-    this.client = new Hs100Api.Client({ debug: this.debug });
+    this.client = new Hs100Api.Client({ deviceTypes: this.config.deviceTypes, debug: this.debug });
 
     this.client.on('plug-offline', (plug) => {
       var accessory = this.accessories.get(plug.deviceId);
@@ -39,6 +39,7 @@ class Hs100Platform {
         this.addAccessory(plug);
       } else {
         if (accessory instanceof Hs100Accessory) {
+          accessory.plug = plug;
           if (this.debug) { this.log('Online: %s [%s]', accessory.accessory.displayName, plug.deviceId); }
         }
       }
@@ -50,8 +51,6 @@ class Hs100Platform {
         this.addAccessory(plug);
       } else {
         this.log('New Plug Online: %s [%s]', accessory.displayName, plug.deviceId);
-        accessory.context.host = plug.host;
-        accessory.context.port = plug.port;
         var hs100Acc = new Hs100Accessory(this.log, this.config, accessory, this.client, plug);
         this.accessories.set(plug.deviceId, hs100Acc);
         hs100Acc.configure(plug);
@@ -82,8 +81,6 @@ class Hs100Platform {
     infoService.addCharacteristic(Characteristic.HardwareRevision);
 
     platformAccessory.context.deviceId = plug.deviceId;
-    platformAccessory.context.host = plug.host;
-    platformAccessory.context.port = plug.port || 9999;
 
     const accessory = new Hs100Accessory(this.log, this.config, platformAccessory, this.client, plug);
 
@@ -114,13 +111,19 @@ class Hs100Accessory {
 
     this.debug = !!(this.config.debug);
 
-    this.plug = plug;
     this.deviceId = accessory.context.deviceId;
 
-    this.plug.on('power-on', (plug) => { this.setOn(true); });
-    this.plug.on('power-off', (plug) => { this.setOn(false); });
-    this.plug.on('in-use', (plug) => { this.setOutletInUse(true); });
-    this.plug.on('not-in-use', (plug) => { this.setOutletInUse(false); });
+    this.plug = plug;
+  }
+
+  get plug () { return this._plug; }
+
+  set plug (plug) {
+    this._plug = plug;
+    this._plug.on('power-on', (plug) => { this.setOn(true); });
+    this._plug.on('power-off', (plug) => { this.setOn(false); });
+    this._plug.on('in-use', (plug) => { this.setOutletInUse(true); });
+    this._plug.on('not-in-use', (plug) => { this.setOutletInUse(false); });
   }
 
   identify (callback) {
@@ -174,13 +177,12 @@ class Hs100Accessory {
         .on('get', (callback) => {
           this.plug.getSysInfo().then((si) => {
             this.refresh(si);
-            // On HS110 model we'll check the current power consumption to determinate the state
-            if (si.model.toLowerCase().indexOf('hs110')) {
+            if (plug.supportsConsumption) {
               this.plug.getConsumption().then((consumption) => {
                 callback(null, consumption.get_realtime.power > 0);
               });
-            // On HS100 we can just use relay state
             } else {
+              // On plugs that don't support consumption we use relay state
               callback(null, si.relay_state === 1);
             }
           }).catch((reason) => {
@@ -196,7 +198,7 @@ class Hs100Accessory {
     sysInfo = sysInfo ? Promise.resolve(sysInfo) : this.plug.getSysInfo();
 
     return sysInfo.then((si) => {
-      const name = si.alias || this.accessory.context.host;
+      const name = si.alias;
       this.accessory.displayName = name;
 
       const outletService = this.accessory.getService(Service.Outlet);
