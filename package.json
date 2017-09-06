@@ -23,10 +23,10 @@
   ],
   "engines": {
     "node": ">=6.0.0",
-    "homebridge": ">=0.4.0"
+    "homebridge": ">=0.4.27"
   },
   "dependencies": {
-    "hs100-api": "^0.7.0"
+    "hs100-api": "~0.8.0"
   },
   "devDependencies": {
     "semistandard": "^11.0.0"
