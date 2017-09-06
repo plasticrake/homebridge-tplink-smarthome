@@ -29,12 +29,14 @@ All options with defaults:
 ```json
 "platforms": [{
     "platform": "Hs100",
-    "deviceTypes": ["IOT.SMARTPLUGSWITCH"],
+    "deviceTypes": ["plug"],
     "debug": false
 }]
 ```
 
-By default only smart plugs are configured. I've heard reports that this can work with switches and lightbulbs, but I don't have any to test myself. Add the other deviceTypes to configure those as well or set deviceTypes to null to try to configure all devices. If anyone knows what those are please let me know so I can update this documentation.
+By default only smart plugs are configured (and switches, since they look identical to plugs in the API). I've heard reports that this can work with switches and lightbulbs, but I don't have any to test myself. Add the other deviceTypes to configure those as well or set deviceTypes to null to try to configure all devices.
+
+I only have HS100, HS105 and HS110 (plugs), so I am unable to test Switch and Bulb support. I'd gladly accept pull requests to add features or equipment donations ([amazon wishlist](http://a.co/bw0EfsB)) so I can do my own development!
 
 ## Credits
 Thanks to George Georgovassilis and Thomas Baust for reverse engineering the HS1XX protocol.
