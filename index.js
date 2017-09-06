@@ -9,7 +9,8 @@ module.exports = function (homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
-  homebridge.registerPlatform('homebridge-hs100', 'Hs100', Hs100Platform, true);
+  const dynamic = true;
+  homebridge.registerPlatform('homebridge-hs100', 'Hs100', Hs100Platform, dynamic);
 };
 
 class Hs100Platform {
@@ -27,8 +28,8 @@ class Hs100Platform {
     this.client.on('plug-offline', (plug) => {
       var accessory = this.accessories.get(plug.deviceId);
       if (accessory !== undefined) {
-        if (accessory instanceof Hs100Accessory) {
-          if (this.debug) { this.log('Offline: %s [%s]', accessory.accessory.displayName, accessory.deviceId); }
+        if (accessory instanceof PlugAccessory) {
+          this.log.debug('Offline: %s [%s]', accessory.accessory.displayName, accessory.deviceId);
         }
       }
     });
@@ -38,9 +39,9 @@ class Hs100Platform {
       if (accessory === undefined) {
         this.addAccessory(plug);
       } else {
-        if (accessory instanceof Hs100Accessory) {
+        if (accessory instanceof PlugAccessory) {
           accessory.plug = plug;
-          if (this.debug) { this.log('Online: %s [%s]', accessory.accessory.displayName, plug.deviceId); }
+          this.log.debug('Online: %s [%s]', accessory.accessory.displayName, plug.deviceId);
         }
       }
     });
@@ -50,8 +51,8 @@ class Hs100Platform {
       if (accessory === undefined) {
         this.addAccessory(plug);
       } else {
-        this.log('New Plug Online: %s [%s]', accessory.displayName, plug.deviceId);
-        var hs100Acc = new Hs100Accessory(this.log, this.config, accessory, this.client, plug);
+        this.log.info('New Plug Online: %s [%s]', accessory.displayName, plug.deviceId);
+        var hs100Acc = new PlugAccessory(this.log, this.config, accessory, this.client, plug);
         this.accessories.set(plug.deviceId, hs100Acc);
         hs100Acc.configure(plug);
       }
@@ -71,7 +72,7 @@ class Hs100Platform {
 
   addAccessory (plug) {
     const name = plug.name;
-    this.log('Adding: %s', name);
+    this.log.info('Adding: %s', name);
 
     const platformAccessory = new Accessory(name, UUIDGen.generate(plug.deviceId), 7 /* Accessory.Categories.OUTLET */);
     platformAccessory.addService(Service.Outlet, name);
@@ -86,26 +87,26 @@ class Hs100Platform {
 
     platformAccessory.context.deviceId = plug.deviceId;
 
-    const accessory = new Hs100Accessory(this.log, this.config, platformAccessory, this.client, plug);
+    const accessory = new PlugAccessory(this.log, this.config, platformAccessory, this.client, plug);
 
     return accessory.configure(plug).then(() => {
       this.accessories.set(plug.deviceId, accessory);
       this.api.registerPlatformAccessories('homebridge-hs100', 'Hs100', [platformAccessory]);
       return accessory;
     }).catch((reason) => {
-      this.log(reason);
+      this.log.error(reason);
     });
   }
 
   removeAccessory (accessory) {
-    this.log('Removing: %s', accessory.accessory.displayName);
+    this.log.info('Removing: %s', accessory.accessory.displayName);
 
     this.accessories.delete(accessory.accessory.deviceId);
     this.api.unregisterPlatformAccessories('homebridge-hs100', 'Hs100', [accessory.accessory]);
   }
 }
 
-class Hs100Accessory {
+class PlugAccessory {
   constructor (log, config, accessory, client, plug) {
     this.log = log;
 
@@ -136,21 +137,21 @@ class Hs100Accessory {
   }
 
   setOn (value) {
-    if (this.debug) { this.log('DEBUG: setOn(%s)', value); }
+    this.log.debug('%s setOn(%s)', this.accessory.accessory.displayName, value);
     const outletService = this.accessory.getService(Service.Outlet);
     const characteristic = outletService.getCharacteristic(Characteristic.On);
     characteristic.setValue(value);
   }
 
   setOutletInUse (value) {
-    if (this.debug) { this.log('DEBUG: setOutletInUse(%s)', value); }
+    this.log.debug('setOutletInUse(%s)', value);
     const outletService = this.accessory.getService(Service.Outlet);
     const characteristic = outletService.getCharacteristic(Characteristic.OutletInUse);
     characteristic.setValue(value);
   }
 
   configure (plug) {
-    this.log('Configuring: %s', this.accessory.displayName);
+    this.log.info('Configuring: %s', this.accessory.displayName);
 
     let plugInfo = plug ? Promise.resolve(plug.getInfo) : this.plug.getInfo();
 
@@ -166,14 +167,14 @@ class Hs100Accessory {
             this.refresh(si);
             callback(null, si.relay_state === 1);
           }).catch((reason) => {
-            this.log(reason);
+            this.log.error(reason);
           });
         })
         .on('set', (value, callback) => {
           this.plug.setPowerState(value).then(() => {
             callback();
           }, (reason) => {
-            this.log(reason);
+            this.log.error(reason);
           });
         });
 
@@ -190,11 +191,11 @@ class Hs100Accessory {
               callback(null, si.relay_state === 1);
             }
           }).catch((reason) => {
-            this.log(reason);
+            this.log.error(reason);
           });
         });
     }).catch((reason) => {
-      this.log(reason);
+      this.log.error(reason);
     });
   }
 
@@ -220,7 +221,7 @@ class Hs100Accessory {
       this.accessory.context.lastRefreshed = new Date();
       return this;
     }).catch((reason) => {
-      this.log(reason);
+      this.log.error(reason);
     });
   }
 }
