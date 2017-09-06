@@ -35,6 +35,7 @@
     "debug": "DEBUG=* homebridge --debug --plugin-path .",
     "test": "./node_modules/.bin/semistandard",
     "preversion": "npm test",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "cleancache": "rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories"
   }
 }
