@@ -31,8 +31,7 @@ All options with defaults:
 "platforms": [{
     "platform": "Hs100",
     "name": "TPLink",
-    "deviceTypes": ["plug"],
-    "debug": false
+    "deviceTypes": ["plug"]
 }]
 ```
 
