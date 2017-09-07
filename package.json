@@ -26,7 +26,8 @@
     "homebridge": ">=0.4.27"
   },
   "dependencies": {
-    "hs100-api": "~0.9.0"
+    "hs100-api": "~0.9.0",
+    "semver": "^5.4.1"
   },
   "devDependencies": {
     "semistandard": "^11.0.0"
