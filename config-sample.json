@@ -9,7 +9,8 @@
     "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
 
     "platforms": [{
-        "platform": "Hs100"
+        "platform": "Hs100",
+        "name": "TPLink"
     }],
 
     "accessories": []

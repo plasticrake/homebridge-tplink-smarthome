@@ -21,7 +21,8 @@ TPLink HS100/HS110 WiFi Smart Plug plugin for [Homebridge](https://github.com/nf
 Minimal:
 ```json
 "platforms": [{
-    "platform": "Hs100"
+    "platform": "Hs100",
+    "name": "TPLink"
 }]
 ```
 
@@ -29,6 +30,7 @@ All options with defaults:
 ```json
 "platforms": [{
     "platform": "Hs100",
+    "name": "TPLink",
     "deviceTypes": ["plug"],
     "debug": false
 }]
