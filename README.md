@@ -50,7 +50,8 @@ I only have HS100, HS105 and HS110 (plugs), so I am unable to test Switch and Bu
 | LB100, LB110, LB120 | bulb       | On | Not tested |
 
 ### Custom Characteristics in Eve
-Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false;
+Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false
+
 ![eveplug](https://user-images.githubusercontent.com/1383980/30236344-5ca0e866-94cc-11e7-9cf7-bb5632291082.png)
 
 ### Accessory Names
