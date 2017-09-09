@@ -19,7 +19,7 @@ TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for [Homebridge](htt
 ## Sample Configuration
 
 ##### Minimal:
-```json
+```js
 "platforms": [{
     "platform": "Hs100",
     "name": "TPLink"
@@ -27,7 +27,7 @@ TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for [Homebridge](htt
 ```
 
 ##### All options with defaults:
-```json
+```js
 "platforms": [{
     "platform": "Hs100",
     "name": "TPLink",
@@ -51,7 +51,7 @@ I only have HS100, HS105 and HS110 (plugs), so I am unable to test Switch and Bu
 
 ### Custom Characteristics in Eve
 Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false;
-![eveplug](https://user-images.githubusercontent.com/1383980/30236054-975ffab0-94c6-11e7-904e-df8aa79ca435.png)
+![eveplug](https://user-images.githubusercontent.com/1383980/30236344-5ca0e866-94cc-11e7-9cf7-bb5632291082.png)
 
 ### Accessory Names
 Note the name in Homebridge/HomeKit may be out of sync from the Kasa app. This is a [Homebridge/HomeKit limitation](https://github.com/nfarina/homebridge#limitations). You can rename your accessory through the Home app.
