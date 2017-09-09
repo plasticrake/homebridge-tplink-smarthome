@@ -16,8 +16,11 @@
     "homebridge-plugin",
     "homebridge",
     "tplink",
+    "kasa",
     "hs100",
+    "hs105"
     "hs110",
+    "hs200"
     "home",
     "smartplug"
   ],
@@ -26,13 +29,15 @@
     "homebridge": ">=0.4.27"
   },
   "dependencies": {
-    "hs100-api": "~0.9.0",
+    "hs100-api": "~0.10.0",
     "semver": "^5.4.1"
   },
   "devDependencies": {
+    "memoizee": "^0.4.10",
     "semistandard": "^11.0.0"
   },
   "scripts": {
+    "homebridge": "homebridge --plugin-path .",
     "debug": "DEBUG=* homebridge --debug --plugin-path .",
     "test": "./node_modules/.bin/semistandard",
     "preversion": "npm test",
