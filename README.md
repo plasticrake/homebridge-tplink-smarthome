@@ -18,7 +18,7 @@ TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for [Homebridge](htt
 
 ## Sample Configuration
 
-Minimal:
+##### Minimal:
 ```json
 "platforms": [{
     "platform": "Hs100",
@@ -26,7 +26,7 @@ Minimal:
 }]
 ```
 
-All options with defaults:
+##### All options with defaults:
 ```json
 "platforms": [{
     "platform": "Hs100",
@@ -49,12 +49,20 @@ I only have HS100, HS105 and HS110 (plugs), so I am unable to test Switch and Bu
 | HS200               | plug       | On <br />OutletInUse (based on On) | Reported Good <br /> Same API as Plug |
 | LB100, LB110, LB120 | bulb       | On | Not tested |
 
-## Custom Characteristics in Eve
+### Custom Characteristics in Eve
 Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false;
 ![eveplug](https://user-images.githubusercontent.com/1383980/30236054-975ffab0-94c6-11e7-904e-df8aa79ca435.png)
 
-## Accessory Names
+### Accessory Names
 Note the name in Homebridge/HomeKit may be out of sync from the Kasa app. This is a [Homebridge/HomeKit limitation](https://github.com/nfarina/homebridge#limitations). You can rename your accessory through the Home app.
+
+## Troubleshooting
+### UUID Errors
+`Error: Cannot add a bridged Accessory with the same UUID as another bridged Accessory`
+If you get an error about duplicate UUIDs you'll have to either remove your cached configuration files or manually edit them to remove the offending entry. By default they are stored in `~/.homebridge/persist` and `~/.homebridge/accessories`.
+
+You can remove them by running:
+`rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories`
 
 ## Credits
 Thanks to George Georgovassilis and Thomas Baust for reverse engineering the HS1XX protocol.
