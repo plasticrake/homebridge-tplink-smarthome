@@ -31,11 +31,12 @@ TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for [Homebridge](htt
 "platforms": [{
     "platform": "Hs100",
     "name": "TPLink",
-    "deviceTypes": ["plug"],  // set to null or ["plug", "bulb"] to try to use all TPLink device types
-    "pollingInterval": 10,    // (seconds) How often to check device status in the background
-    "switchModels": ["HS200"], // Matching models will be creatd in homekit as a switch instead of an outlet
+    "deviceTypes": ["plug"],   // set to null or ["plug", "bulb"] to try to use all TPLink device types
+    "pollingInterval": 10,     // (seconds) How often to check device status in the background
+    "switchModels": ["HS200"], // Matching models are created in homekit as a switch instead of an outlet
     "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app.
-    "cacheTtl": 0                     // (seconds) Experimental Caching Mode, off by default
+    "inUseThreshold": 0        // (Watts) For devices that support energy monitoring, min power draw for OutletInUse
+    "cacheTtl": 0              // (seconds) Experimental Caching Mode, off by default
 }]
 ```
 
@@ -45,10 +46,10 @@ I only have HS100, HS105 and HS110 (plugs), so I am unable to test Switch and Bu
 
 | Model               | deviceType | Characteristics | Support                 |
 |---------------------|------------|-----------------|-------------------------|
-| HS100, HS105, HS110 | plug       | On <br /> OutletInUse (based on On) | Good |
-| HS110               | plug       | On <br /> OutletInUse (based on energy monitoring)<br />Volts (Custom)<br />Amperes (Custom)<br />Watts (Custom)<br />VoltAmperes (Custom)<br />KilowattHours (Custom)<br />KilowattVoltAmpereHour (Custom) | Good |
-| HS200               | plug       | On <br />OutletInUse (based on On) | Reported Good <br /> Same API as Plug |
-| LB100, LB110, LB120 | bulb       | On | Not tested |
+| HS100, HS105, HS110 | plug       | On <br/> OutletInUse (based on On state) | Good |
+| HS110               | plug       | On <br/> OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) | Good |
+| HS200               | plug       | On              | Reported Good <br /> Same API as Plug |
+| LB100, LB110, LB120 | bulb       | On              | Not tested |
 
 ### Custom Characteristics in Eve
 Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false.
