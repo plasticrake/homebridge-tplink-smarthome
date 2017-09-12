@@ -25,11 +25,12 @@
     "smartplug"
   ],
   "engines": {
-    "node": ">=6.0.0",
+    "node": ">=6.5.0",
     "homebridge": ">=0.4.27"
   },
   "dependencies": {
     "hs100-api": "~0.10.0",
+    "lodash.castarray": "^4.4.0",
     "semver": "^5.4.1"
   },
   "devDependencies": {
