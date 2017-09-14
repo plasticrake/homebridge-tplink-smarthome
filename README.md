@@ -36,6 +36,7 @@ TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for [Homebridge](htt
     "switchModels": ["HS200"], // Matching models are created in homekit as a switch instead of an outlet
     "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app.
     "inUseThreshold": 0        // (Watts) For devices that support energy monitoring, min power draw for OutletInUse
+    "timeout": 5               // (seconds) communication timeout 
     "cacheTtl": 0              // (seconds) Experimental Caching Mode, off by default
 }]
 ```
