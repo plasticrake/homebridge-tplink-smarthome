@@ -36,8 +36,7 @@ TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for [Homebridge](htt
     "switchModels": ["HS200"], // Matching models are created in homekit as a switch instead of an outlet
     "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app.
     "inUseThreshold": 0        // (Watts) For devices that support energy monitoring, min power draw for OutletInUse
-    "timeout": 5               // (seconds) communication timeout 
-    "cacheTtl": 0              // (seconds) Experimental Caching Mode, off by default
+    "timeout": 5               // (seconds) communication timeout
 }]
 ```
 
@@ -45,12 +44,14 @@ By default only smart plugs are configured (and switches, since they look identi
 
 I only have HS100, HS105 and HS110 (plugs), so I am unable to test Switch and Bulb support. I'd gladly accept pull requests to add features or equipment donations ([amazon wishlist](http://a.co/bw0EfsB)) so I can do my own development!
 
-| Model               | deviceType | Characteristics | Support                 |
-|---------------------|------------|-----------------|-------------------------|
-| HS100, HS105, HS110 | plug       | On <br/> OutletInUse (based on On state) | Good |
-| HS110               | plug       | On <br/> OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) | Good |
-| HS200               | plug       | On              | Reported Good <br /> Same API as Plug |
-| LB100, LB110, LB120 | bulb       | On              | Not tested |
+| Model               | deviceType | Characteristics   | Support                 |
+|---------------------|------------|-------------------|-------------------------|
+| HS100, HS105, HS110 | plug       | On<br/>OutletInUse (based on On state) | Good |
+| HS110               | plug       | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) | Good |
+| HS200               | plug       | On                | Reported Good <br /> Same API as Plug |
+| LB100               | bulb       | On<br/>Brightness | Not tested |
+| LB110               | bulb       | On<br/>Brightness<br/>ColorTemperature | Not tested   |
+| LB120               | bulb       | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation | Not tested  |
 
 ### Custom Characteristics in Eve
 Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false.
@@ -67,6 +68,8 @@ If you get an error about duplicate UUIDs you'll have to either remove your cach
 
 You can remove them by running:
 `rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories`
+
+You may also need to un-pair and re-pair your bridge to Homekit.
 
 ## Credits
 Thanks to George Georgovassilis and Thomas Baust for reverse engineering the HS1XX protocol.
