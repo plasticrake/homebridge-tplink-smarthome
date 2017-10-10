@@ -31,27 +31,28 @@ TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for [Homebridge](htt
 "platforms": [{
     "platform": "Hs100",
     "name": "TPLink",
-    "deviceTypes": ["plug"],   // set to null or ["plug", "bulb"] to try to use all TPLink device types
+    "deviceTypes": [],         // set to [] or ["plug", "bulb"] to find all TPLink device types or ["plug"] / ["bulb"] for only plugs or bulbs
+    "macAddresses": [],        // Whitelist of mac addresses to include. If specified will ignore other devices
     "pollingInterval": 10,     // (seconds) How often to check device status in the background
     "switchModels": ["HS200"], // Matching models are created in homekit as a switch instead of an outlet
-    "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app.
-    "inUseThreshold": 0        // (Watts) For devices that support energy monitoring, min power draw for OutletInUse
+    "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app
+    "inUseThreshold": 0,       // (Watts) For plugs that support energy monitoring (HS110), min power draw for OutletInUse
     "timeout": 5               // (seconds) communication timeout
 }]
 ```
 
-By default only smart plugs are configured (and switches, since they look identical to plugs in the API). I've heard reports that this can work with switches and lightbulbs, but I don't have any to test myself. Add the other deviceTypes to configure those as well or set deviceTypes to null to try to configure all devices.
+I only have HS100, HS105 and HS110 (plugs), so I am unable to test Bulb support directly. I'd gladly accept pull requests to add features or equipment donations ([amazon wishlist](http://a.co/bw0EfsB)) so I can do my own development!
 
-I only have HS100, HS105 and HS110 (plugs), so I am unable to test Switch and Bulb support. I'd gladly accept pull requests to add features or equipment donations ([amazon wishlist](http://a.co/bw0EfsB)) so I can do my own development!
+I have written a [TP-Link device simulator](https://github.com/plasticrake/tplink-smarthome-simulator) for automated testing that includes Bulbs. So while I don't have a physical Bulb to test with, I do have virtual ones!
 
 | Model               | deviceType | Characteristics   | Support                 |
 |---------------------|------------|-------------------|-------------------------|
 | HS100, HS105, HS110 | plug       | On<br/>OutletInUse (based on On state) | Good |
 | HS110               | plug       | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) | Good |
 | HS200               | plug       | On                | Reported Good <br /> Same API as Plug |
-| LB100               | bulb       | On<br/>Brightness | Not tested |
-| LB110               | bulb       | On<br/>Brightness<br/>ColorTemperature | Not tested   |
-| LB120               | bulb       | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation | Not tested  |
+| LB100, LB110        | bulb       | On<br/>Brightness | Not tested |
+| LB120               | bulb       | On<br/>Brightness<br/>ColorTemperature | Not tested   |
+| LB130               | bulb       | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation | Not tested  |
 
 ### Custom Characteristics in Eve
 Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false.
