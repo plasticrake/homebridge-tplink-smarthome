@@ -29,18 +29,17 @@
     "homebridge": ">=0.4.27"
   },
   "dependencies": {
-    "hs100-api": "~0.14.0",
+    "hs100-api": "~0.17.0",
     "lodash.castarray": "^4.4.0",
     "semver": "^5.4.1"
   },
   "devDependencies": {
-    "memoizee": "^0.4.10",
     "semistandard": "^11.0.0"
   },
   "scripts": {
     "start": "homebridge --plugin-path .",
     "debug": "homebridge --debug --plugin-path .",
-    "test": "./node_modules/.bin/semistandard",
+    "test": "semistandard",
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
     "cleancache": "rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories"
