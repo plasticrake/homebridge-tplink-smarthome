@@ -5,10 +5,10 @@
 TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for [Homebridge](https://github.com/nfarina/homebridge).
 
 # Installation
-
-1. Install Homebridge using: `npm install -g homebridge` or `sudo npm install -g --unsafe-perm homebridge` ([more details](https://github.com/nfarina/homebridge#installation))
-2. Install this plugin using: `npm install -g homebridge-hs100`
-3. Update your configuration file. See the sample below.
+1. **Node v6.5 or greater is required.** Check by running: `node --version`
+2. Install Homebridge using: `npm install -g homebridge` or `sudo npm install -g --unsafe-perm homebridge` ([more details](https://github.com/nfarina/homebridge#installation))
+3. Install this plugin using: `npm install -g homebridge-hs100`
+4. Update your configuration file. See the sample below.
 
 # Updating
 
