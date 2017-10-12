@@ -1,6 +1,6 @@
 {
   "name": "homebridge-hs100",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for Homebridge",
   "author": "Patrick Seal",
   "license": "MIT",
