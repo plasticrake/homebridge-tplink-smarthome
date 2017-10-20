@@ -1,15 +1,15 @@
 {
-  "name": "homebridge-hs100",
-  "version": "3.7.0",
-  "description": "TPLink HS100 / HS105 / HS110 / HS200 WiFi Smart Plug plugin for Homebridge",
+  "name": "homebridge-tplink-smarthome",
+  "version": "3.8.0",
+  "description": "TPLink Smarthome plugin for Homebridge",
   "author": "Patrick Seal",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/plasticrake/homebridge-hs100.git"
+    "url": "git://github.com/plasticrake/homebridge-tplink-smarthome.git"
   },
   "bugs": {
-    "url": "https://github.com/plasticrake/homebridge-hs100/issues",
+    "url": "https://github.com/plasticrake/homebridge-tplink-smarthome/issues",
     "email": "code@plasticrake.com"
   },
   "keywords": [
@@ -17,19 +17,24 @@
     "homebridge",
     "tplink",
     "kasa",
+    "lb100",
+    "lb110",
+    "lb120",
+    "lb130",
     "hs100",
     "hs105",
     "hs110",
     "hs200",
     "home",
-    "smartplug"
+    "smartplug",
+    "smartbulb"
   ],
   "engines": {
     "node": ">=6.5.0",
     "homebridge": ">=0.4.27"
   },
   "dependencies": {
-    "hs100-api": "^0.19.0",
+    "tplink-smarthome-api": "~0.20.0",
     "lodash.castarray": "^4.4.0",
     "semver": "^5.4.1"
   },
