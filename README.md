@@ -2,7 +2,7 @@
 [![NPM Version](https://img.shields.io/npm/v/homebridge-tplink-smarthome.svg)](https://www.npmjs.com/package/homebridge-tplink-smarthome)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/Flet/semistandard)
 
-TPLink Smarthome Plugin for [Homebridge](https://github.com/nfarina/homebridge).
+TPLink Smarthome Plugin for [Homebridge](https://github.com/nfarina/homebridge). (formerly `homebridge-hs100`)
 
 **Models Supported**
 - **Plugs:** HS100, HS105, HS110, HS200
@@ -17,6 +17,10 @@ TPLink Smarthome Plugin for [Homebridge](https://github.com/nfarina/homebridge).
 ## Updating
 
 - `npm update -g homebridge-tplink-smarthome`
+
+## Note for Previous Users of  homebridge-hs100
+
+If you had `homebridge-hs100` installed previously, due to how homebridge works, you may get this error on startup: `Error: Cannot add a bridged Accessory with the same UUID as another bridged Accessory:`. You'll need to remedy this by deleting the `cachedAccessories` file, or by manually editing the file to remove the old accessories under `homebridge-hs100`. On most systems that file will be here: `~/.homebridge/accessories/cachedAccessories`.
 
 ## Configuration
 
@@ -69,12 +73,11 @@ Note the name in Homebridge/HomeKit may be out of sync from the Kasa app. This i
 ## Troubleshooting
 ### UUID Errors
 `Error: Cannot add a bridged Accessory with the same UUID as another bridged Accessory`
-If you get an error about duplicate UUIDs you'll have to either remove your cached configuration files or manually edit them to remove the offending entry. By default they are stored in `~/.homebridge/persist` and `~/.homebridge/accessories`.
+If you get an error about duplicate UUIDs you'll have to either remove your cached configuration files or manually edit them to remove the offending entry. By default they are stored in `~/.homebridge/accessories`. In some cases you may also need to remove `~/.homebridge/persist` and re-pair homebridge to your home.
 
 You can remove them by running:
-`rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories`
-
-You may also need to un-pair and re-pair your bridge to Homekit.
+- `rm -rf ~/.homebridge/accessories`
+- `rm -rf ~/.homebridge/persist`
 
 ## Credits
 Thanks to George Georgovassilis and Thomas Baust for reverse engineering the HS1XX protocol.

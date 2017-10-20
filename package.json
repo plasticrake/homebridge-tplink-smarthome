@@ -34,7 +34,7 @@
     "homebridge": ">=0.4.27"
   },
   "dependencies": {
-    "tplink-smarthome-api": "^1.0.0",
+    "tplink-smarthome-api": "~0.20.0",
     "lodash.castarray": "^4.4.0",
     "semver": "^5.4.1"
   },
