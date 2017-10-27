@@ -2,7 +2,7 @@
 [![NPM Version](https://img.shields.io/npm/v/homebridge-tplink-smarthome.svg)](https://www.npmjs.com/package/homebridge-tplink-smarthome)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/Flet/semistandard)
 
-TPLink Smarthome Plugin for [Homebridge](https://github.com/nfarina/homebridge). (formerly `homebridge-hs100`)
+TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge). (formerly `homebridge-hs100`)
 
 **Models Supported**
 - **Plugs:** HS100, HS105, HS110, HS200
@@ -29,23 +29,33 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
 ##### Minimal:
 ```js
 "platforms": [{
-    "platform": "TplinkSmarthome",
-    "name": "TplinkSmarthome"
+  "platform": "TplinkSmarthome",
+  "name": "TplinkSmarthome"
 }]
 ```
 
 ##### All options with defaults:
 ```js
 "platforms": [{
-    "platform": "TplinkSmarthome",
-    "name": "TplinkSmarthome",
-    "deviceTypes": [],         // set to [] or ["plug", "bulb"] to find all TPLink device types or ["plug"] / ["bulb"] for only plugs or bulbs
-    "macAddresses": [],        // Whitelist of mac addresses to include. If specified will ignore other devices
-    "pollingInterval": 10,     // (seconds) How often to check device status in the background
-    "switchModels": ["HS200"], // Matching models are created in homekit as a switch instead of an outlet
-    "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app
-    "inUseThreshold": 0,       // (Watts) For plugs that support energy monitoring (HS110), min power draw for OutletInUse
-    "timeout": 5               // (seconds) communication timeout
+  "platform": "TplinkSmarthome",
+  "name": "TplinkSmarthome",
+
+  ////////////////////////////////
+  // Device Discovery Options
+  ////////////////////////////////
+  "broadcast": "255.255.255.255", // Broadcast Address
+  "devices": [],         // Manual list of devices (see section below)
+  "deviceTypes": [],     // set to [] or ["plug", "bulb"] to find all TPLink device types or ["plug"] / ["bulb"] for only plugs or bulbs
+  "macAddresses": [],    // Whitelist of mac addresses to include. If specified will ignore other devices
+  "pollingInterval": 10, // (seconds) How often to check device status in the background
+
+  ////////////////////////////////
+  // Device Options
+  ////////////////////////////////
+  "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app
+  "inUseThreshold": 0,       // (Watts) For plugs that support energy monitoring (HS110), min power draw for OutletInUse
+  "switchModels": ["HS200"], // Matching models are created in homekit as a switch instead of an outlet
+  "timeout": 5               // (seconds) communication timeout
 }]
 ```
 
@@ -65,7 +75,20 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
 ### Custom Characteristics in Eve
 Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false.
 
+### Manually Specifying Devices
+If you have a network setup where UDP broadcast is not working, you can manually specify the devices you'd like this plugin to use. This will send the discovery message directly to these devices in addition to the UDP broadcast. **Note that your device must have a static IP to work.**
+```js
+"platforms": [{
+  "platform": "TplinkSmarthome",
+  "name": "TplinkSmarthome",
 
+  "devices": [
+    { host: "192.168.0.100" },
+    { host: "192.168.0.101" },
+    { host: "192.168.0.102", port: "9999" } // port defaults to "9999" but can be overriden
+  ]
+}]
+```
 
 ### Accessory Names
 Note the name in Homebridge/HomeKit may be out of sync from the Kasa app. This is a [Homebridge/HomeKit limitation](https://github.com/nfarina/homebridge#limitations). You can rename your accessory through the Home app.
