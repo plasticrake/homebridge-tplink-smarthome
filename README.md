@@ -83,9 +83,9 @@ If you have a network setup where UDP broadcast is not working, you can manually
   "name": "TplinkSmarthome",
 
   "devices": [
-    { host: "192.168.0.100" },
-    { host: "192.168.0.101" },
-    { host: "192.168.0.102", port: "9999" } // port defaults to "9999" but can be overriden
+    { "host": "192.168.0.100" },
+    { "host": "192.168.0.101" },
+    { "host": "192.168.0.102", "port": "9999" } // port defaults to "9999" but can be overriden
   ]
 }]
 ```
