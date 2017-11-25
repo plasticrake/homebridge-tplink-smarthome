@@ -18,12 +18,21 @@
 - **OS**:         <!-- The version and architecture of your operating system -->
 
 ### Configuration
-<!-- Please include the hs100 platform section of your config.json file. -->
+<!-- Please include the TplinkSmarthome platform section of your config.json file.
+Paste between the the two ``` lines below.
+-->
+```json
+
+```
 
 ### Homebridge Log / Command Output
-<!-- Paste relevant output here
+<!-- Paste relevant output between the two ``` lines below
+  - Remove any sensitive information, passwords, etc.
   - If output is long:
     - Please extract only the relevant portions if possible (remove other plugin's output, etc)
     - Consider creating a gist, etc
-  - However, please include the the beginning of the log where the initialization happens if possible
+  - However, please include the beginning of the log where the homebridge initialization happens if possible
 -->
+```
+
+```
