@@ -35,6 +35,7 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
 ```
 
 ##### All options with defaults:
+Note that comments aren't allow in JSON files. But are included here for readability.
 ```js
 "platforms": [{
   "platform": "TplinkSmarthome",
