@@ -6,7 +6,7 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 **Models Supported**
 - **Plugs:** HS100, HS105, HS110, HS200
-- **Bulbs:** LB100, LB110, LB120, LB130
+- **Bulbs:** LB100, LB110, LB120, LB130, LB200, LB230
 
 ## Installation
 1. **Node v6.5 or greater is required.** Check by running: `node --version`
@@ -61,15 +61,14 @@ Note that comments aren't allow in JSON files. But are included here for readabi
 ```
 
 
-
 | Model               | deviceType | Characteristics   |
 |---------------------|------------|-------------------|
 | HS100, HS105        | plug       | On<br/>OutletInUse (based on On state) |
 | HS110               | plug       | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
 | HS200               | plug       | On                | Reported Good <br /> Same API as Plug |
-| LB100, LB110        | bulb       | On<br/>Brightness |
+| LB100, LB110, LB200 | bulb       | On<br/>Brightness |
 | LB120               | bulb       | On<br/>Brightness<br/>ColorTemperature |
-| LB130               | bulb       | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation |
+| LB130, LB230        | bulb       | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation |
 
 <img src="https://user-images.githubusercontent.com/1383980/30236344-5ca0e866-94cc-11e7-9cf7-bb5632291082.png" align="right" alt="Eve Screenshot - Custom Characteristics" width=250>
 
