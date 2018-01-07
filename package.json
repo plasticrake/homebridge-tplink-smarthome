@@ -1,6 +1,6 @@
 {
   "name": "homebridge-tplink-smarthome",
-  "version": "3.10.0",
+  "version": "3.11.0",
   "description": "TPLink Smarthome plugin for Homebridge",
   "author": "Patrick Seal",
   "license": "MIT",
@@ -21,6 +21,8 @@
     "lb110",
     "lb120",
     "lb130",
+    "lb200",
+    "lb230",
     "hs100",
     "hs105",
     "hs110",
@@ -34,12 +36,12 @@
     "homebridge": ">=0.4.27"
   },
   "dependencies": {
-    "tplink-smarthome-api": "~0.20.1",
     "lodash.castarray": "^4.4.0",
-    "semver": "^5.4.1"
+    "semver": "^5.4.1",
+    "tplink-smarthome-api": "~0.22.0"
   },
   "devDependencies": {
-    "semistandard": "^11.0.0"
+    "semistandard": "^12.0.0"
   },
   "scripts": {
     "start": "homebridge --plugin-path .",
