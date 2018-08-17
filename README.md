@@ -56,7 +56,7 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
   "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app
   "inUseThreshold": 0,       // (Watts) For plugs that support energy monitoring (HS110), min power draw for OutletInUse
   "switchModels": ["HS200"], // Matching models are created in homekit as a switch instead of an outlet
-  "timeout": 5               // (seconds) communication timeout
+  "timeout": 15               // (seconds) communication timeout
 }]
 ```
 
