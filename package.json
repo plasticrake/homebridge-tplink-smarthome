@@ -41,7 +41,7 @@
     "tplink-smarthome-api": "~0.22.0"
   },
   "devDependencies": {
-    "semistandard": "^12.0.0"
+    "semistandard": "^13.0.1"
   },
   "scripts": {
     "start": "homebridge --plugin-path .",
