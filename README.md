@@ -1,14 +1,17 @@
 # homebridge-tplink-smarthome
+
 [![NPM Version](https://img.shields.io/npm/v/homebridge-tplink-smarthome.svg)](https://www.npmjs.com/package/homebridge-tplink-smarthome)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/Flet/semistandard)
 
 TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge). (formerly `homebridge-hs100`)
 
-**Models Supported**
+## Models Supported
+
 - **Plugs:** HS100, HS105, HS110, HS200
 - **Bulbs:** LB100, LB110, LB120, LB130, LB200, LB230
 
 ## Installation
+
 1. **Node v6.5 or greater is required.** Check by running: `node --version`
 2. Install Homebridge using: `npm install -g homebridge` or `sudo npm install -g --unsafe-perm homebridge` ([more details](https://github.com/nfarina/homebridge#installation))
 3. Install this plugin using: `npm install -g homebridge-tplink-smarthome`
@@ -26,7 +29,8 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
 
 ### Sample Configuration
 
-##### Minimal:
+#### Minimal
+
 ```js
 "platforms": [{
   "platform": "TplinkSmarthome",
@@ -34,8 +38,10 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
 }]
 ```
 
-##### All options with defaults:
+#### All options with defaults
+
 **Note that comments aren't allowed in JSON files. But are included here for readability.**
+
 ```js
 "platforms": [{
   "platform": "TplinkSmarthome",
@@ -60,23 +66,25 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
 }]
 ```
 
-
-| Model               | deviceType | Characteristics   |
-|---------------------|------------|-------------------|
-| HS100, HS105        | plug       | On<br/>OutletInUse (based on On state) |
+| Model               | deviceType | Characteristics                                                                                                                                                                                    |
+| ------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HS100, HS105        | plug       | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
 | HS110               | plug       | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
-| HS200               | plug       | On                | Reported Good <br /> Same API as Plug |
-| LB100, LB110, LB200 | bulb       | On<br/>Brightness |
-| LB120               | bulb       | On<br/>Brightness<br/>ColorTemperature |
-| LB130, LB230        | bulb       | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation |
+| HS200               | plug       | On                                                                                                                                                                                                 | Reported Good <br /> Same API as Plug |
+| LB100, LB110, LB200 | bulb       | On<br/>Brightness                                                                                                                                                                                  |
+| LB120               | bulb       | On<br/>Brightness<br/>ColorTemperature                                                                                                                                                             |
+| LB130, LB230        | bulb       | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation                                                                                                                                      |
 
 <img src="https://user-images.githubusercontent.com/1383980/30236344-5ca0e866-94cc-11e7-9cf7-bb5632291082.png" align="right" alt="Eve Screenshot - Custom Characteristics" width=250>
 
 ### Custom Characteristics in Eve
+
 Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false.
 
 ### Manually Specifying Devices
+
 If you have a network setup where UDP broadcast is not working, you can manually specify the devices you'd like this plugin to use. This will send the discovery message directly to these devices in addition to the UDP broadcast. **Note that your device must have a static IP to work.**
+
 ```js
 "platforms": [{
   "platform": "TplinkSmarthome",
@@ -91,17 +99,21 @@ If you have a network setup where UDP broadcast is not working, you can manually
 ```
 
 ### Accessory Names
+
 Note the name in Homebridge/HomeKit may be out of sync from the Kasa app. This is a [Homebridge/HomeKit limitation](https://github.com/nfarina/homebridge#limitations). You can rename your accessory through the Home app.
 
 ## Troubleshooting
+
 ### UUID Errors
+
 `Error: Cannot add a bridged Accessory with the same UUID as another bridged Accessory`
 If you get an error about duplicate UUIDs you'll have to either remove your cached configuration files or manually edit them to remove the offending entry. By default they are stored in `~/.homebridge/accessories`. In some cases you may also need to remove `~/.homebridge/persist` and re-pair homebridge to your home.
 
 You can remove them by running:
+
 - `rm -rf ~/.homebridge/accessories`
 - `rm -rf ~/.homebridge/persist`
 
 ## Credits
-Thanks to George Georgovassilis and Thomas Baust for reverse engineering the HS1XX protocol.
-https://blog.georgovassilis.com/2016/05/07/controlling-the-tp-link-hs100-wi-fi-smart-plug/
+
+Thanks to George Georgovassilis and Thomas Baust for [reverse engineering the HS1XX protocol](https://blog.georgovassilis.com/2016/05/07/controlling-the-tp-link-hs100-wi-fi-smart-plug/).
