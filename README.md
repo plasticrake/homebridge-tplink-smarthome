@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 -->
+
 # homebridge-tplink-smarthome
 
 [![NPM Version](https://img.shields.io/npm/v/homebridge-tplink-smarthome.svg)](https://www.npmjs.com/package/homebridge-tplink-smarthome)
@@ -7,7 +9,7 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 ## Models Supported
 
-- **Plugs:** HS100, HS105, HS110, HS200
+- **Plugs:** HS100, HS105, HS110, HS200, HS220, HS300
 - **Bulbs:** LB100, LB110, LB120, LB130, LB200, LB230
 
 ## Installation
