@@ -9,8 +9,21 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 ## Models Supported
 
-- **Plugs:** HS100, HS105, HS110, HS200, HS220, HS300
+- **Plugs:** HS100, HS105, HS107, HS110, HS200, HS220, HS300
 - **Bulbs:** LB100, LB110, LB120, LB130, LB200, LB230
+
+More models may be supported than listed. If you have another model working please let me know so I can add here.
+
+## Homekit
+
+| Model               | deviceType | Service   | Characteristics                                                                                                                                                                                    |
+| ------------------- | ---------- | --------- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HS100, HS105, HS107 | plug       | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
+| HS110, HS300        | plug       | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
+| HS200, HS220        | plug       | Switch    | On                                                                                                                                                                                                 | Reported Good <br /> Same API as Plug |
+| LB100, LB110, LB200 | bulb       | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
+| LB120               | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature                                                                                                                                                             |
+| LB130, LB230        | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation                                                                                                                                      |
 
 ## Installation
 
@@ -52,10 +65,11 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
   ////////////////////////////////
   // Device Discovery Options
   ////////////////////////////////
-  "broadcast": "255.255.255.255", // Broadcast Address
+  "broadcast": "255.255.255.255", // Broadcast Address. If discovery is not working tweak to match your subnet, eg: 192.168.0.255
   "devices": [],         // Manual list of devices (see section below)
   "deviceTypes": [],     // set to [] or ["plug", "bulb"] to find all TPLink device types or ["plug"] / ["bulb"] for only plugs or bulbs
-  "macAddresses": [],    // Whitelist of mac addresses to include. If specified will ignore other devices
+  "macAddresses": [],    // Whitelist of mac addresses to include. If specified will ignore other devices. Supports glob-style patterns
+  "excludeMacAddresses": [],  // Blacklist of mac addresses to exclude. Supports glob-style patterns
   "pollingInterval": 10, // (seconds) How often to check device status in the background
 
   ////////////////////////////////
@@ -63,25 +77,20 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
   ////////////////////////////////
   "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app
   "inUseThreshold": 0,       // (Watts) For plugs that support energy monitoring (HS110), min power draw for OutletInUse
-  "switchModels": ["HS200"], // Matching models are created in homekit as a switch instead of an outlet
+  "switchModels": ["HS200", "HS220"], // Matching models are created in homekit as a switch instead of an outlet
   "timeout": 15               // (seconds) communication timeout
 }]
 ```
 
-| Model               | deviceType | Characteristics                                                                                                                                                                                    |
-| ------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HS100, HS105        | plug       | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
-| HS110               | plug       | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
-| HS200               | plug       | On                                                                                                                                                                                                 | Reported Good <br /> Same API as Plug |
-| LB100, LB110, LB200 | bulb       | On<br/>Brightness                                                                                                                                                                                  |
-| LB120               | bulb       | On<br/>Brightness<br/>ColorTemperature                                                                                                                                                             |
-| LB130, LB230        | bulb       | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation                                                                                                                                      |
+##### MAC Addresses
+
+MAC Addresses are normalized, special characters are removed and made uppercase for comparison. So any format should work: `AA:BB:CC:00:11:22` or `aaBbcc001122` are valid. Glob-style pattern matching is supported: `?` will match a single character and `*` matches zero or more. To specify all MAC addresses that start with `AA` you could use `AA*`
 
 <img src="https://user-images.githubusercontent.com/1383980/30236344-5ca0e866-94cc-11e7-9cf7-bb5632291082.png" align="right" alt="Eve Screenshot - Custom Characteristics" width=250>
 
 ### Custom Characteristics in Eve
 
-Devices that support energy monitoring (HS110) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false.
+Devices that support energy monitoring (HS110, etc) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false.
 
 ### Manually Specifying Devices
 
