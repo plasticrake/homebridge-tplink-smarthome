@@ -25,8 +25,11 @@
     "lb230",
     "hs100",
     "hs105",
+    "hs107",
     "hs110",
     "hs200",
+    "hs220",
+    "hs300",
     "home",
     "smartplug",
     "smartbulb"
@@ -38,7 +41,7 @@
   "dependencies": {
     "lodash.castarray": "^4.4.0",
     "semver": "^5.6.0",
-    "tplink-smarthome-api": "~0.23.0"
+    "tplink-smarthome-api": "~1.1.0"
   },
   "devDependencies": {
     "semistandard": "^13.0.1",
