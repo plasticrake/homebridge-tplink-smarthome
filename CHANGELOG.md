@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.12.0"></a>
+# [3.12.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.11.1...v3.12.0) (2019-01-11)
+
+
+### Bug Fixes
+
+* treat HS220 as a switch by default ([9e828b3](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/9e828b3))
+
+
+### Features
+
+* add `excludeMacAddresses` configuration ([37d3ca4](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/37d3ca4))
+* add support for HS300/HS107 multi-outlet devices ([325b1f8](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/325b1f8))
+
+
+
 <a name="3.11.1"></a>
 ## [3.11.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.7.0...v3.11.1) (2018-12-03)
 
