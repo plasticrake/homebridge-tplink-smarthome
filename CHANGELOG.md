@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.13.0"></a>
+# [3.13.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.12.0...v3.13.0) (2019-01-17)
+
+
+### Bug Fixes
+
+* correctly pass timeout to Client / Device ([1481b8b](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/1481b8b))
+
+
+### Features
+
+* add HS210 to switch model list ([a247574](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/a247574))
+* skip unsupported devices ([#77](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/77)) ([1faafbf](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/1faafbf)), closes [#68](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/68)
+
+
+
 <a name="3.12.0"></a>
 # [3.12.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.11.1...v3.12.0) (2019-01-11)
 
