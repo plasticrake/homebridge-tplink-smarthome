@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.14.0"></a>
+# [3.14.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.13.0...v3.14.0) (2019-01-23)
+
+
+### Bug Fixes
+
+* **lightbulb:** check for non-zero color_temp ([8acf6e1](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/8acf6e1))
+* **lightbulb:** incorrectly testing for Hue instead of Saturation ([a823b54](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/a823b54))
+
+
+### Features
+
+* **outlet:** update energy characteristics automatically ([83c524f](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/83c524f))
+
+
+
 <a name="3.13.0"></a>
 # [3.13.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.12.0...v3.13.0) (2019-01-17)
 
