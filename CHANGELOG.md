@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.14.1"></a>
+## [3.14.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.14.0...v3.14.1) (2019-01-23)
+
+
+### Bug Fixes
+
+* update require for new index.js location ([9894520](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/9894520))
+
+
+
 <a name="3.14.0"></a>
 # [3.14.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.13.0...v3.14.0) (2019-01-23)
 
