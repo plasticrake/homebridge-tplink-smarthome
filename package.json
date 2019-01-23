@@ -48,6 +48,10 @@
     "semistandard": "^13.0.1",
     "standard-version": "^4.4.0"
   },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "start": "homebridge --plugin-path .",
     "debug": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
