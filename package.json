@@ -58,7 +58,8 @@
     "test": "semistandard",
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
-    "release": "standard-version",
+    "prerelease": "npm test",
+    "release": "standard-version --sign",
     "cleancache": "rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories"
   }
 }
