@@ -17,17 +17,18 @@ More models may be supported than listed. If you have another model working plea
 ## Homekit
 
 | Model               | deviceType | Service   | Characteristics                                                                                                                                                                                    |
-| ------------------- | ---------- | --------- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------------------- | ---------- | --------- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | HS100, HS105, HS107 | plug       | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
 | HS110, HS300        | plug       | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
-| HS200, HS210, HS220 | plug       | Switch    | On                                                                                                                                                                                                 | Reported Good <br /> Same API as Plug |
-| LB100, LB110, LB200 | bulb       | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
-| LB120               | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature                                                                                                                                                             |
-| LB130, LB230        | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation                                                                                                                                      |
+| HS200, HS210        | plug       | Switch    | On                                                                                                                                                                                                 |
+| HS220               | plug       | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
+| LB100, LB110, LB200 | bulb       | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
+| LB120               | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
+| LB130, LB230        | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
 
 ## Installation
 
-1. **Node v6.5 or greater is required.** Check by running: `node --version`
+1. **Node v8.3 or greater is required.** Check by running: `node --version`
 2. Install Homebridge using: `npm install -g homebridge` or `sudo npm install -g --unsafe-perm homebridge` ([more details](https://github.com/nfarina/homebridge#installation))
 3. Install this plugin using: `npm install -g homebridge-tplink-smarthome`
 4. Update your configuration file. See the sample below.
@@ -77,7 +78,7 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
   ////////////////////////////////
   "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app
   "inUseThreshold": 0,       // (Watts) For plugs that support energy monitoring (HS110), min power draw for OutletInUse
-  "switchModels": ["HS200", "HS210", "HS220"], // Matching models are created in homekit as a switch instead of an outlet
+  "switchModels": ["HS200", "HS210"], // Matching models are created in homekit as a Switch instead of an Outlet
   "timeout": 15               // (seconds) communication timeout
 }]
 ```
