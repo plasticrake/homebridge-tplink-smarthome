@@ -36,7 +36,7 @@
     "smartbulb"
   ],
   "engines": {
-    "node": ">=6.5.0",
+    "node": ">=8.3.0",
     "homebridge": ">=0.4.27"
   },
   "dependencies": {
