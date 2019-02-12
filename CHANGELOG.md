@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.14.1...v4.0.0) (2019-02-12)
+
+
+### Bug Fixes
+
+* regression of addCustomCharacteristics ([e087be5](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/e087be5))
+
+
+### Chores
+
+* set minimum node version to v8.3.0 ([e6abcf2](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/e6abcf2))
+
+
+### BREAKING CHANGES
+
+* minimum node version supported >=v8.3.0
+
+
+
 <a name="3.14.1"></a>
 ## [3.14.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.14.0...v3.14.1) (2019-01-23)
 
