@@ -46,7 +46,8 @@
   },
   "devDependencies": {
     "semistandard": "^13.0.1",
-    "standard-version": "^4.4.0"
+    "standard-version": "^4.4.0",
+    "tplink-smarthome-simulator": "^1.10.0"
   },
   "main": "lib/index.js",
   "files": [
@@ -55,6 +56,7 @@
   "scripts": {
     "start": "homebridge --plugin-path .",
     "debug": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
+    "debugsim": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
     "test": "semistandard",
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
