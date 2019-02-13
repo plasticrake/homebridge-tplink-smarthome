@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.1"></a>
+## [4.0.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v4.0.0...v4.0.1) (2019-02-13)
+
+
+### Bug Fixes
+
+* identify regression ([2cf302e](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/2cf302e))
+* lightbulb regressions ([3a3143d](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/3a3143d))
+
+
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v3.14.1...v4.0.0) (2019-02-12)
 
