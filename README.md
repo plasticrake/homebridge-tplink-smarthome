@@ -9,7 +9,7 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 ## Models Supported
 
-- **Plugs:** HS100, HS105, HS107, HS110, HS200, HS210, HS220, HS300
+- **Plugs:** HS100, HS103, HS105, HS107, HS110, HS200, HS210, HS220, HS300, KP400
 - **Bulbs:** LB100, LB110, LB120, LB130, LB200, LB230
 
 More models may be supported than listed. If you have another model working please let me know so I can add here.
@@ -18,7 +18,7 @@ More models may be supported than listed. If you have another model working plea
 
 | Model               | deviceType | Service   | Characteristics                                                                                                                                                                                    |
 | ------------------- | ---------- | --------- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HS100, HS105, HS107 | plug       | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
+| HS100, HS103, HS105, HS107, KP400 | plug       | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
 | HS110, HS300        | plug       | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
 | HS200, HS210        | plug       | Switch    | On                                                                                                                                                                                                 |
 | HS220               | plug       | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
