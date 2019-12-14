@@ -67,7 +67,7 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
   // Device Discovery Options
   ////////////////////////////////
   "broadcast": "255.255.255.255", // Broadcast Address. If discovery is not working tweak to match your subnet, eg: 192.168.0.255
-  "devices": [],         // Manual list of devices (see section below)
+  "devices": [],         // Manual list of devices (see "Manually Specifying Devices" section below)
   "deviceTypes": [],     // set to [] or ["plug", "bulb"] to find all TPLink device types or ["plug"] / ["bulb"] for only plugs or bulbs
   "macAddresses": [],    // Whitelist of mac addresses to include. If specified will ignore other devices. Supports glob-style patterns
   "excludeMacAddresses": [],  // Blacklist of mac addresses to exclude. Supports glob-style patterns
