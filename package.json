@@ -9,8 +9,7 @@
     "url": "git://github.com/plasticrake/homebridge-tplink-smarthome.git"
   },
   "bugs": {
-    "url": "https://github.com/plasticrake/homebridge-tplink-smarthome/issues",
-    "email": "code@plasticrake.com"
+    "url": "https://github.com/plasticrake/homebridge-tplink-smarthome/issues"
   },
   "keywords": [
     "homebridge-plugin",
