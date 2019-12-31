@@ -16,15 +16,15 @@ More models may be supported than listed. If you have another model working plea
 
 ## Homekit
 
-| Model               | deviceType | Service   | Characteristics                                                                                                                                                                                    |
-| ------------------- | ---------- | --------- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model                                    | deviceType | Service   | Characteristics                                                                                                                                                                                    |
+| ---------------------------------------- | ---------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | HS100, HS103, HS105, HS107, KP303, KP400 | plug       | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
-| HS110, HS300        | plug       | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
-| HS200, HS210        | plug       | Switch    | On                                                                                                                                                                                                 |
-| HS220               | plug       | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
-| LB100, LB110, LB200 | bulb       | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
-| LB120               | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
-| LB130, LB230        | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
+| HS110, HS300                             | plug       | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
+| HS200, HS210                             | plug       | Switch    | On                                                                                                                                                                                                 |
+| HS220                                    | plug       | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
+| LB100, LB110, LB200                      | bulb       | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
+| LB120                                    | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
+| LB130, LB230                             | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
 
 ## Installation
 
@@ -37,7 +37,7 @@ More models may be supported than listed. If you have another model working plea
 
 - `npm update -g homebridge-tplink-smarthome`
 
-## Note for Previous Users of  homebridge-hs100
+## Note for Previous Users of homebridge-hs100
 
 If you had `homebridge-hs100` installed previously, due to how homebridge works, you may get this error on startup: `Error: Cannot add a bridged Accessory with the same UUID as another bridged Accessory:`. You'll need to remedy this by deleting the `cachedAccessories` file, or by manually editing the file to remove the old accessories under `homebridge-hs100`. On most systems that file will be here: `~/.homebridge/accessories/cachedAccessories`.
 
