@@ -1,0 +1,32 @@
+{
+  "version": "0.1",
+
+  "language": "en",
+  "words": [
+    "plasticrake",
+
+    "castarray",
+
+    "callbackify",
+    "emeter",
+    "homekit",
+    "kasa",
+    "lightbulb",
+    "smartbulb",
+    "smarthome",
+    "tplink"
+  ],
+  "languageSettings": [{
+    "languageId": "markdown",
+    "local": "*",
+    "dictionaries": ["node", "typescript"]
+  }],
+  "ignorePaths": [
+    "node_modules",
+    "package.json",
+    "package-lock.json",
+    "README.md",
+    "API.md"
+  ],
+  "ignoreRegExpList": ["\/[\/*] eslint[- ].*/gi"]
+}

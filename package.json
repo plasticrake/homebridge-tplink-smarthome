@@ -48,7 +48,12 @@
     "tplink-smarthome-api": "~1.3.0"
   },
   "devDependencies": {
-    "semistandard": "^14.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
     "standard-version": "^7.0.1",
     "tplink-smarthome-simulator": "^1.10.0"
   },
@@ -60,7 +65,8 @@
     "start": "homebridge --plugin-path .",
     "debug": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
     "debugsim": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
-    "test": "semistandard",
+    "lint": "eslint --ignore-path .gitignore .",
+    "pretest": "npm run lint",
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
     "prerelease": "npm test",
