@@ -6,27 +6,34 @@
     "plasticrake",
 
     "castarray",
+    "homebridge",
 
     "callbackify",
     "emeter",
     "homekit",
     "kasa",
     "lightbulb",
+    "lightstate",
     "smartbulb",
     "smarthome",
-    "tplink"
+    "tplink",
+    "uuid"
   ],
-  "languageSettings": [{
-    "languageId": "markdown",
-    "local": "*",
-    "dictionaries": ["node", "typescript"]
-  }],
+  "languageSettings": [
+    {
+      "languageId": "markdown",
+      "local": "*",
+      "dictionaries": ["node", "typescript"]
+    }
+  ],
   "ignorePaths": [
     "node_modules",
     "package.json",
     "package-lock.json",
     "README.md",
-    "API.md"
+    "API.md",
+    "test/homebridge*/accessories/",
+    "test/homebridge*/persist/"
   ],
-  "ignoreRegExpList": ["\/[\/*] eslint[- ].*/gi"]
+  "ignoreRegExpList": ["/[/*] eslint[- ].*/gi"]
 }
