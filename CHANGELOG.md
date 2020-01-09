@@ -1,6 +1,23 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [5.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v4.0.1...v5.0.0) (2020-01-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* Requires Node v10 or later
+
+### Features
+
+* stop discovery on homebridge shutdown ([e138b42](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/e138b42a353d03d0882ca4ef94c74a42608b82c2))
+* upgrade to tplink-smarthome-api v2 ([35264b7](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/35264b78734f4ddffad1cc68526eeecd6ce7ee50))
+
+
+### Bug Fixes
+
+* broadcast config option not being set properly ([7ff7886](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/7ff78863146938f67f724be2ca7f8bf17e067718)), closes [#96](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/96)
 
 <a name="4.0.1"></a>
 ## [4.0.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v4.0.0...v4.0.1) (2019-02-13)
