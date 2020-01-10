@@ -1,0 +1,108 @@
+{
+  "pluginAlias": "TplinkSmarthome",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "TPLink Smart Home Plugin for Homebridge.",
+  "footerDisplay": "",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "TplinkSmarthome",
+        "minLength": 1,
+        "required": true
+      },
+      "addCustomCharacteristics": {
+        "type": "boolean",
+        "title": "Add Custom Characteristics (For energy monitoring in Eve app)"
+      },
+      "pollingInterval": {
+        "type": "integer",
+        "description": "How often to check device status in the background (seconds)",
+        "placeholder": "10"
+      },
+      "inUseThreshold": {
+        "type": "integer",
+        "description": "For plugs that support energy monitoring (HS110), min power draw for OutletInUse (Watts)",
+        "placeholder": "10"
+      },
+      "switchModels": {
+        "title": "Switch Models",
+        "type": "array",
+        "items": {
+          "title": "Model",
+          "type": "string"
+        }
+      },
+      "timeout": {
+        "type": "integer",
+        "title": "Timeout",
+        "description": "Communication Timeout (seconds)",
+        "placeholder": "15"
+      },
+      "broadcast": {
+        "title": "Broadcast Address",
+        "type": "string",
+        "description": "If discovery is not working tweak to match your subnet, eg: 192.168.0.255.",
+        "placeholder": "255.255.255.255"
+      },
+      "devices": {
+        "title": "Manual List Of Devices",
+        "type": "array",
+        "items": {
+          "title": "Device",
+          "type": "object",
+          "properties": {
+            "host": {
+              "title": "Host",
+              "type": "string",
+              "required": true
+            },
+            "port": {
+              "title": "Port",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "macAddresses": {
+        "title": "Whitelisted Devices",
+        "type": "array",
+        "items": {
+          "title": "Mac Address",
+          "type": "string"
+        }
+      },
+      "excludeMacAddresses": {
+        "title": "Blacklisted Devices",
+        "type": "array",
+        "items": {
+          "title": "Mac Address",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "layout": [
+    "name",
+    {
+      "type": "fieldset",
+      "title": "Advanced Settings",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        "addCustomCharacteristics",
+        "broadcast",
+        "pollingInterval",
+        "inUseThreshold",
+        "timeout",
+        {
+          "type": "help",
+          "helpvalue": "<hr><em>Additional settings to whitelist/blacklist devices and to filter devices types etc. are available. Please see <a href='https://github.com/plasticrake/homebridge-tplink-smarthome' target='_blank'>the plugin README</a> for further information.</em>"
+        }
+      ]
+    }
+  ]
+}
