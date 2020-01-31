@@ -1,0 +1,114 @@
+{
+    "pluginAlias": "TplinkSmarthome",
+    "pluginType": "platform",
+    "schema": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "title": "Name",
+                "type": "string",
+                "required": true,
+                "default": "TplinkSmarthome",
+                "description": "The name that will appear in the Home App and your homebridge log."
+            },
+            "broadcast": {
+                "title": "Broadcast",
+                "type": "string",
+                "required": false,
+                "placeholder": "255.255.255.255",
+                "description": "Broadcast Address. If discovery is not working tweak to match your subnet, eg: 192.168.0.255."
+            },
+            "devices": {
+                "type": "array",
+                "required": false,
+                "items": {
+                "title": "Devices",
+                "type": "string",
+                "pattern": "^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$"
+                },
+                "description": "Manual list of devices (see Manually Specifying Devices section on Project Page)."
+            },
+            "deviceTypes": {
+                "type": "array",
+                "required": false,
+                "items": {
+                "title": "Device Types",
+                "type": "string",
+                "pattern": "^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$"
+                },
+                "description": "Set to find all TPLink device types for only plugs and/or bulbs."
+            },
+            "macAddresses": {
+                "type": "array",
+                "required": false,
+                "items": {
+                "title": "Mac Addresses",
+                "type": "string",
+                "pattern": "^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$"
+                },
+                "description": "Whitelist of mac addresses to include. If specified will ignore other devices. Supports glob-style patterns."
+            },
+            "excludeMacAddresses": {
+                "type": "array",
+                "required": false,
+                "items": {
+                "title": "Excluded Mac Addresses",
+                "type": "string",
+                "pattern": "^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$"
+                },
+                "description": "Blacklist of mac addresses to exclude. Supports glob-style patterns."
+            },
+            "pollingInterval": {
+                "title": "Polling Interval",
+                "type": "integer",
+                "required": false,
+                "placeholder": "10",
+                "description": "How often (in seconds) to check device status in the background."
+            },
+            "inUseThreshold": {
+                "title": "In Use Threshold",
+                "type": "integer",
+                "required": false,
+                "placeholder": "15",
+                "description": "Communication timeout in seconds."
+            },
+            "switchModels": {
+                "title": "Switch Models",
+                "type": "string",
+                "oneOf": [
+                    { "title": "HS100", "enum": ["HS100"] },
+                    { "title": "HS103", "enum": ["HS103"] },
+                    { "title": "HS105", "enum": ["HS105"] },
+                    { "title": "HS107", "enum": ["HS107"] },
+                    { "title": "KP303", "enum": ["KP303"] },
+                    { "title": "KP400", "enum": ["KP400"] },
+                    { "title": "HS110", "enum": ["HS110"] },
+                    { "title": "HS300", "enum": ["HS300"] },
+                    { "title": "HS200", "enum": ["HS200"] },
+                    { "title": "HS210", "enum": ["HS210"] },
+                    { "title": "HS220", "enum": ["HS220"] },
+                    { "title": "LB100", "enum": ["LB100"] },
+                    { "title": "LB110", "enum": ["LB110"] },
+                    { "title": "LB200", "enum": ["LB200"] },
+                    { "title": "LB120", "enum": ["LB120"] },
+                    { "title": "LB130", "enum": ["LB130"] },
+                    { "title": "LB230", "enum": ["LB230"] }
+                    ],
+                "description": "Matching models are created in homekit as a Switch instead of an Outlet."
+            },
+            "timeout": {
+                "title": "Timeout",
+                "type": "integer",
+                "required": false,
+                "placeholder": "15",
+                "description": "Communication timeout in seconds."
+            },
+            "addCustomCharacteristics": {
+                "title": "Add Custom Characteristics",
+                "type": "boolean",
+                "required": false,
+                "description": "Adds energy monitoring characteristics viewable in Eve app."
+            }
+        }
+    }
+}
