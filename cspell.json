@@ -17,15 +17,14 @@
     "smartbulb",
     "smarthome",
     "tplink",
+    "unregisters",
     "uuid"
   ],
-  "languageSettings": [
-    {
-      "languageId": "markdown",
-      "local": "*",
-      "dictionaries": ["node", "typescript"]
-    }
-  ],
+  "languageSettings": [{
+    "languageId": "markdown",
+    "local": "*",
+    "dictionaries": ["node", "typescript"]
+  }],
   "ignorePaths": [
     "node_modules",
     "package.json",
