@@ -1,0 +1,2864 @@
+[{
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock HS100",
+  "UUID": "bd7d07c7-e291-416f-8376-88ee28db1213",
+  "category": 7,
+  "context": {
+    "deviceId": "A100"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS100(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS100",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:8f:58:18 A100",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.2.5 Build 171129 Rel.174814",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock HS100",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS100",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock HS105",
+  "UUID": "82957bbc-4c36-4dc1-ac1b-3fa4b4898a41",
+  "category": 7,
+  "context": {
+    "deviceId": "A105"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS105(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS105",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:d8:bf:d4 A105",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.2.9 Build 170808 Rel.145916",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock HS105",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS105",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock HS110",
+  "UUID": "9cd1a4ec-dc76-4584-8bc3-ae9dc7bc695a",
+  "category": 7,
+  "context": {
+    "deviceId": "A110"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS110(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS110",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:0d:91:8c A110",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0.8 Build 151113 Rel.24658",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock HS110",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS110",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Amperes",
+      "UUID": "E863F126-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "A",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.01,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0.12,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Total Consumption",
+      "UUID": "E863F10C-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "kWh",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.001,
+        "perms": ["pr", "ev"]
+      },
+      "value": 51.493,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Apparent Power",
+      "UUID": "E863F110-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "uint16",
+        "unit": "VA",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 15,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Volts",
+      "UUID": "E863F10A-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "V",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 122,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 3.1,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock HS110v2",
+  "UUID": "ac901427-814a-46cb-b0e1-a665c6a01360",
+  "category": 7,
+  "context": {
+    "deviceId": "A110F2"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS110(EU)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS110v2",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:B7:F3:50 A110F2",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.5.2 Build 180130 Rel.085820",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "2.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock HS110v2",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS110v2",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Amperes",
+      "UUID": "E863F126-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "A",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.01,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0.12,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Total Consumption",
+      "UUID": "E863F10C-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "kWh",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.001,
+        "perms": ["pr", "ev"]
+      },
+      "value": 51.493,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Apparent Power",
+      "UUID": "E863F110-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "uint16",
+        "unit": "VA",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 15,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Volts",
+      "UUID": "E863F10A-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "V",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 122,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 3.1,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock HS200",
+  "UUID": "15a02756-487d-4684-84cc-7a8e2c181c44",
+  "category": 8,
+  "context": {
+    "deviceId": "A200"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000049-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS200(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS200",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:46:b4:24 A200",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.1.0 Build 160521 Rel.085826",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock HS200",
+    "UUID": "00000049-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS200",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock HS220",
+  "UUID": "0125e88b-a538-4daf-ab69-f846cfc77864",
+  "category": 5,
+  "context": {
+    "deviceId": "A220"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000043-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS220(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS220",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:46:b5:34 A220",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.5.7 Build 180912 Rel.104837",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock HS220",
+    "UUID": "00000043-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock HS220",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Brightness",
+      "UUID": "00000008-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "int",
+        "unit": "percentage",
+        "minValue": 0,
+        "maxValue": 100,
+        "minStep": 1,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": 50,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock One",
+  "UUID": "8b1fc8d8-b6f4-44fb-88bb-c63f2f3acb12",
+  "category": 7,
+  "context": {
+    "deviceId": "A30000"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS300(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock One",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:EE:0C:9D A30000",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0.6 Build 180627 Rel.081000",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock One",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock One",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Amperes",
+      "UUID": "E863F126-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "A",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.01,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0.12,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Total Consumption",
+      "UUID": "E863F10C-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "kWh",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.001,
+        "perms": ["pr", "ev"]
+      },
+      "value": 51.493,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Apparent Power",
+      "UUID": "E863F110-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "uint16",
+        "unit": "VA",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 15,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Volts",
+      "UUID": "E863F10A-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "V",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 122,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 3.1,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock Two",
+  "UUID": "4b67830f-5bac-4fab-9083-895180c30346",
+  "category": 7,
+  "context": {
+    "deviceId": "A30001"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS300(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Two",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:EE:0C:9D A30001",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0.6 Build 180627 Rel.081000",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock Two",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Two",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Amperes",
+      "UUID": "E863F126-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "A",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.01,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0.12,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Total Consumption",
+      "UUID": "E863F10C-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "kWh",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.001,
+        "perms": ["pr", "ev"]
+      },
+      "value": 51.493,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Apparent Power",
+      "UUID": "E863F110-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "uint16",
+        "unit": "VA",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 15,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Volts",
+      "UUID": "E863F10A-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "V",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 122,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 3.1,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock Three",
+  "UUID": "784e86b6-abb9-471d-bc3c-7dd1ec2e3503",
+  "category": 7,
+  "context": {
+    "deviceId": "A30002"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS300(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Three",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:EE:0C:9D A30002",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0.6 Build 180627 Rel.081000",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock Three",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Three",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Amperes",
+      "UUID": "E863F126-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "A",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.01,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0.12,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Total Consumption",
+      "UUID": "E863F10C-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "kWh",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.001,
+        "perms": ["pr", "ev"]
+      },
+      "value": 51.493,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Apparent Power",
+      "UUID": "E863F110-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "uint16",
+        "unit": "VA",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 15,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Volts",
+      "UUID": "E863F10A-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "V",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 122,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 3.1,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock Four",
+  "UUID": "5f9294f1-5b5f-4500-8220-8a8457461feb",
+  "category": 7,
+  "context": {
+    "deviceId": "A30003"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS300(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Four",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:EE:0C:9D A30003",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0.6 Build 180627 Rel.081000",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock Four",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Four",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Amperes",
+      "UUID": "E863F126-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "A",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.01,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0.12,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Total Consumption",
+      "UUID": "E863F10C-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "kWh",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.001,
+        "perms": ["pr", "ev"]
+      },
+      "value": 51.493,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Apparent Power",
+      "UUID": "E863F110-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "uint16",
+        "unit": "VA",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 15,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Volts",
+      "UUID": "E863F10A-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "V",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 122,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 3.1,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock Five",
+  "UUID": "e234fa5c-e0d7-434e-8563-e7ed029c9aae",
+  "category": 7,
+  "context": {
+    "deviceId": "A30004"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS300(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Five",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:EE:0C:9D A30004",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0.6 Build 180627 Rel.081000",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock Five",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Five",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Amperes",
+      "UUID": "E863F126-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "A",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.01,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0.12,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Total Consumption",
+      "UUID": "E863F10C-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "kWh",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.001,
+        "perms": ["pr", "ev"]
+      },
+      "value": 51.493,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Apparent Power",
+      "UUID": "E863F110-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "uint16",
+        "unit": "VA",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 15,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Volts",
+      "UUID": "E863F10A-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "V",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 122,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 3.1,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock Six",
+  "UUID": "6dfd1e13-5bd0-45af-8c2d-22624bd596e9",
+  "category": 7,
+  "context": {
+    "deviceId": "A30005"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000047-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "HS300(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Six",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:EE:0C:9D A30005",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0.6 Build 180627 Rel.081000",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock Six",
+    "UUID": "00000047-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock Six",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Outlet In Use",
+      "UUID": "00000026-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "ev"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Amperes",
+      "UUID": "E863F126-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "A",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.01,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0.12,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Total Consumption",
+      "UUID": "E863F10C-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "kWh",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.001,
+        "perms": ["pr", "ev"]
+      },
+      "value": 51.493,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Apparent Power",
+      "UUID": "E863F110-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "uint16",
+        "unit": "VA",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 15,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Volts",
+      "UUID": "E863F10A-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "V",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 122,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 3.1,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock LB100",
+  "UUID": "83fc30e4-cfda-47d1-93e2-899995a4a878",
+  "category": 5,
+  "context": {
+    "deviceId": "BB100"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000043-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": true,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "LB100(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock LB100",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:49:ca:42 BB100",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.4.3 Build 170504 Rel.144921",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock LB100",
+    "UUID": "00000043-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock LB100",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Brightness",
+      "UUID": "00000008-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "int",
+        "unit": "percentage",
+        "minValue": 0,
+        "maxValue": 100,
+        "minStep": 1,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": 60,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 10.8,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock LB120",
+  "UUID": "4130cfc7-9dfe-4bfb-bb80-356bf73d4acc",
+  "category": 5,
+  "context": {
+    "deviceId": "BB120"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000043-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "LB120(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock LB120",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:90:9b:da BB120",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.1.0 Build 160630 Rel.085319",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock LB120",
+    "UUID": "00000043-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock LB120",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Brightness",
+      "UUID": "00000008-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "int",
+        "unit": "percentage",
+        "minValue": 0,
+        "maxValue": 100,
+        "minStep": 1,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": 100,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Color Temperature",
+      "UUID": "000000CE-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "uint32",
+        "unit": null,
+        "minValue": 154,
+        "maxValue": 370,
+        "minStep": 1,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": 159,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 10.8,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}, {
+  "plugin": "homebridge-tplink-smarthome",
+  "platform": "TplinkSmarthome",
+  "displayName": "Mock LB130",
+  "UUID": "46bc277f-e136-4ad8-ad82-84cf195708da",
+  "category": 5,
+  "context": {
+    "deviceId": "BB130"
+  },
+  "linkedServices": {
+    "0000003E-0000-1000-8000-0026BB765291": [],
+    "00000043-0000-1000-8000-0026BB765291": []
+  },
+  "services": [{
+    "UUID": "0000003E-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Identify",
+      "UUID": "00000014-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pw"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Manufacturer",
+      "UUID": "00000020-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "TP-Link",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Model",
+      "UUID": "00000021-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "LB130(US)",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock LB130",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Serial Number",
+      "UUID": "00000030-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "aa:aa:aa:b1:04:d3 BB130",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Firmware Revision",
+      "UUID": "00000052-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.6.0 Build 170703 Rel.141938",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hardware Revision",
+      "UUID": "00000053-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "1.0",
+      "eventOnlyCharacteristic": false
+    }]
+  }, {
+    "displayName": "Mock LB130",
+    "UUID": "00000043-0000-1000-8000-0026BB765291",
+    "characteristics": [{
+      "displayName": "Name",
+      "UUID": "00000023-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "string",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr"]
+      },
+      "value": "Mock LB130",
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "On",
+      "UUID": "00000025-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "bool",
+        "unit": null,
+        "minValue": null,
+        "maxValue": null,
+        "minStep": null,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": false,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Brightness",
+      "UUID": "00000008-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "int",
+        "unit": "percentage",
+        "minValue": 0,
+        "maxValue": 100,
+        "minStep": 1,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": 100,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Color Temperature",
+      "UUID": "000000CE-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "uint32",
+        "unit": null,
+        "minValue": 112,
+        "maxValue": 400,
+        "minStep": 1,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": 140,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Hue",
+      "UUID": "00000013-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "float",
+        "unit": "arcdegrees",
+        "minValue": 0,
+        "maxValue": 360,
+        "minStep": 1,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": 0,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Saturation",
+      "UUID": "0000002F-0000-1000-8000-0026BB765291",
+      "props": {
+        "format": "float",
+        "unit": "percentage",
+        "minValue": 0,
+        "maxValue": 100,
+        "minStep": 1,
+        "perms": ["pr", "pw", "ev"]
+      },
+      "value": 0,
+      "eventOnlyCharacteristic": false
+    }, {
+      "displayName": "Consumption",
+      "UUID": "E863F10D-079E-48FF-8F27-9C2605A29F52",
+      "props": {
+        "format": "float",
+        "unit": "W",
+        "minValue": 0,
+        "maxValue": 65535,
+        "minStep": 0.1,
+        "perms": ["pr", "ev"]
+      },
+      "value": 0,
+      "eventOnlyCharacteristic": false
+    }]
+  }]
+}]

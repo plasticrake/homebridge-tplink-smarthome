@@ -1,0 +1,167 @@
+[
+  {
+    "fixtureName": "CONTEXT_MISSING",
+    "plugin": "homebridge-tplink-smarthome",
+    "platform": "TplinkSmarthome",
+    "displayName": "HS100 Missing Context",
+    "UUID": "bd7d07c7-e291-416f-8376-88ee28db1213",
+    "category": 7,
+    "linkedServices": {
+      "0000003E-0000-1000-8000-0026BB765291": [],
+      "00000047-0000-1000-8000-0026BB765291": []
+    },
+    "services": [
+      {
+        "UUID": "0000003E-0000-1000-8000-0026BB765291",
+        "characteristics": [
+          {
+            "displayName": "Identify",
+            "UUID": "00000014-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "bool",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pw"]
+            },
+            "value": false,
+            "eventOnlyCharacteristic": false
+          },
+          {
+            "displayName": "Manufacturer",
+            "UUID": "00000020-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "string",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr"]
+            },
+            "value": "TP-Link",
+            "eventOnlyCharacteristic": false
+          },
+          {
+            "displayName": "Model",
+            "UUID": "00000021-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "string",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr"]
+            },
+            "value": "HS100(US)",
+            "eventOnlyCharacteristic": false
+          },
+          {
+            "displayName": "Name",
+            "UUID": "00000023-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "string",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr"]
+            },
+            "value": "Mock HS100",
+            "eventOnlyCharacteristic": false
+          },
+          {
+            "displayName": "Serial Number",
+            "UUID": "00000030-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "string",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr"]
+            },
+            "value": "aa:aa:aa:8f:58:18 A100",
+            "eventOnlyCharacteristic": false
+          },
+          {
+            "displayName": "Firmware Revision",
+            "UUID": "00000052-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "string",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr"]
+            },
+            "value": "1.2.5 Build 171129 Rel.174814",
+            "eventOnlyCharacteristic": false
+          },
+          {
+            "displayName": "Hardware Revision",
+            "UUID": "00000053-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "string",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr"]
+            },
+            "value": "1.0",
+            "eventOnlyCharacteristic": false
+          }
+        ]
+      },
+      {
+        "displayName": "Mock HS100",
+        "UUID": "00000047-0000-1000-8000-0026BB765291",
+        "characteristics": [
+          {
+            "displayName": "Name",
+            "UUID": "00000023-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "string",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr"]
+            },
+            "value": "Mock HS100",
+            "eventOnlyCharacteristic": false
+          },
+          {
+            "displayName": "On",
+            "UUID": "00000025-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "bool",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr", "pw", "ev"]
+            },
+            "value": false,
+            "eventOnlyCharacteristic": false
+          },
+          {
+            "displayName": "Outlet In Use",
+            "UUID": "00000026-0000-1000-8000-0026BB765291",
+            "props": {
+              "format": "bool",
+              "unit": null,
+              "minValue": null,
+              "maxValue": null,
+              "minStep": null,
+              "perms": ["pr", "ev"]
+            },
+            "value": false,
+            "eventOnlyCharacteristic": false
+          }
+        ]
+      }
+    ]
+  }
+]
