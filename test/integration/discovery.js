@@ -56,8 +56,8 @@ const teardownHomebridge = function teardownHomebridge(homebridgeServer) {
   homebridgeServer._api.emit('shutdown');
 };
 
-describe('homebridge', function() {
-  describe('startup', function() {
+describe('homebridge', function () {
+  describe('startup', function () {
     [
       { scenario: 'fresh-no-config', shouldCallPlatformConstructor: false },
       { scenario: 'fresh-with-config', shouldCallPlatformConstructor: true },
@@ -70,27 +70,27 @@ describe('homebridge', function() {
         shouldCallPlatformConstructor: false,
       },
       { scenario: 'persist-with-config', shouldCallPlatformConstructor: true },
-    ].forEach(function(scen) {
-      describe(scen.scenario, function() {
+    ].forEach(function (scen) {
+      describe(scen.scenario, function () {
         let homebridgeServer;
         let tplinkSmarthomePlatformSpy;
-        before(function() {
+        before(function () {
           homebridgeServer = setupHomebridge(scen.scenario);
           tplinkSmarthomePlatformSpy = spyOnPlatformCtor(homebridgeServer);
           homebridgeServer.run();
         });
 
-        after(function() {
+        after(function () {
           teardownHomebridge(homebridgeServer);
           sinon.restore();
         });
 
         if (scen.shouldCallPlatformConstructor) {
-          it('should call Platform constructor', function() {
+          it('should call Platform constructor', function () {
             expect(tplinkSmarthomePlatformSpy).to.have.been.calledOnce;
           });
         } else {
-          it('should not call Platform constructor', function() {
+          it('should not call Platform constructor', function () {
             expect(tplinkSmarthomePlatformSpy).to.have.not.been.called;
           });
         }

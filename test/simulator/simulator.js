@@ -98,7 +98,7 @@ devices.push(
   })
 );
 
-devices.forEach(d => {
+devices.forEach((d) => {
   d.start();
 });
 

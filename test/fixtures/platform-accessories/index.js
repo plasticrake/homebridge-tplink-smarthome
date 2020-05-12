@@ -21,11 +21,11 @@ accessoryStorage.initSync({ dir: __dirname });
 
 const platformAccessories = accessoryStorage
   .getItem('cachedAccessories.json')
-  .map(serializedAccessory => deserialize(serializedAccessory));
+  .map((serializedAccessory) => deserialize(serializedAccessory));
 
 const platformAccessoriesIssues = accessoryStorage
   .getItem('cachedAccessoriesIssues.json')
-  .map(serializedAccessory => deserialize(serializedAccessory))
+  .map((serializedAccessory) => deserialize(serializedAccessory))
   .reduce((map, platformAccessory) => {
     map.set(platformAccessory.fixtureName, platformAccessory);
     return map;
