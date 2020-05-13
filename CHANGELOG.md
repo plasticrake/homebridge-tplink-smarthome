@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.0.0...v5.1.0) (2020-05-13)
+
+
+### Features
+
+* add config.schema.json ([#109](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/109)) ([b98dd5b](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/b98dd5b55e170f6d38a628943db8a8cef0938b42))
+
+
+### Bug Fixes
+
+* add missing require()s for characteristics ([#117](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/117)) ([14a3963](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/14a39632c2ebe89ded14ae289c1a74f668506d1c)), closes [#110](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/110) [#111](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/111)
+
 ## [5.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v4.0.1...v5.0.0) (2020-01-09)
 
 
