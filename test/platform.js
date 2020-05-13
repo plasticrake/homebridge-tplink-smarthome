@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 const { expect } = require('chai');
 const rewire = require('rewire');
 
-const { API } = require('homebridge/lib/api');
+const { HomebridgeAPI } = require('homebridge/lib/api');
 
 const TplinkSmarthomePlatform = rewire('../lib/platform');
 const { TplinkAccessory } = require('../lib/tplink-accessory');
@@ -24,7 +24,7 @@ describe('TplinkSmarthomePlatform', function () {
   let platform;
   let tplinkDevice;
   beforeEach(function () {
-    platform = new TplinkSmarthomePlatform(log, {}, new API());
+    platform = new TplinkSmarthomePlatform(log, {}, new HomebridgeAPI());
 
     tplinkDevice = new EventEmitter();
     Object.assign(tplinkDevice, {
