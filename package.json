@@ -79,6 +79,7 @@
     "debugsim": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
     "lint": "eslint --ignore-path .gitignore .",
     "pretest": "npm run lint",
+    "test": "mocha",
     "preversion": "npm test",
     "postversion": "git push && git push --tags",
     "prerelease": "npm test",
