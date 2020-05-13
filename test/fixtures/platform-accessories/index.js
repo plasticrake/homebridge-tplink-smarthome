@@ -7,8 +7,8 @@ const deserialize = function deserialize(serializedAccessory) {
     serializedAccessory.UUID,
     serializedAccessory.category
   );
-  // eslint-disable-next-line no-underscore-dangle
-  platformAccessory._configFromData(serializedAccessory);
+
+  PlatformAccessory.deserialize(serializedAccessory);
 
   if (serializedAccessory.fixtureName != null) {
     platformAccessory.fixtureName = serializedAccessory.fixtureName;
