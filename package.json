@@ -1,6 +1,6 @@
 {
   "name": "homebridge-tplink-smarthome",
-  "version": "5.1.0",
+  "version": "5.1.1-beta.0",
   "description": "TPLink Smarthome plugin for Homebridge",
   "author": "Patrick Seal",
   "license": "MIT",
