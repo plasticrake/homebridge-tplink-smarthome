@@ -1,11 +1,18 @@
-module.exports = (hap) => {
-  const { Service } = hap;
+import type { HAP, PlatformAccessory, Service } from 'homebridge';
+import type HomekitDevice from './homekit-device';
+
+export default function accessoryInformation(
+  hap: HAP
+): (
+  accessory: PlatformAccessory,
+  hkDevice: HomekitDevice
+) => Service | undefined {
   const { Characteristic } = hap;
 
-  return (homebridgeAccessory, hkDevice) => {
-    const infoService = homebridgeAccessory.getService(
-      Service.AccessoryInformation
-    );
+  return (accessory: PlatformAccessory, hkDevice: HomekitDevice) => {
+    const infoService = accessory.getService(hap.Service.AccessoryInformation);
+    if (infoService === undefined) return undefined;
+
     if (!infoService.getCharacteristic(Characteristic.FirmwareRevision)) {
       infoService.addCharacteristic(Characteristic.FirmwareRevision);
     }
@@ -28,4 +35,4 @@ module.exports = (hap) => {
 
     return infoService;
   };
-};
+}

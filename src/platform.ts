@@ -1,157 +1,86 @@
-/**
- * @typedef {import('tplink-smarthome-api').Client} Client
- */
-/**
- * @typedef {import('tplink-smarthome-api').Device} Device
- */
-/**
- * @typedef {import('homebridge/lib/platformAccessory')} PlatformAccessory
- */
+// homebridge import is a const enum and not an actual import
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { APIEvent } from 'homebridge';
+import type {
+  API,
+  Categories,
+  Characteristic,
+  DynamicPlatformPlugin,
+  Logging,
+  PlatformAccessory,
+  PlatformConfig,
+  WithUUID,
+} from 'homebridge';
 
-const semver = require('semver');
-const castArray = require('lodash.castarray');
+import { satisfies } from 'semver';
+import { Client } from 'tplink-smarthome-api';
+import type { Sysinfo } from 'tplink-smarthome-api';
 
-/**
- * @type {Client}
- */
-const { Client } = require('tplink-smarthome-api');
-const Characteristics = require('./characteristics');
-const { TplinkAccessory } = require('./tplink-accessory');
-const { lookup } = require('./utils');
+import { parseConfig } from './config';
+import type { TplinkSmarthomeConfig } from './config';
+import Characteristics from './characteristics';
+import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
+import TplinkAccessory from './tplink-accessory';
+import { lookup, lookupCharacteristicNameByUUID, isObjectLike } from './utils';
+import type { TplinkDevice } from './utils';
 
+// @ts-ignore: okay for reading json
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageConfig = require('../package.json');
 
-/**
- * @private
- */
-const configSetup = function configSetup() {
-  const c = this.config;
-  c.addCustomCharacteristics =
-    c.addCustomCharacteristics == null ? true : c.addCustomCharacteristics;
-  c.deviceTypes = c.deviceTypes == null ? [] : castArray(c.deviceTypes);
-  c.switchModels = c.switchModels == null ? ['HS200', 'HS210'] : c.switchModels; // null = default
-  c.switchModels = c.switchModels === '' ? [] : castArray(c.switchModels); // '' = [] (no match)
+export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
+  public readonly Service = this.api.hap.Service;
 
-  c.discoveryOptions = c.discoveryOptions || {};
-  const dis = c.discoveryOptions;
-  dis.broadcast = dis.broadcast || c.broadcast;
-  dis.discoveryInterval =
-    dis.discoveryInterval || c.pollingInterval * 1000 || 10000;
-  dis.deviceTypes = dis.deviceTypes || c.deviceTypes;
-  dis.deviceOptions = dis.deviceOptions || c.deviceOptions || {};
-  dis.macAddresses = dis.macAddresses || c.macAddresses || [];
-  dis.excludeMacAddresses =
-    dis.excludeMacAddresses || c.excludeMacAddresses || [];
-  if (Array.isArray(c.devices)) {
-    dis.devices = c.devices;
-  }
+  public readonly Characteristic = this.api.hap.Characteristic;
 
-  c.defaultSendOptions = c.defaultSendOptions || {};
-  const dso = c.defaultSendOptions;
-  dso.timeout = dso.timeout || c.timeout * 1000 || 15000;
+  public customCharacteristics: {
+    [key: string]: WithUUID<new () => Characteristic>;
+  };
 
-  const dev = dis.deviceOptions;
-  dev.defaultSendOptions = dev.defaultSendOptions || { ...dso };
-  dev.inUseThreshold = dev.inUseThreshold || c.inUseThreshold;
-};
+  public config: TplinkSmarthomeConfig;
 
-/**
- *
- * @private
- * @param {TplinkSmarthomePlatform} platform
- * @param {PlatformAccessory} accessory
- * @param {Device} tplinkDevice
- * @returns
- */
-const createTplinkAccessory = function createTplinkAccessory(
-  platform,
-  accessory,
-  tplinkDevice
-) {
-  const { config } = platform;
-  const { Categories } = platform.homebridge.hap.Accessory;
-  const { Service } = platform.homebridge.hap;
+  private readonly homebridgeAccessories: Map<
+    string,
+    PlatformAccessory
+  > = new Map();
 
-  const [category, services] = (() => {
-    if (tplinkDevice.deviceType === 'bulb') {
-      return [Categories.LIGHTBULB, [Service.Lightbulb]];
-    }
-    // plug
-    if (
-      config.switchModels &&
-      config.switchModels.findIndex((m) => tplinkDevice.model.includes(m)) !==
-        -1
-    ) {
-      return [Categories.SWITCH, [Service.Switch]];
-    }
-    if (tplinkDevice.supportsDimmer) {
-      return [Categories.LIGHTBULB, [Service.Lightbulb]];
-    }
-    return [Categories.OUTLET, [Service.Outlet]];
-  })();
+  private readonly deviceAccessories: Map<string, TplinkAccessory> = new Map();
 
-  return new TplinkAccessory(
-    platform,
-    platform.config,
-    accessory,
-    tplinkDevice,
-    category,
-    services
-  );
-};
-
-class TplinkSmarthomePlatform {
-  constructor(log, config, homebridge) {
-    this.log = log;
-    this.config = config || {};
-    this.homebridge = homebridge;
-
-    this.customCharacteristics = Characteristics(homebridge.hap.Characteristic);
-
+  constructor(
+    public readonly log: Logging,
+    config: PlatformConfig,
+    public readonly api: API
+  ) {
     this.log.info(
       '%s v%s, node %s, homebridge v%s',
       packageConfig.name,
       packageConfig.version,
       process.version,
-      homebridge.serverVersion
+      api.serverVersion
     );
-    if (!semver.satisfies(process.version, packageConfig.engines.node)) {
+    if (!satisfies(process.version, packageConfig.engines.node)) {
       this.log.error(
         'Error: not using minimum node version %s',
         packageConfig.engines.node
       );
     }
-    this.log.debug('config.json: %j', config);
 
-    configSetup.call(this);
+    this.log.debug('config.json: %j', config);
+    this.config = parseConfig(config);
     this.log.debug('config: %j', this.config);
 
-    /**
-     * @member {Map<string, PlatformAccessory>}
-     * @private
-     */
-    this.homebridgeAccessories = new Map();
-    /**
-     * @member {Map<string, TplinkAccessory>}
-     * @private
-     */
-    this.deviceAccessories = new Map();
+    this.customCharacteristics = Characteristics(api.hap.Characteristic);
 
-    const TplinkSmarthomeLog = {
-      ...this.log,
-      prefix: `${this.log.prefix || 'TplinkSmarthome'}.API`,
-    };
+    const TplinkSmarthomeLog: Logging = Object.assign(() => {}, this.log, {
+      prefix: `${this.log.prefix || PLATFORM_NAME}.API`,
+    });
 
-    /**
-     * @member {Client}
-     * @private
-     */
-    this.client = new Client({
+    const client = new Client({
       logger: TplinkSmarthomeLog,
       defaultSendOptions: this.config.defaultSendOptions,
     });
 
-    this.client.on('device-new', (device) => {
+    client.on('device-new', (device: TplinkDevice) => {
       this.log.info(
         'New Device Online: [%s] %s [%s]',
         device.alias,
@@ -163,7 +92,7 @@ class TplinkSmarthomePlatform {
       this.addAccessory(device);
     });
 
-    this.client.on('device-online', (device) => {
+    client.on('device-online', (device: TplinkDevice) => {
       this.log.debug(
         'Device Online: [%s] %s [%s]',
         device.alias,
@@ -175,7 +104,7 @@ class TplinkSmarthomePlatform {
       this.addAccessory(device);
     });
 
-    this.client.on('device-offline', (device) => {
+    client.on('device-offline', (device: TplinkDevice) => {
       const deviceAccessory = this.deviceAccessories.get(device.id);
       if (deviceAccessory !== undefined) {
         this.log.debug(
@@ -189,72 +118,120 @@ class TplinkSmarthomePlatform {
       }
     });
 
-    this.homebridge.on('didFinishLaunching', () => {
-      this.log.debug('didFinishLaunching');
-      this.client.startDiscovery({
+    this.api.on(APIEvent.DID_FINISH_LAUNCHING, () => {
+      this.log.debug(APIEvent.DID_FINISH_LAUNCHING);
+      client.startDiscovery({
         ...this.config.discoveryOptions,
-        filterCallback: (si) => {
+        filterCallback: (si: Sysinfo) => {
           return si.deviceId != null && si.deviceId.length > 0;
         },
       });
     });
 
-    this.homebridge.on('shutdown', () => {
+    this.api.on('shutdown', () => {
       this.log.debug('shutdown');
-      this.client.stopDiscovery();
+      client.stopDiscovery();
     });
+  }
 
-    this.getCategoryName = lookup.bind(
-      homebridge.hap.Accessory.Categories,
-      null
-    );
-    this.getServiceName = lookup.bind(
-      homebridge.hap.Service,
-      (thisKeyValue, value) => thisKeyValue.UUID === value.UUID
-    );
+  private createTplinkAccessory(
+    accessory: PlatformAccessory | undefined,
+    tplinkDevice: TplinkDevice
+  ): TplinkAccessory {
+    const { config, Service } = this;
+    const { Accessory } = this.api.hap;
 
-    this.getCharacteristicName = (characteristic) => {
-      return (
-        characteristic.name ||
-        characteristic.displayName ||
-        lookup.bind(
-          homebridge.hap.Characteristic,
-          (thisKeyValue, value) => thisKeyValue.UUID === value.UUID
-        )(characteristic)
+    const [category, services] = ((): [
+      Categories,
+      Array<WithUUID<typeof Service>>
+    ] => {
+      if (tplinkDevice.deviceType === 'bulb') {
+        return [Accessory.Categories.LIGHTBULB, [Service.Lightbulb]];
+      }
+      // plug
+      if (
+        config.switchModels &&
+        config.switchModels.findIndex((m) => tplinkDevice.model.includes(m)) !==
+          -1
+      ) {
+        return [Accessory.Categories.SWITCH, [Service.Switch]];
+      }
+      if (tplinkDevice.supportsDimmer) {
+        return [Accessory.Categories.LIGHTBULB, [Service.Lightbulb]];
+      }
+      return [Accessory.Categories.OUTLET, [Service.Outlet]];
+    })();
+
+    return new TplinkAccessory(
+      this,
+      this.config,
+      accessory,
+      tplinkDevice,
+      category,
+      services
+    );
+  }
+
+  getCategoryName(category: Categories): string | undefined {
+    // @ts-ignore: this should work
+    return this.api.hap.Accessory.Categories[category];
+    // return lookup.bind(
+    //   null,
+    //   this.api.hap.Accessory.Categories,
+    //   undefined
+    // )(category);
+  }
+
+  getServiceName(service: { UUID: string }): string | undefined {
+    return lookup(
+      this.api.hap.Service,
+      (thisKeyValue, value) =>
+        isObjectLike(thisKeyValue) &&
+        'UUID' in thisKeyValue &&
+        thisKeyValue.UUID === value,
+      service.UUID
+    );
+  }
+
+  getCharacteristicName(
+    characteristic: WithUUID<{ name?: string; displayName?: string }>
+  ): string | undefined {
+    if ('name' in characteristic && characteristic.name !== undefined)
+      return characteristic.name;
+    if (
+      'displayName' in characteristic &&
+      characteristic.displayName !== undefined
+    )
+      return characteristic.displayName;
+
+    if ('UUID' in characteristic) {
+      return lookupCharacteristicNameByUUID(
+        this.api.hap.Characteristic,
+        characteristic.UUID
       );
-    };
+    }
+    return undefined;
   }
 
   /**
    * Registers a Homebridge PlatformAccessory.
    *
    * Calls {@link external:homebridge.API#registerPlatformAccessories}
-   *
-   * @private
-   * @param {PlatformAccessory} platformAccessory
-   * @returns {void}
-   * @memberof TplinkSmarthomePlatform
    */
-  registerPlatformAccessory(platformAccessory) {
+  registerPlatformAccessory(platformAccessory: PlatformAccessory): void {
     this.log.debug(
       'registerPlatformAccessory(%s)',
       platformAccessory.displayName
     );
-    this.homebridge.registerPlatformAccessories(
-      'homebridge-tplink-smarthome',
-      'TplinkSmarthome',
-      [platformAccessory]
-    );
+    this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
+      platformAccessory,
+    ]);
   }
 
   /**
    * Function invoked when homebridge tries to restore cached accessory
-   *
-   * @param {PlatformAccessory} accessory
-   * @returns {void}
-   * @memberof TplinkSmarthomePlatform
    */
-  configureAccessory(accessory) {
+  configureAccessory(accessory: PlatformAccessory): void {
     this.log.info(
       'Configuring cached accessory: [%s] %s %s',
       accessory.displayName,
@@ -267,13 +244,8 @@ class TplinkSmarthomePlatform {
 
   /**
    * Adds a new or existing real device.
-   *
-   * @private
-   * @param {Device} device
-   * @returns {void}
-   * @memberof TplinkSmarthomePlatform
    */
-  addAccessory(device) {
+  private addAccessory(device: TplinkDevice): void {
     // TODO: refactor this function
     const deviceId = device.id;
 
@@ -284,7 +256,7 @@ class TplinkSmarthomePlatform {
 
     let deviceAccessory = this.deviceAccessories.get(deviceId);
 
-    if (deviceAccessory) {
+    if (deviceAccessory !== undefined) {
       if (device.deviceType === 'plug' && device.supportsEmeter) {
         this.log.debug('getEmeterRealtime [%s]', device.alias);
         device.emeter.getRealtime().catch((reason) => {
@@ -302,10 +274,10 @@ class TplinkSmarthomePlatform {
       deviceId
     );
 
-    const uuid = this.homebridge.hap.uuid.generate(deviceId);
+    const uuid = this.api.hap.uuid.generate(deviceId);
     const homebridgeAccessory = this.homebridgeAccessories.get(uuid);
 
-    deviceAccessory = createTplinkAccessory(this, homebridgeAccessory, device);
+    deviceAccessory = this.createTplinkAccessory(homebridgeAccessory, device);
 
     this.deviceAccessories.set(deviceId, deviceAccessory);
     this.homebridgeAccessories.set(uuid, deviceAccessory.homebridgeAccessory);
@@ -313,23 +285,15 @@ class TplinkSmarthomePlatform {
 
   /**
    * Removes an accessory and unregisters it from Homebridge
-   *
-   * @private
-   * @param {PlatformAccessory} homebridgeAccessory
-   * @returns {void}
-   * @memberof TplinkSmarthomePlatform
    */
-  removeAccessory(homebridgeAccessory) {
+  // @ts-ignore: future use
+  private removeAccessory(homebridgeAccessory: PlatformAccessory): void {
     this.log.info('Removing: %s', homebridgeAccessory.displayName);
 
     this.deviceAccessories.delete(homebridgeAccessory.context.deviceId);
     this.homebridgeAccessories.delete(homebridgeAccessory.UUID);
-    this.homebridge.unregisterPlatformAccessories(
-      'homebridge-tplink-smarthome',
-      'TplinkSmarthome',
-      [homebridgeAccessory]
-    );
+    this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
+      homebridgeAccessory,
+    ]);
   }
 }
-
-module.exports = TplinkSmarthomePlatform;

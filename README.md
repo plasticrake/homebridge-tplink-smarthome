@@ -27,7 +27,7 @@ More models may be supported than listed. If you have another model working plea
 
 ## Installation
 
-1. **Node v8.3 or greater is required.** Check by running: `node --version`
+1. **Node v10 or greater is required.** Check by running: `node --version`
 2. Install Homebridge using: `npm install -g homebridge` or `sudo npm install -g --unsafe-perm homebridge` ([more details](https://github.com/nfarina/homebridge#installation))
 3. Install this plugin using: `npm install -g homebridge-tplink-smarthome`
 4. Update your configuration file. See the sample below.

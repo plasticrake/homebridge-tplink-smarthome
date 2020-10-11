@@ -1,11 +1,8 @@
-const TplinkSmarthomePlatform = require('./platform');
+import type { API } from 'homebridge';
 
-module.exports = (homebridge) => {
-  const dynamic = true;
-  homebridge.registerPlatform(
-    'homebridge-tplink-smarthome',
-    'TplinkSmarthome',
-    TplinkSmarthomePlatform,
-    dynamic
-  );
+import { PLATFORM_NAME } from './settings';
+import TplinkSmarthomePlatform from './platform';
+
+export = (api: API): void => {
+  api.registerPlatform(PLATFORM_NAME, TplinkSmarthomePlatform);
 };

@@ -1,12 +1,17 @@
-module.exports = (DefaultCharacteristic) => {
-  class Watts extends DefaultCharacteristic {
+import type { Characteristic, WithUUID } from 'homebridge';
+
+export default function watts(
+  DefaultCharacteristic: typeof Characteristic
+): WithUUID<new () => Characteristic> {
+  return class Watts extends DefaultCharacteristic {
+    static readonly UUID = 'E863F10D-079E-48FF-8F27-9C2605A29F52';
+
     constructor() {
       super('Consumption', Watts.UUID, {
+        // @ts-ignore: custom unit
         unit: 'W',
         minStep: 0.1,
       });
     }
-  }
-  Watts.UUID = 'E863F10D-079E-48FF-8F27-9C2605A29F52';
-  return Watts;
-};
+  };
+}

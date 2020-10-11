@@ -1,6 +1,17 @@
-module.exports = (Characteristic) => {
+import type {
+  Characteristic as CharacteristicClass,
+  CharacteristicProps,
+} from 'homebridge';
+
+export default function defaultCharacteristic(
+  Characteristic: typeof CharacteristicClass
+): typeof CharacteristicClass {
   return class DefaultCharacteristic extends Characteristic {
-    constructor(displayName, UUID, props) {
+    constructor(
+      displayName: string,
+      UUID: string,
+      props?: CharacteristicProps
+    ) {
       super(displayName, UUID);
       this.setProps({
         format: Characteristic.Formats.FLOAT,
@@ -12,4 +23,4 @@ module.exports = (Characteristic) => {
       this.value = this.getDefaultValue();
     }
   };
-};
+}

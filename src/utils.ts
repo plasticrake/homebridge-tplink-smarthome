@@ -1,11 +1,34 @@
-function callbackify(func, errFunc) {
-  return (...args) => {
+import type { Characteristic, Logging, Service, WithUUID } from 'homebridge';
+
+import type { Bulb, Plug } from 'tplink-smarthome-api';
+
+export type TplinkDevice = Bulb | Plug;
+
+export function isObjectLike(
+  candidate: unknown
+): candidate is Record<string, unknown> {
+  return (
+    (typeof candidate === 'object' && candidate !== null) ||
+    typeof candidate === 'function'
+  );
+}
+
+export function callbackify<T>(
+  func: (...args: unknown[]) => Promise<T>,
+  errFunc: (error: Error) => void
+): (error?: Error | null | undefined, value?: T | undefined) => void {
+  return (...args: unknown[]) => {
+    type Callback = (
+      error?: Error | null | undefined,
+      value?: T | undefined
+    ) => void;
+
     const onlyArgs = [];
-    let callback = null;
+    let callback: Callback;
 
     for (const arg of args) {
       if (typeof arg === 'function') {
-        callback = arg;
+        callback = arg as Callback;
         break;
       }
 
@@ -21,56 +44,66 @@ function callbackify(func, errFunc) {
   };
 }
 
-function callbackifyLogError(func) {
-  return callbackify(func.bind(this), (reason) => {
-    this.log.error('[%s] %s', this.name, func.name);
-    this.log.error(reason);
+export function callbackifyLogError<T>(
+  acc: { name: string; log: Logging },
+  func: (...args: unknown[]) => Promise<T>
+): (error?: Error | null | undefined, value?: T | undefined) => void {
+  return callbackify(func.bind(acc), (reason) => {
+    acc.log.error('[%s] %s', acc.name, func.name);
+    acc.log.error(String(reason));
   });
 }
 
-/**
- *
- *
- * @param {import('hap-nodejs').Service} service
- * @param {import('hap-nodejs').WithUUID<new () => import('hap-nodejs').Characteristic>} characteristic
- * @returns {import('hap-nodejs').Characteristic}
- */
-function getOrAddCharacteristic(service, characteristic) {
+export function getOrAddCharacteristic(
+  service: Service,
+  characteristic: WithUUID<new () => Characteristic>
+): Characteristic {
   return (
     service.getCharacteristic(characteristic) ||
     service.addCharacteristic(characteristic)
   );
 }
 
-function kelvinToMired(kelvin) {
+export function kelvinToMired(kelvin: number): number {
   return 1e6 / kelvin;
 }
 
-function lookup(compareFn, value) {
-  if (compareFn == null) {
-    // eslint-disable-next-line no-param-reassign
-    compareFn = (thisKeyValue, val) => {
-      return thisKeyValue === val;
-    };
-  }
-  const keys = Object.keys(this);
-  for (let i = 0; i < keys.length; i += 1) {
-    if (compareFn(this[keys[i]], value)) {
-      return keys[i];
+export function lookup<T>(
+  object: unknown,
+  compareFn: undefined | ((objectProp: unknown, search: T) => boolean),
+  value: T
+): string | undefined {
+  const compare =
+    compareFn ??
+    ((objectProp: unknown, search: T): boolean => objectProp === search);
+
+  if (isObjectLike(object)) {
+    const keys = Object.keys(object);
+    for (let i = 0; i < keys.length; i += 1) {
+      if (compare(object[keys[i]], value)) {
+        return keys[i];
+      }
     }
   }
-  return null;
+  return undefined;
 }
 
-function miredToKelvin(mired) {
+export function lookupCharacteristicNameByUUID(
+  characteristic: typeof Characteristic,
+  uuid: string
+): string | undefined {
+  const keys = Object.keys(characteristic);
+  for (let i = 0; i < keys.length; i += 1) {
+    const key = keys[i];
+    // @ts-ignore: not sure how to make this correct in typescript
+    const c = characteristic[key];
+    if ('UUID' in c && c.UUID === uuid) {
+      return key;
+    }
+  }
+  return undefined;
+}
+
+export function miredToKelvin(mired: number): number {
   return 1e6 / mired;
 }
-
-module.exports = {
-  callbackify,
-  callbackifyLogError,
-  getOrAddCharacteristic,
-  kelvinToMired,
-  lookup,
-  miredToKelvin,
-};

@@ -1,52 +1,58 @@
-const AccessoryInformation = require('./accessory-information');
-const { callbackifyLogError, getOrAddCharacteristic } = require('./utils');
+// homebridge import is a const enum and not an actual import
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { PlatformAccessoryEvent } from 'homebridge';
 
-const { HomeKitDevice } = require('./homekit-device');
+import type {
+  Categories,
+  Characteristic,
+  CharacteristicValue,
+  Logging,
+  PlatformAccessory,
+  Service,
+  WithUUID,
+} from 'homebridge';
 
-class TplinkAccessory {
+import create from './homekit-device/create';
+
+import AccessoryInformation from './accessory-information';
+import { TplinkSmarthomeConfig } from './config';
+import HomekitDevice from './homekit-device';
+import type TplinkSmarthomePlatform from './platform';
+import { callbackify, getOrAddCharacteristic } from './utils';
+import type { TplinkDevice } from './utils';
+
+export default class TplinkAccessory {
+  readonly homebridgeAccessory: PlatformAccessory;
+
+  private readonly log: Logging;
+
+  private readonly hkDevice: HomekitDevice;
+
+  private readonly services: Record<string, Service> = {};
+
+  private readonly name: string;
+
   constructor(
-    platform,
-    config,
-    homebridgeAccessory,
-    tplinkDevice,
-    category,
-    services
+    private readonly platform: TplinkSmarthomePlatform,
+    private readonly config: TplinkSmarthomeConfig,
+    homebridgeAccessory: PlatformAccessory | undefined,
+    tplinkDevice: TplinkDevice,
+    category: Categories,
+    services: Array<WithUUID<typeof Service>>
   ) {
-    this.platform = platform;
-    const PlatformAccessory = platform.homebridge.platformAccessory;
-    const { Characteristic } = platform.homebridge.hap;
     const CustomCharacteristic = platform.customCharacteristics;
-    const UUIDGen = platform.homebridge.hap.uuid;
 
     this.log = platform.log;
-    this.config = config || {};
-    this.homebridgeAccessory = homebridgeAccessory;
-    this.hkDevice = HomeKitDevice.create(platform, tplinkDevice);
-    this.services = {};
+
+    this.hkDevice = create(platform, tplinkDevice);
 
     this.name = this.hkDevice.name;
 
-    /**
-     * @private
-     */
-    this.callbackify = callbackifyLogError.bind(this);
-
     const categoryName = platform.getCategoryName(category);
 
-    if (!this.homebridgeAccessory) {
-      const uuid = UUIDGen.generate(this.hkDevice.id);
-      this.log.debug(
-        `[${this.name}] Creating new Accessory [${
-          this.hkDevice.id
-        }] [${uuid}] category: ${categoryName || ''}`
-      );
-      this.homebridgeAccessory = new PlatformAccessory(
-        this.name,
-        uuid,
-        category
-      );
-      this.platform.registerPlatformAccessory(this.homebridgeAccessory);
-    } else {
+    if (homebridgeAccessory !== undefined) {
+      this.homebridgeAccessory = homebridgeAccessory;
+
       this.log.debug(
         `[${this.name}] Existing Accessory found [${
           homebridgeAccessory.context.deviceId
@@ -63,19 +69,49 @@ class TplinkAccessory {
         );
         this.homebridgeAccessory.category = category;
       }
+    } else {
+      const uuid = platform.api.hap.uuid.generate(this.hkDevice.id);
+      this.log.debug(
+        `[${this.name}] Creating new Accessory [${
+          this.hkDevice.id
+        }] [${uuid}] category: ${categoryName || ''}`
+      );
+      // eslint-disable-next-line new-cap
+      this.homebridgeAccessory = new platform.api.platformAccessory(
+        this.name,
+        uuid,
+        category
+      );
+      this.platform.registerPlatformAccessory(this.homebridgeAccessory);
     }
 
-    this.services.AccessoryInformation = AccessoryInformation(
-      platform.homebridge.hap
-    )(this.homebridgeAccessory, this.hkDevice);
+    const accInfo = AccessoryInformation(platform.api.hap)(
+      this.homebridgeAccessory,
+      this.hkDevice
+    );
+    if (accInfo !== undefined) {
+      this.services.AccessoryInformation = accInfo;
+    } else {
+      this.log.error('Could not retrieve default AccessoryInformation');
+    }
 
     this.homebridgeAccessory.context.deviceId = this.hkDevice.id;
-    this.homebridgeAccessory.on('identify', (...args) => {
-      this.hkDevice.identify(...args);
-    });
+    this.homebridgeAccessory.on(
+      PlatformAccessoryEvent.IDENTIFY,
+      this.hkDevice.identify
+    );
 
     services.forEach((serviceConstructor) => {
       const serviceName = this.platform.getServiceName(serviceConstructor);
+
+      if (serviceName === undefined) {
+        this.log.error(
+          'Could not find service name for UUID:',
+          serviceConstructor.UUID
+        );
+        return;
+      }
+
       let service = this.homebridgeAccessory.getService(serviceConstructor);
       if (!service) {
         this.log.debug(`[${this.name}] Creating new ${serviceName} Service`);
@@ -84,16 +120,19 @@ class TplinkAccessory {
           this.name
         );
       } else {
-        service.setCharacteristic(Characteristic.Name, this.name);
+        service.setCharacteristic(this.platform.Characteristic.Name, this.name);
       }
+
       this.services[serviceName] = service;
     });
 
     if (this.services.Outlet) {
-      const characteristics = [
-        Characteristic.Name,
-        Characteristic.On,
-        Characteristic.OutletInUse,
+      const characteristics: Array<WithUUID<
+        WithUUID<new () => Characteristic>
+      >> = [
+        this.platform.Characteristic.Name,
+        this.platform.Characteristic.On,
+        this.platform.Characteristic.OutletInUse,
       ];
 
       if (this.config.addCustomCharacteristics) {
@@ -112,19 +151,19 @@ class TplinkAccessory {
 
     if (this.services.Switch) {
       this.setupCharacteristics(this.services.Switch, [
-        Characteristic.Name,
-        Characteristic.On,
+        this.platform.Characteristic.Name,
+        this.platform.Characteristic.On,
       ]);
     }
 
     if (this.services.Lightbulb) {
-      const characteristics = [
-        Characteristic.Name,
-        Characteristic.On,
-        Characteristic.Brightness,
-        Characteristic.ColorTemperature,
-        Characteristic.Hue,
-        Characteristic.Saturation,
+      const characteristics: Array<WithUUID<new () => Characteristic>> = [
+        this.platform.Characteristic.Name,
+        this.platform.Characteristic.On,
+        this.platform.Characteristic.Brightness,
+        this.platform.Characteristic.ColorTemperature,
+        this.platform.Characteristic.Hue,
+        this.platform.Characteristic.Saturation,
       ];
       if (this.config.addCustomCharacteristics) {
         characteristics.push(CustomCharacteristic.Watts);
@@ -146,21 +185,24 @@ class TplinkAccessory {
       );
       this.homebridgeAccessory.removeService(service);
     });
-
-    // console.log.debug(this.homebridgeAccessory.displayName);
-    // this.homebridgeAccessory.services.forEach((service) => {
-    //   console.dir(this.platform.getServiceName(service));
-    //   console.dir(service.characteristics.map(c => platform.getCharacteristicName(c)));
-    // });
   }
 
-  /**
-   * @private
-   */
-  setupCharacteristics(service, characteristics) {
+  private callbackify<T>(
+    func: (...args: unknown[]) => Promise<T>
+  ): (error?: Error | null | undefined, value?: T | undefined) => void {
+    return callbackify(func.bind(this), (reason: unknown) => {
+      this.log.error('[%s] %s', this.name, func.name);
+      this.log.error(String(reason));
+    });
+  }
+
+  private setupCharacteristics(
+    service: Service,
+    characteristicTypes: Array<WithUUID<new () => Characteristic>>
+  ) {
     const characteristicsToRemove = service.characteristics.filter(
       (existingCharacteristic) => {
-        return !characteristics.find(
+        return !characteristicTypes.find(
           (characteristicToSetup) =>
             characteristicToSetup.UUID === existingCharacteristic.UUID
         );
@@ -177,16 +219,19 @@ class TplinkAccessory {
       service.removeCharacteristic(characteristicToRemove);
     });
 
-    characteristics.forEach((characteristic) => {
-      if (this.hkDevice.supportsCharacteristic(characteristic)) {
-        const c = getOrAddCharacteristic(service, characteristic);
+    characteristicTypes.forEach((CharacteristicType) => {
+      if (this.hkDevice.supportsCharacteristic(CharacteristicType)) {
+        const characteristic = getOrAddCharacteristic(
+          service,
+          CharacteristicType
+        );
 
         const props = this.hkDevice.getCharacteristicProps(characteristic);
         if (props) {
-          c.setProps(props);
+          characteristic.setProps(props);
         }
 
-        c.on(
+        characteristic.on(
           'get',
           this.callbackify(() => {
             return this.hkDevice.getCharacteristicValue(characteristic);
@@ -194,12 +239,12 @@ class TplinkAccessory {
         );
 
         if (this.hkDevice.supportsCharacteristicSet(characteristic)) {
-          c.on(
+          characteristic.on(
             'set',
             this.callbackify((value) => {
               return this.hkDevice.setCharacteristicValue(
                 characteristic,
-                value
+                value as CharacteristicValue // TODO: refactor
               );
             })
           );
@@ -208,14 +253,15 @@ class TplinkAccessory {
         this.hkDevice.setCharacteristicUpdateCallback(
           characteristic,
           (value) => {
-            service.updateCharacteristic(characteristic, value);
+            characteristic.updateValue(value);
           }
         );
         return;
       }
-      service.removeCharacteristic(characteristic);
+      // Remove unsupported characteristic
+      service.removeCharacteristic(
+        service.getCharacteristic(CharacteristicType)
+      );
     });
   }
 }
-
-module.exports.TplinkAccessory = TplinkAccessory;

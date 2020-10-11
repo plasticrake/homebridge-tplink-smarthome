@@ -1,14 +1,12 @@
-const { HomeKitDevice } = require('.');
+import type { Plug } from 'tplink-smarthome-api';
 
-let Characteristic;
-let CustomCharacteristic;
+import HomeKitDevice from '.';
+import type TplinkSmarthomePlatform from '../platform';
+import { isObjectLike } from '../utils';
 
-class HomeKitDevicePlug extends HomeKitDevice {
-  constructor(platform, tplinkDevice) {
+export default class HomeKitDevicePlug extends HomeKitDevice {
+  constructor(platform: TplinkSmarthomePlatform, readonly tplinkDevice: Plug) {
     super(platform, tplinkDevice);
-
-    Characteristic = platform.homebridge.hap.Characteristic;
-    CustomCharacteristic = platform.customCharacteristics;
 
     this.addBasicCharacteristics();
 
@@ -20,50 +18,33 @@ class HomeKitDevicePlug extends HomeKitDevice {
     }
   }
 
-  identify(paired, callback) {
-    this.log.info(`[${this.name}] identify`);
-    let cbCalled = false;
-    this.tplinkDevice
-      .blink(1, 500)
-      .then(() => {
-        callback(); // Callback after first blink so don't block
-        cbCalled = true;
-        return this.tplinkDevice.blink(2, 500);
-      })
-      .then(() => {
-        this.log.debug(`[${this.name}] identify done`);
-      })
-      .catch((reason) => {
-        if (!cbCalled) {
-          callback(new Error(reason));
-        }
-        this.log.error(`[${this.name}] identify error`);
-        this.log.error(reason);
-      });
-  }
-
-  /**
-   * @private
-   */
-  addBasicCharacteristics() {
-    this.addCharacteristic(Characteristic.On, {
+  private addBasicCharacteristics(): void {
+    this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
-        return this.tplinkDevice.getPowerState().then((value) => {
-          return value;
-        });
+        return this.tplinkDevice.getPowerState();
       },
       setValue: async (value) => {
-        return this.tplinkDevice.setPowerState(value);
+        if (typeof value === 'boolean') {
+          await this.tplinkDevice.setPowerState(value);
+          return;
+        }
+        this.log.warn('setValue: Invalid On:', value);
       },
     });
     this.tplinkDevice.on('power-on', () => {
-      this.fireCharacteristicUpdateCallback(Characteristic.On, true);
+      this.fireCharacteristicUpdateCallback(
+        this.platform.Characteristic.On,
+        true
+      );
     });
     this.tplinkDevice.on('power-off', () => {
-      this.fireCharacteristicUpdateCallback(Characteristic.On, false);
+      this.fireCharacteristicUpdateCallback(
+        this.platform.Characteristic.On,
+        false
+      );
     });
 
-    this.addCharacteristic(Characteristic.OutletInUse, {
+    this.addCharacteristic(this.platform.Characteristic.OutletInUse, {
       getValue: async () => {
         return this.tplinkDevice.getInUse().then((value) => {
           return value;
@@ -71,25 +52,31 @@ class HomeKitDevicePlug extends HomeKitDevice {
       },
     });
     this.tplinkDevice.on('in-use', () => {
-      this.fireCharacteristicUpdateCallback(Characteristic.OutletInUse, true);
+      this.fireCharacteristicUpdateCallback(
+        this.platform.Characteristic.OutletInUse,
+        true
+      );
     });
     this.tplinkDevice.on('not-in-use', () => {
-      this.fireCharacteristicUpdateCallback(Characteristic.OutletInUse, false);
+      this.fireCharacteristicUpdateCallback(
+        this.platform.Characteristic.OutletInUse,
+        false
+      );
     });
   }
 
-  /**
-   * @private
-   */
-  addBrightnessCharacteristics() {
-    this.addCharacteristic(Characteristic.Brightness, {
+  private addBrightnessCharacteristics(): void {
+    this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async () => {
-        return this.tplinkDevice.getSysInfo().then((sysInfo) => {
-          return sysInfo.brightness;
-        });
+        const sysinfo = await this.tplinkDevice.getSysInfo();
+        return sysinfo.brightness;
       },
       setValue: async (value) => {
-        return this.tplinkDevice.dimmer.setBrightness(value);
+        if (typeof value === 'number') {
+          await this.tplinkDevice.dimmer.setBrightness(value);
+          return;
+        }
+        this.log.warn('setValue: Invalid Brightness:', value);
       },
     });
     // TODO: event for brightness change
@@ -97,73 +84,109 @@ class HomeKitDevicePlug extends HomeKitDevice {
     // this.tplinkDevice.on('power-off', () => { this.fireCharacteristicUpdateCallback(Characteristic.On, false); });
   }
 
-  /**
-   * @private
-   */
-  addEnergyCharacteristics() {
-    this.addCharacteristic(CustomCharacteristic.Amperes, {
-      getValue: async () => {
-        return this.tplinkDevice.emeter.getRealtime().then((emeterRealtime) => {
-          return emeterRealtime.current;
+  private addEnergyCharacteristics(): void {
+    const emeterGetValue = (
+      characteristicName: string,
+      emeterProperties: string[]
+    ): (() => Promise<number | null>) => {
+      return async (): Promise<number | null> => {
+        const emeterRealtime = await this.tplinkDevice.emeter.getRealtime();
+        if (!isObjectLike(emeterRealtime)) {
+          this.log.warn(
+            `getValue: Invalid ${characteristicName}:`,
+            typeof emeterRealtime
+          );
+          return null;
+        }
+
+        let invalid = false;
+        emeterProperties.forEach((prop) => {
+          if (typeof emeterRealtime[prop] !== 'number') {
+            invalid = true;
+            this.log.warn(
+              `Invalid ${characteristicName} value:`,
+              `${prop}:`,
+              emeterRealtime[prop]
+            );
+          }
         });
-      },
+        if (invalid) return null;
+
+        if (emeterProperties.length === 1) {
+          // return value if one property
+          return emeterRealtime[emeterProperties[0]] as number;
+        }
+        if (emeterProperties.length > 1) {
+          // return product of values if multiple properties
+          return (
+            emeterProperties
+              // @ts-ignore : safe
+              .map((prop) => emeterProperties[prop] as number)
+              .reduce((acc, val) => acc * val, 1)
+          );
+        }
+
+        return null;
+      };
+    };
+
+    this.addCharacteristic(this.platform.customCharacteristics.Amperes, {
+      getValue: emeterGetValue('Amperes', ['current']),
     });
 
-    this.addCharacteristic(CustomCharacteristic.KilowattHours, {
-      getValue: async () => {
-        return this.tplinkDevice.emeter.getRealtime().then((emeterRealtime) => {
-          return emeterRealtime.total;
-        });
-      },
+    this.addCharacteristic(this.platform.customCharacteristics.KilowattHours, {
+      getValue: emeterGetValue('KilowattHours', ['total']),
     });
 
-    this.addCharacteristic(CustomCharacteristic.VoltAmperes, {
-      getValue: async () => {
-        return this.tplinkDevice.emeter.getRealtime().then((emeterRealtime) => {
-          return emeterRealtime.voltage * emeterRealtime.current;
-        });
-      },
+    this.addCharacteristic(this.platform.customCharacteristics.VoltAmperes, {
+      getValue: emeterGetValue('VoltAmperes', ['voltage', 'current']),
     });
 
-    this.addCharacteristic(CustomCharacteristic.Volts, {
-      getValue: async () => {
-        return this.tplinkDevice.emeter.getRealtime().then((emeterRealtime) => {
-          return emeterRealtime.voltage;
-        });
-      },
+    this.addCharacteristic(this.platform.customCharacteristics.Volts, {
+      getValue: emeterGetValue('Volts', ['voltage']),
     });
 
-    this.addCharacteristic(CustomCharacteristic.Watts, {
-      getValue: async () => {
-        return this.tplinkDevice.emeter.getRealtime().then((emeterRealtime) => {
-          return emeterRealtime.power;
-        });
-      },
+    this.addCharacteristic(this.platform.customCharacteristics.Watts, {
+      getValue: emeterGetValue('Watts', ['power']),
     });
 
     this.tplinkDevice.on('emeter-realtime-update', (emeterRealtime) => {
       this.fireCharacteristicUpdateCallback(
-        CustomCharacteristic.Amperes,
+        this.platform.customCharacteristics.Amperes,
         emeterRealtime.current
       );
       this.fireCharacteristicUpdateCallback(
-        CustomCharacteristic.KilowattHours,
+        this.platform.customCharacteristics.KilowattHours,
         emeterRealtime.total
       );
       this.fireCharacteristicUpdateCallback(
-        CustomCharacteristic.VoltAmperes,
+        this.platform.customCharacteristics.VoltAmperes,
         emeterRealtime.voltage * emeterRealtime.current
       );
       this.fireCharacteristicUpdateCallback(
-        CustomCharacteristic.Volts,
+        this.platform.customCharacteristics.Volts,
         emeterRealtime.voltage
       );
       this.fireCharacteristicUpdateCallback(
-        CustomCharacteristic.Watts,
+        this.platform.customCharacteristics.Watts,
         emeterRealtime.power
       );
     });
   }
-}
 
-module.exports.HomeKitDevicePlug = HomeKitDevicePlug;
+  identify(): void {
+    this.log.info(`[${this.name}] identify`);
+    this.tplinkDevice
+      .blink(1, 500)
+      .then(() => {
+        return this.tplinkDevice.blink(2, 500);
+      })
+      .then(() => {
+        this.log.debug(`[${this.name}] identify done`);
+      })
+      .catch((reason) => {
+        this.log.error(`[${this.name}] identify error`);
+        this.log.error(reason);
+      });
+  }
+}
