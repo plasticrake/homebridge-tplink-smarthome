@@ -39,45 +39,62 @@
   ],
   "engines": {
     "node": ">=10.17.0",
-    "homebridge": ">=0.4.27"
+    "homebridge": ">=1.1.0"
   },
   "dependencies": {
     "lodash.castarray": "^4.4.0",
+    "lodash.defaults": "^4.2.0",
     "semver": "^7.3.2",
-    "tplink-smarthome-api": "~2.0.0"
+    "tplink-smarthome-api": "next"
   },
   "devDependencies": {
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^14.0.1",
+    "@types/chai": "^4.2.13",
+    "@types/lodash.castarray": "^4.4.6",
+    "@types/lodash.defaults": "^4.2.6",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.11.8",
+    "@types/semver": "^7.3.4",
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
     "chai": "^4.2.0",
-    "cspell": "^4.0.61",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-prettier": "^3.1.3",
-    "fs-extra": "^9.0.0",
-    "hap-nodejs": "^0.6.11",
-    "homebridge": "^1.0.4",
-    "mocha": "^7.1.2",
+    "cspell": "^4.1.0",
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-airbnb-typescript": "^11.0.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-tsdoc": "^0.2.7",
+    "fs-extra": "^9.0.1",
+    "hap-nodejs": "^0.8.2",
+    "homebridge": "^1.1.6",
+    "mocha": "^8.1.3",
     "node-persist": "^0.0.11",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.2",
     "rewire": "^5.0.0",
-    "sinon": "^9.0.2",
+    "sinon": "^9.2.0",
     "sinon-chai": "^3.5.0",
-    "standard-version": "^8.0.0",
-    "tplink-smarthome-simulator": "^1.10.0",
-    "typescript": "^3.9.2"
+    "source-map-support": "^0.5.19",
+    "standard-version": "^9.0.0",
+    "tplink-smarthome-simulator": "^2.0.0",
+    "ts-essentials": "^7.0.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   },
   "main": "lib/index.js",
   "files": [
     "lib"
   ],
   "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "clean": "rimraf lib/",
     "start": "homebridge --plugin-path .",
-    "debug": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
-    "debugsim": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
-    "lint": "eslint --ignore-path .gitignore .",
+    "debug": "npm run build && npm run debug:only",
+    "debug:only": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
+    "debugsim": "npm run build && npm run debugsim:only",
+    "debugsim:only": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
     "pretest": "npm run lint",
     "test": "mocha",
     "preversion": "npm test",
@@ -85,6 +102,6 @@
     "prerelease": "npm test",
     "release": "standard-version --sign",
     "cleancache": "rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories",
-    "spellcheck": "cspell '{lib,test}/**/*' *.md"
+    "spellcheck": "cspell '{src,test}/**/*' *.md"
   }
 }

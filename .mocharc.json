@@ -1,0 +1,6 @@
+{
+  "extension": ["ts", "js"],
+  "ignore": "test/types/**/*",
+  "recursive": true,
+  "require": ["ts-node/register", "source-map-support/register"]
+}
