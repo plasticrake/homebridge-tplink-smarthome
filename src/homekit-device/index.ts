@@ -146,7 +146,14 @@ export default abstract class HomeKitDevice {
     const c = this.getCharacteristic(characteristic);
     if (c && typeof c.updateCallback === 'function') {
       c.updateCallback(value);
+      return;
     }
+    this.log.warn(
+      '[%s] fireCharacteristicUpdateCallback [%s]: Unable to call updateCallback',
+      this.name,
+      value,
+      this.platform.getCharacteristicName(characteristic)
+    );
   }
 
   setCharacteristicUpdateCallback(
@@ -160,8 +167,6 @@ export default abstract class HomeKitDevice {
       callbackFn.name
     );
     const c = this.getCharacteristic(characteristic);
-    if (c && typeof c.updateCallback === 'function') {
-      this.getCharacteristic(characteristic).updateCallback = callbackFn;
-    }
+    c.updateCallback = callbackFn;
   }
 }
