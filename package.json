@@ -2,15 +2,6 @@
   "name": "homebridge-tplink-smarthome",
   "version": "5.1.1-beta.0",
   "description": "TPLink Smarthome plugin for Homebridge",
-  "author": "Patrick Seal",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/plasticrake/homebridge-tplink-smarthome.git"
-  },
-  "bugs": {
-    "url": "https://github.com/plasticrake/homebridge-tplink-smarthome/issues"
-  },
   "keywords": [
     "homebridge-plugin",
     "homebridge",
@@ -37,15 +28,44 @@
     "smartplug",
     "smartbulb"
   ],
-  "engines": {
-    "node": ">=10.17.0",
-    "homebridge": ">=1.1.0"
+  "bugs": {
+    "url": "https://github.com/plasticrake/homebridge-tplink-smarthome/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/plasticrake/homebridge-tplink-smarthome.git"
+  },
+  "license": "MIT",
+  "author": "Patrick Seal",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "clean": "rimraf lib/",
+    "cleancache": "rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories",
+    "debug": "npm run build && npm run debug:only",
+    "debug:only": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
+    "debugsim": "npm run build && npm run debugsim:only",
+    "debugsim:only": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
+    "prepublishOnly": "npm run build",
+    "prerelease": "npm test",
+    "release": "standard-version --sign",
+    "spellcheck": "cspell '{src,test}/**/*' *.md",
+    "start": "homebridge --plugin-path .",
+    "pretest": "npm run lint",
+    "test": "mocha",
+    "preversion": "npm test",
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "lodash.castarray": "^4.4.0",
     "lodash.defaults": "^4.2.0",
     "semver": "^7.3.2",
-    "tplink-smarthome-api": "next"
+    "tplink-smarthome-api": "^3.0.0-beta.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.13",
@@ -83,27 +103,8 @@
     "ts-node": "^9.0.0",
     "typescript": "^4.0.3"
   },
-  "main": "lib/index.js",
-  "files": [
-    "lib"
-  ],
-  "scripts": {
-    "prebuild": "npm run clean",
-    "build": "tsc",
-    "clean": "rimraf lib/",
-    "start": "homebridge --plugin-path .",
-    "debug": "npm run build && npm run debug:only",
-    "debug:only": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
-    "debugsim": "npm run build && npm run debugsim:only",
-    "debugsim:only": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
-    "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
-    "pretest": "npm run lint",
-    "test": "mocha",
-    "preversion": "npm test",
-    "postversion": "git push && git push --tags",
-    "prerelease": "npm test",
-    "release": "standard-version --sign",
-    "cleancache": "rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories",
-    "spellcheck": "cspell '{src,test}/**/*' *.md"
+  "engines": {
+    "homebridge": ">=1.1.0",
+    "node": ">=10.17.0"
   }
 }
