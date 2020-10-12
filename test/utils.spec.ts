@@ -13,7 +13,7 @@ function delay(ms: number) {
 }
 
 describe('utils', function () {
-  describe.only('deferAndCombine', function () {
+  describe('deferAndCombine', function () {
     let spy: sinon.SinonSpy;
     let deferredFn: () => Promise<unknown>;
     const deferTime = 100;
