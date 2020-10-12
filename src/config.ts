@@ -55,6 +55,11 @@ export interface TplinkSmarthomeConfigInput {
    * @defaultValue 10
    */
   pollingInterval?: number;
+  /**
+   * (milliseconds) The time to wait to combine similar commands for a device before sending a command to a device
+   * @defaultValue 100
+   */
+  waitTimeUpdate?: number;
 }
 
 type TplinkSmarthomeConfigDefault = {
@@ -70,11 +75,13 @@ type TplinkSmarthomeConfigDefault = {
   macAddresses?: Array<string>;
   excludeMacAddresses?: Array<string>;
   pollingInterval: number;
+  waitTimeUpdate: number;
 };
 
 export type TplinkSmarthomeConfig = {
   addCustomCharacteristics: boolean;
   switchModels: Array<string>;
+  waitTimeUpdate: number;
 
   defaultSendOptions: {
     timeout: number;
@@ -111,6 +118,7 @@ export const defaultConfig: TplinkSmarthomeConfigDefault = {
   macAddresses: undefined,
   excludeMacAddresses: undefined,
   pollingInterval: 10,
+  waitTimeUpdate: 100,
 };
 
 function isArrayOfStrings(value: unknown): value is Array<string> {
@@ -128,7 +136,8 @@ function isTplinkSmarthomeConfigInput(
     (!('pollingInterval' in c) || typeof c.pollingInterval === 'number') &&
     (!('inUseThreshold' in c) || typeof c.inUseThreshold === 'number') &&
     (!('switchModels' in c) || isArrayOfStrings(c.switchModels)) &&
-    (!('deviceTypes' in c) || isArrayOfStrings(c.deviceTypes))
+    (!('deviceTypes' in c) || isArrayOfStrings(c.deviceTypes)) &&
+    (!('waitTimeUpdate' in c) || typeof c.waitTimeUpdate === 'number')
   );
 }
 
@@ -147,6 +156,8 @@ export function parseConfig(
   return {
     addCustomCharacteristics: Boolean(c.addCustomCharacteristics),
     switchModels: c.switchModels,
+
+    waitTimeUpdate: c.waitTimeUpdate,
 
     defaultSendOptions,
 

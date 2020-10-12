@@ -48,6 +48,11 @@
         "description": "If discovery is not working tweak to match your subnet, eg: 192.168.0.255.",
         "placeholder": "255.255.255.255"
       },
+      "waitTimeUpdate": {
+        "type": "integer",
+        "description": "The time to wait to combine similar commands for a device before sending a command to a device. Default: 100.",
+        "placeholder": "100"
+      },
       "devices": {
         "title": "Manual List Of Devices",
         "type": "array",
@@ -69,6 +74,7 @@
       },
       "macAddresses": {
         "title": "Whitelisted Devices",
+        "description": "Allow-list of mac addresses to include. If specified will ignore other devices. Supports glob-style patterns",
         "type": "array",
         "items": {
           "title": "Mac Address",
@@ -77,6 +83,7 @@
       },
       "excludeMacAddresses": {
         "title": "Blacklisted Devices",
+        "description": "Deny-list of mac addresses to exclude. Supports glob-style patterns",
         "type": "array",
         "items": {
           "title": "Mac Address",
@@ -90,17 +97,18 @@
     {
       "type": "fieldset",
       "title": "Advanced Settings",
+      "description": "Don't change these, unless you understand what you're doing.",
       "expandable": true,
-      "expanded": false,
       "items": [
         "addCustomCharacteristics",
         "broadcast",
         "pollingInterval",
         "inUseThreshold",
         "timeout",
+        "waitTimeUpdate",
         {
           "type": "help",
-          "helpvalue": "<hr><em>Additional settings to whitelist/blacklist devices and to filter devices types etc. are available. Please see <a href='https://github.com/plasticrake/homebridge-tplink-smarthome' target='_blank'>the plugin README</a> for further information.</em>"
+          "helpvalue": "<hr><em>Additional settings to include/exclude devices and to filter devices types etc. are available. Please see <a href='https://github.com/plasticrake/homebridge-tplink-smarthome' target='_blank'>the plugin README</a> for further information.</em>"
         }
       ]
     }

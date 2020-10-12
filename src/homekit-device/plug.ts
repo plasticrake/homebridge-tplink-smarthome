@@ -1,10 +1,12 @@
-import type { Plug } from 'tplink-smarthome-api';
+import type { Plug, PlugSysinfo } from 'tplink-smarthome-api';
 
 import HomeKitDevice from '.';
 import type TplinkSmarthomePlatform from '../platform';
-import { isObjectLike } from '../utils';
+import { deferAndCombine, isObjectLike } from '../utils';
 
 export default class HomeKitDevicePlug extends HomeKitDevice {
+  private desiredPowerState?: boolean;
+
   constructor(platform: TplinkSmarthomePlatform, readonly tplinkDevice: Plug) {
     super(platform, tplinkDevice);
 
@@ -16,16 +18,77 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
     if (tplinkDevice.supportsEmeter) {
       this.addEnergyCharacteristics();
     }
+
+    this.getSysInfo = deferAndCombine(() => {
+      return this.tplinkDevice.getSysInfo();
+    }, platform.config.waitTimeUpdate);
+
+    this.getPowerState = deferAndCombine(() => {
+      return this.tplinkDevice.getPowerState();
+    }, platform.config.waitTimeUpdate);
+
+    this.setPowerState = deferAndCombine(
+      async () => {
+        if (this.desiredPowerState === undefined) {
+          this.log.warn(
+            'setPowerState called with undefined desiredPowerState'
+          );
+          return Promise.resolve(true);
+        }
+
+        const ret = await this.tplinkDevice.setPowerState(
+          this.desiredPowerState
+        );
+        this.desiredPowerState = undefined;
+        return ret;
+      },
+      platform.config.waitTimeUpdate,
+      (value: boolean) => {
+        this.desiredPowerState = value;
+      }
+    );
+
+    this.getRealtime = deferAndCombine(() => {
+      return this.tplinkDevice.emeter.getRealtime();
+    }, platform.config.waitTimeUpdate);
   }
+
+  /**
+   * Aggregates getSysInfo requests
+   *
+   * @private
+   */
+  private getSysInfo: () => Promise<PlugSysinfo>;
+
+  /**
+   * Aggregates getPowerState requests
+   *
+   * @private
+   */
+  private getPowerState: () => Promise<boolean>;
+
+  /**
+   * Aggregates setPowerState requests
+   *
+   * @private
+   */
+  private setPowerState: (value: boolean) => Promise<true>;
+
+  /**
+   * Aggregates getRealtime requests
+   *
+   * @private
+   */
+  private getRealtime: () => Promise<unknown>;
 
   private addBasicCharacteristics(): void {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
-        return this.tplinkDevice.getPowerState();
+        return this.getPowerState();
       },
       setValue: async (value) => {
         if (typeof value === 'boolean') {
-          await this.tplinkDevice.setPowerState(value);
+          await this.setPowerState(value);
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
@@ -68,7 +131,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
   private addBrightnessCharacteristics(): void {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async () => {
-        const sysinfo = await this.tplinkDevice.getSysInfo();
+        const sysinfo = await this.getSysInfo();
         return sysinfo.brightness;
       },
       setValue: async (value) => {
@@ -90,7 +153,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
       emeterProperties: string[]
     ): (() => Promise<number | null>) => {
       return async (): Promise<number | null> => {
-        const emeterRealtime = await this.tplinkDevice.emeter.getRealtime();
+        const emeterRealtime = await this.getRealtime();
         if (!isObjectLike(emeterRealtime)) {
           this.log.warn(
             `getValue: Invalid ${characteristicName}:`,
