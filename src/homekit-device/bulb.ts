@@ -1,10 +1,17 @@
-import type { Bulb } from 'tplink-smarthome-api';
+import type { Bulb, LightState } from 'tplink-smarthome-api';
 
 import HomeKitDevice from '.';
 import type TplinkSmarthomePlatform from '../platform';
-import { isObjectLike, kelvinToMired, miredToKelvin } from '../utils';
+import {
+  deferAndCombine,
+  isObjectLike,
+  kelvinToMired,
+  miredToKelvin,
+} from '../utils';
 
 export default class HomeKitDeviceBulb extends HomeKitDevice {
+  private desiredLightState: LightState = {};
+
   constructor(platform: TplinkSmarthomePlatform, readonly tplinkDevice: Bulb) {
     super(platform, tplinkDevice);
 
@@ -25,21 +32,66 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
     if (tplinkDevice.supportsEmeter) {
       this.addEnergyCharacteristics();
     }
+
+    this.getLightState = deferAndCombine(() => {
+      return this.tplinkDevice.lighting.getLightState();
+    }, platform.config.waitTimeUpdate);
+
+    this.setLightState = deferAndCombine(
+      () => {
+        if (Object.keys(this.desiredLightState).length === 0) {
+          this.log.warn('setLightState called with empty desiredLightState');
+          return Promise.resolve(true);
+        }
+
+        const ret = this.tplinkDevice.lighting.setLightState(
+          this.desiredLightState
+        );
+        this.desiredLightState = {};
+        return ret;
+      },
+      platform.config.waitTimeUpdate,
+      (value: LightState) => {
+        this.desiredLightState = Object.assign(this.desiredLightState, value);
+      }
+    );
+
+    this.getRealtime = deferAndCombine(() => {
+      return this.tplinkDevice.emeter.getRealtime();
+    }, platform.config.waitTimeUpdate);
   }
+
+  /**
+   * Aggregates getLightState requests
+   *
+   * @private
+   */
+  private getLightState: () => Promise<LightState>;
+
+  /**
+   * Aggregates setLightState requests
+   *
+   * @private
+   */
+  private setLightState: (value: LightState) => Promise<true>;
+
+  /**
+   * Aggregates getRealtime requests
+   *
+   * @private
+   */
+  private getRealtime: () => Promise<unknown>;
 
   private addBasicCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
-        return this.tplinkDevice.lighting.getLightState().then((ls) => {
+        return this.getLightState().then((ls) => {
           return !!ls.on_off;
         });
       },
       setValue: async (value) => {
         if (typeof value === 'boolean') {
-          await this.tplinkDevice.lighting.setLightState(
-            { on_off: value ? 1 : 0 },
-            { transport: 'udp' }
-          );
+          await this.setLightState({ on_off: value ? 1 : 0 });
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
@@ -113,16 +165,13 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addBrightnessCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async () => {
-        return this.tplinkDevice.lighting.getLightState().then((ls) => {
+        return this.getLightState().then((ls) => {
           return ls.brightness;
         });
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
-          await this.tplinkDevice.lighting.setLightState(
-            { brightness: value },
-            { transport: 'udp' }
-          );
+          await this.setLightState({ brightness: value });
           return;
         }
         this.log.warn('setValue: Invalid Brightness:', value);
@@ -145,7 +194,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         maxValue: Math.floor(kelvinToMired(min)), // K and Mired are reversed
       },
       getValue: async () => {
-        const ls = await this.tplinkDevice.lighting.getLightState();
+        const ls = await this.getLightState();
         if (typeof ls.color_temp === 'number') {
           return Math.round(kelvinToMired(ls.color_temp));
         }
@@ -157,10 +206,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
-          await this.tplinkDevice.lighting.setLightState(
-            { color_temp: Math.round(miredToKelvin(value)) },
-            { transport: 'udp' }
-          );
+          await this.setLightState({
+            color_temp: Math.round(miredToKelvin(value)),
+          });
           return;
         }
         this.log.warn('setValue: Invalid ColorTemperature:', value);
@@ -171,15 +219,12 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addColorCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Hue, {
       getValue: async () => {
-        const ls = await this.tplinkDevice.lighting.getLightState();
+        const ls = await this.getLightState();
         return ls.hue;
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
-          await this.tplinkDevice.lighting.setLightState(
-            { hue: value, color_temp: 0 },
-            { transport: 'udp' }
-          );
+          await this.setLightState({ hue: value, color_temp: 0 });
           return;
         }
         this.log.warn('setValue: Invalid Hue:', value);
@@ -188,16 +233,13 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
     this.addCharacteristic(this.platform.Characteristic.Saturation, {
       getValue: async () => {
-        return this.tplinkDevice.lighting.getLightState().then((ls) => {
+        return this.getLightState().then((ls) => {
           return ls.saturation;
         });
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
-          await this.tplinkDevice.lighting.setLightState(
-            { saturation: value, color_temp: 0 },
-            { transport: 'udp' }
-          );
+          await this.setLightState({ saturation: value, color_temp: 0 });
           return;
         }
         this.log.warn('setValue: Invalid Saturation:', value);
@@ -208,7 +250,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addEnergyCharacteristics() {
     this.addCharacteristic(this.platform.customCharacteristics.Watts, {
       getValue: async () => {
-        const emeterRealtime = await this.tplinkDevice.emeter.getRealtime();
+        const emeterRealtime = await this.getRealtime();
         if (isObjectLike(emeterRealtime)) {
           if (typeof emeterRealtime.power === 'number') {
             return emeterRealtime.power;
