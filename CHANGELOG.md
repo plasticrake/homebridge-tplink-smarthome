@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0-beta.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.1.1-beta.0...v5.2.0-beta.0) (2020-10-12)
+
+
+### Features
+
+* combine and batch requests to devices ([#141](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/141)) ([6d6076c](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/6d6076c9dce70b7038d98b850f0c25287a665a41))
+
+
+### Bug Fixes
+
+* characteristics not being updated ([5351c58](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/5351c58d33072baa6bafbb907ebfc6cb84dcb715))
+
 ### [5.1.1-beta.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.1.0...v5.1.1-beta.0) (2020-10-11)
 
 ## [5.1.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.0.0...v5.1.0) (2020-05-13)
