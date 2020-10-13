@@ -126,7 +126,7 @@
     "name",
     {
       "type": "fieldset",
-      "title": "HomeKit",
+      "title": "HomeKit (Optional)",
       "description": "Customize how devices are exposed in HomeKit",
       "expandable": true,
       "items": [
@@ -146,7 +146,7 @@
     },
     {
       "type": "fieldset",
-      "title": "Device Discovery",
+      "title": "Device Discovery (Optional)",
       "description": "Customize device discovery",
       "expandable": true,
       "items": [
@@ -195,7 +195,7 @@
     },
     {
       "type": "fieldset",
-      "title": "Advanced Settings",
+      "title": "Advanced Settings (Optional)",
       "description": "Don't change these, unless you understand what you're doing.",
       "expandable": true,
       "items": ["timeout", "waitTimeUpdate", "transport"]
