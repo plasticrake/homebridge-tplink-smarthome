@@ -87,6 +87,10 @@ MAC Addresses are normalized, special characters are removed and made uppercase 
 
 Devices that support energy monitoring (HS110, etc) will have extra characteristics that are viewable in the Eve app. Turn this off by setting `addCustomCharacteristics` false.
 
+### Discovery and Broadcast
+
+This plugin uses UDP broadcast to find devices on your network. This is also how the Kasa app finds devices. Try setting the `broadcast` configuration if you're having discovery issues. Some users have reported that rebooting their router or changing some router settings have fixed discovery issues.
+
 ### Manually Specifying Devices
 
 If you have a network setup where UDP broadcast is not working, you can manually specify the devices you'd like this plugin to use. This will send the discovery message directly to these devices in addition to the UDP broadcast. **Note that your device must have a static IP to work.**
