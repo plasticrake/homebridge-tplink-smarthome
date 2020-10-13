@@ -3,21 +3,65 @@ import defaults from 'lodash.defaults';
 import { isObjectLike } from './utils';
 
 export interface TplinkSmarthomeConfigInput {
+  // ==================
+  // HomeKit
+  // ------------------
   /**
    * Adds energy monitoring characteristics viewable in Eve app
+   * plug: Amperes, KilowattHours, VoltAmperes, Volts, Watts
+   * bulb: Watts
    * @defaultValue true
    */
   addCustomCharacteristics?: boolean;
   /**
-   * (Watts) For plugs that support energy monitoring (HS110), min power draw for OutletInUse
+   * (Watts) For plugs that support energy monitoring (e.g. HS110), min power draw for OutletInUse
    * @defaultValue 0
    */
   inUseThreshold?: number;
   /**
-   * Matching models are created in homekit as a Switch instead of an Outlet
+   * Matching models are created in HomeKit as a Switch instead of an Outlet
    * @defaultValue ['HS200', 'HS210']
    */
   switchModels?: Array<string>;
+
+  // ==================
+  // Discovery
+  // ------------------
+  /**
+   * Broadcast Address. If discovery is not working tweak to match your subnet, eg: 192.168.0.255
+   * @defaultValue '255.255.255.255'
+   */
+  broadcast?: string;
+  /**
+   * (seconds) How often to check device status in the background
+   * @defaultValue 10
+   */
+  pollingInterval?: number;
+  /**
+   * ["plug", "bulb"] to find all TPLink device types or ["plug"] / ["bulb"] for only plugs or bulbs
+   * @defaultValue ["plug", "bulb"]
+   */
+  deviceTypes?: Array<'plug' | 'bulb'>;
+  /**
+   * Allow-list of mac addresses to include. If specified will ignore other devices.
+   * MAC Addresses are normalized, special characters are removed and made uppercase for comparison.
+   * Supports glob-style patterns
+   */
+  macAddresses?: Array<string>;
+  /**
+   * Deny-list of mac addresses to exclude.
+   * MAC Addresses are normalized, special characters are removed and made uppercase for comparison.
+   * Supports glob-style patterns
+   */
+  excludeMacAddresses?: Array<string>;
+  /**
+   * Manual list of devices (see "Manually Specifying Devices" section below)
+   */
+  devices?: Array<{ host: string; port?: number | undefined }>;
+
+  // ==================
+  // Advanced Settings
+  // ------------------
   /**
    * (seconds) communication timeout
    * @defaultValue 15
@@ -27,34 +71,6 @@ export interface TplinkSmarthomeConfigInput {
    * Use 'tcp' or 'udp' for device communication. Discovery will always use 'udp'
    */
   transport?: 'tcp' | 'udp';
-
-  /**
-   * Broadcast Address. If discovery is not working tweak to match your subnet, eg: 192.168.0.255
-   * @defaultValue '255.255.255.255'
-   */
-  broadcast?: string;
-  /**
-   * Manual list of devices (see "Manually Specifying Devices" section below)
-   */
-  devices?: Array<{ host: string; port?: number | undefined }>;
-  /**
-   * ["plug", "bulb"] to find all TPLink device types or ["plug"] / ["bulb"] for only plugs or bulbs
-   * @defaultValue ["plug", "bulb"]
-   */
-  deviceTypes?: Array<'plug' | 'bulb'>;
-  /**
-   * Allow-list of mac addresses to include. If specified will ignore other devices. Supports glob-style patterns
-   */
-  macAddresses?: Array<string>;
-  /**
-   * Deny-list of mac addresses to exclude. Supports glob-style patterns
-   */
-  excludeMacAddresses?: Array<string>;
-  /**
-   * (seconds) How often to check device status in the background
-   * @defaultValue 10
-   */
-  pollingInterval?: number;
   /**
    * (milliseconds) The time to wait to combine similar commands for a device before sending a command to a device
    * @defaultValue 100
@@ -66,15 +82,16 @@ type TplinkSmarthomeConfigDefault = {
   addCustomCharacteristics: boolean;
   inUseThreshold: number;
   switchModels: Array<string>;
-  timeout: number;
-  transport: 'tcp' | 'udp' | undefined;
 
   broadcast: string;
-  devices?: Array<{ host: string; port?: number | undefined }>;
+  pollingInterval: number;
   deviceTypes: Array<'plug' | 'bulb'>;
   macAddresses?: Array<string>;
   excludeMacAddresses?: Array<string>;
-  pollingInterval: number;
+  devices?: Array<{ host: string; port?: number | undefined }>;
+
+  timeout: number;
+  transport: 'tcp' | 'udp' | undefined;
   waitTimeUpdate: number;
 };
 
@@ -109,15 +126,16 @@ export const defaultConfig: TplinkSmarthomeConfigDefault = {
   addCustomCharacteristics: true,
   inUseThreshold: 0,
   switchModels: ['HS200', 'HS210'],
-  timeout: 15,
-  transport: undefined,
 
   broadcast: '255.255.255.255',
-  devices: undefined,
+  pollingInterval: 10,
   deviceTypes: ['bulb', 'plug'],
   macAddresses: undefined,
   excludeMacAddresses: undefined,
-  pollingInterval: 10,
+  devices: undefined,
+
+  timeout: 15,
+  transport: undefined,
   waitTimeUpdate: 100,
 };
 

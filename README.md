@@ -13,7 +13,7 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 More models may be supported than listed. If you have another model working please let me know so I can add here.
 
-## Homekit
+## HomeKit
 
 | Model                                    | deviceType | Service   | Characteristics                                                                                                                                                                                    |
 | ---------------------------------------- | ---------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -36,17 +36,15 @@ More models may be supported than listed. If you have another model working plea
 
 - `npm update -g homebridge-tplink-smarthome`
 
-## Note for Previous Users of homebridge-hs100
-
-If you had `homebridge-hs100` installed previously, due to how homebridge works, you may get this error on startup: `Error: Cannot add a bridged Accessory with the same UUID as another bridged Accessory:`. You'll need to remedy this by deleting the `cachedAccessories` file, or by manually editing the file to remove the old accessories under `homebridge-hs100`. On most systems that file will be here: `~/.homebridge/accessories/cachedAccessories`.
-
 ## Configuration
 
 ### Sample Configuration
 
 #### Minimal
 
-```js
+Most setups do not require any other configuration to get up and runing.
+
+```json
 "platforms": [{
   "platform": "TplinkSmarthome",
   "name": "TplinkSmarthome"
@@ -55,30 +53,27 @@ If you had `homebridge-hs100` installed previously, due to how homebridge works,
 
 #### All options with defaults
 
-**Note that comments aren't allowed in JSON files. But are included here for readability.**
+See [config.ts](src/config.ts) for documention on these options. It is recommended to use [Homebridge Config UI X](https://github.com/oznu/homebridge-config-ui-x) to setup the configuration if you don't want to manually edit JSON files.
 
-```js
+```json
 "platforms": [{
   "platform": "TplinkSmarthome",
   "name": "TplinkSmarthome",
 
-  ////////////////////////////////
-  // Device Discovery Options
-  ////////////////////////////////
-  "broadcast": "255.255.255.255", // Broadcast Address. If discovery is not working tweak to match your subnet, eg: 192.168.0.255
-  "devices": [],         // Manual list of devices (see "Manually Specifying Devices" section below)
-  "deviceTypes": [],     // set to [] or ["plug", "bulb"] to find all TPLink device types or ["plug"] / ["bulb"] for only plugs or bulbs
-  "macAddresses": [],    // Whitelist of mac addresses to include. If specified will ignore other devices. Supports glob-style patterns
-  "excludeMacAddresses": [],  // Blacklist of mac addresses to exclude. Supports glob-style patterns
-  "pollingInterval": 10, // (seconds) How often to check device status in the background
+  "addCustomCharacteristics": true,
+  "inUseThreshold": 0,
+  "switchModels": ["HS200", "HS210"],
 
-  ////////////////////////////////
-  // Device Options
-  ////////////////////////////////
-  "addCustomCharacteristics": true, // Adds energy monitoring characteristics viewable in Eve app
-  "inUseThreshold": 0,       // (Watts) For plugs that support energy monitoring (HS110), min power draw for OutletInUse
-  "switchModels": ["HS200", "HS210"], // Matching models are created in homekit as a Switch instead of an Outlet
-  "timeout": 15               // (seconds) communication timeout
+  "broadcast": "255.255.255.255",
+  "pollingInterval": 10,
+  "deviceTypes": ["bulb", "plug"],
+  "macAddresses": undefined,
+  "excludeMacAddresses": undefined,
+  "devices": undefined,
+
+  "timeout": 15,
+  "transport": 'tcp',
+  "waitTimeUpdate": 100
 }]
 ```
 
