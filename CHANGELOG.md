@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0-beta.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.2.0-beta.0...v5.2.0-beta.1) (2020-10-13)
+
+
+### Features
+
+* improve homebridge-config-ui-x configuration ([#142](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/142)) ([f7a157d](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/f7a157d350fadbe5a1c1164ae0cda19599339a3f))
+
 ## [5.2.0-beta.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.1.1-beta.0...v5.2.0-beta.0) (2020-10-12)
 
 
