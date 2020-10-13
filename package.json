@@ -35,6 +35,10 @@
     "type": "git",
     "url": "git://github.com/plasticrake/homebridge-tplink-smarthome.git"
   },
+  "funding": {
+    "type": "github",
+    "url": "ttps://github.com/sponsors/plasticrake"
+  },
   "license": "MIT",
   "author": "Patrick Seal",
   "main": "lib/index.js",
