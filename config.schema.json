@@ -2,8 +2,8 @@
   "pluginAlias": "TplinkSmarthome",
   "pluginType": "platform",
   "singular": true,
-  "headerDisplay": "TPLink Smart Home Plugin.",
-  "footerDisplay": "See [README](https://github.com/plasticrake/homebridge-tplink-smarthome/blob/master/README.md) for more information.",
+  "headerDisplay": "TP-Link Smart Home Plugin.<p>Most users do not require configuration and can just click \"Save\" to get started. See [README](https://github.com/plasticrake/homebridge-tplink-smarthome/blob/master/README.md) for more information.</p>",
+  "footerDisplay": "",
   "schema": {
     "type": "object",
     "properties": {
@@ -28,7 +28,7 @@
       },
       "switchModels": {
         "type": "array",
-        "description": "Matching models are created in homekit as a Switch instead of an Outlet. Default: ['HS200', 'HS210']",
+        "description": "Matching models are created in HomeKit as a Switch instead of an Outlet. Default: ['HS200', 'HS210']",
         "items": {
           "type": "string"
         }

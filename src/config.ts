@@ -19,7 +19,7 @@ export interface TplinkSmarthomeConfigInput {
    */
   inUseThreshold?: number;
   /**
-   * Matching models are created in homekit as a Switch instead of an Outlet
+   * Matching models are created in HomeKit as a Switch instead of an Outlet
    * @defaultValue ['HS200', 'HS210']
    */
   switchModels?: Array<string>;

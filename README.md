@@ -13,7 +13,7 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 More models may be supported than listed. If you have another model working please let me know so I can add here.
 
-## Homekit
+## HomeKit
 
 | Model                                    | deviceType | Service   | Characteristics                                                                                                                                                                                    |
 | ---------------------------------------- | ---------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
