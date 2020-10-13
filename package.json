@@ -1,6 +1,6 @@
 {
   "name": "homebridge-tplink-smarthome",
-  "version": "5.2.0-beta.1",
+  "version": "5.2.0",
   "description": "TPLink Smarthome plugin for Homebridge",
   "keywords": [
     "homebridge-plugin",
