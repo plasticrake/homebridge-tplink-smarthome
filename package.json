@@ -39,6 +39,7 @@
   "author": "Patrick Seal",
   "main": "lib/index.js",
   "files": [
+    "config.schema.json",
     "lib"
   ],
   "scripts": {
