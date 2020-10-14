@@ -29,7 +29,10 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
       this.addColorCharacteristics();
     }
 
-    if (tplinkDevice.supportsEmeter) {
+    if (
+      platform.config.addCustomCharacteristics &&
+      tplinkDevice.supportsEmeter
+    ) {
       this.addEnergyCharacteristics();
     }
 

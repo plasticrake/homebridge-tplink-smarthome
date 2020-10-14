@@ -148,12 +148,24 @@ export default abstract class HomeKitDevice {
       c.updateCallback(value);
       return;
     }
-    this.log.warn(
-      '[%s] fireCharacteristicUpdateCallback [%s]: Unable to call updateCallback',
-      this.name,
-      value,
-      this.platform.getCharacteristicName(characteristic)
-    );
+
+    // Characteristic may not be setup on device (e.g. addCustomCharacteristics is false)
+    // Warn if characteristic exists, but do not warn if characteristic does not exist
+    if (c) {
+      this.log.warn(
+        '[%s] fireCharacteristicUpdateCallback [%s]: Unable to call updateCallback',
+        this.name,
+        value,
+        this.platform.getCharacteristicName(characteristic)
+      );
+    } else {
+      this.log.debug(
+        '[%s] fireCharacteristicUpdateCallback [%s]: Unable to call updateCallback',
+        this.name,
+        value,
+        this.platform.getCharacteristicName(characteristic)
+      );
+    }
   }
 
   setCharacteristicUpdateCallback(

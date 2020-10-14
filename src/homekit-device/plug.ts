@@ -15,7 +15,10 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
     if (tplinkDevice.supportsDimmer) {
       this.addBrightnessCharacteristics();
     }
-    if (tplinkDevice.supportsEmeter) {
+    if (
+      platform.config.addCustomCharacteristics &&
+      tplinkDevice.supportsEmeter
+    ) {
       this.addEnergyCharacteristics();
     }
 
