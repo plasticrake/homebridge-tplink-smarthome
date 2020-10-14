@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.2.0...v6.0.0) (2020-10-14)
+
+
+### Bug Fixes
+
+* only add energy characteristics if configured ([52705a6](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/52705a69090c98f1dbc55adea2c0a4ceb5253429)), closes [#144](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/144)
+
 ## [5.2.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.2.0-beta.1...v5.2.0) (2020-10-13)
 
 ## [5.2.0-beta.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.2.0-beta.0...v5.2.0-beta.1) (2020-10-13)
