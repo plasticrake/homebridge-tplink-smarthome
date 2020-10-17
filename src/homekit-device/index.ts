@@ -1,4 +1,5 @@
 import type {
+  Categories,
   CharacteristicGetCallback,
   CharacteristicProps,
   CharacteristicSetCallback,
@@ -27,7 +28,8 @@ export default abstract class HomeKitDevice {
    */
   constructor(
     readonly platform: TplinkSmarthomePlatform,
-    readonly tplinkDevice: TplinkDevice
+    readonly tplinkDevice: TplinkDevice,
+    readonly category: Categories
   ) {
     this.log = platform.log;
 

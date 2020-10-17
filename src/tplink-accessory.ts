@@ -44,7 +44,7 @@ export default class TplinkAccessory {
 
     this.log = platform.log;
 
-    this.hkDevice = create(platform, tplinkDevice);
+    this.hkDevice = create(platform, tplinkDevice, category);
 
     this.name = this.hkDevice.name;
 
@@ -129,11 +129,13 @@ export default class TplinkAccessory {
     if (this.services.Outlet) {
       const characteristics: Array<WithUUID<
         WithUUID<new () => Characteristic>
-      >> = [
-        this.platform.Characteristic.Name,
-        this.platform.Characteristic.On,
-        this.platform.Characteristic.OutletInUse,
-      ];
+      >> = [this.platform.Characteristic.Name, this.platform.Characteristic.On];
+
+      const { Accessory } = platform.api.hap;
+
+      if (category === Accessory.Categories.OUTLET) {
+        characteristics.push(this.platform.Characteristic.OutletInUse);
+      }
 
       if (this.config.addCustomCharacteristics) {
         characteristics.push(

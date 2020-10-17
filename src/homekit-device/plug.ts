@@ -1,3 +1,4 @@
+import type { Categories } from 'homebridge';
 import type { Plug, PlugSysinfo } from 'tplink-smarthome-api';
 
 import HomeKitDevice from '.';
@@ -7,8 +8,12 @@ import { deferAndCombine, isObjectLike } from '../utils';
 export default class HomeKitDevicePlug extends HomeKitDevice {
   private desiredPowerState?: boolean;
 
-  constructor(platform: TplinkSmarthomePlatform, readonly tplinkDevice: Plug) {
-    super(platform, tplinkDevice);
+  constructor(
+    platform: TplinkSmarthomePlatform,
+    readonly tplinkDevice: Plug,
+    readonly category: Categories
+  ) {
+    super(platform, tplinkDevice, category);
 
     this.addBasicCharacteristics();
 
@@ -110,25 +115,29 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
       );
     });
 
-    this.addCharacteristic(this.platform.Characteristic.OutletInUse, {
-      getValue: async () => {
-        return this.tplinkDevice.getInUse().then((value) => {
-          return value;
-        });
-      },
-    });
-    this.tplinkDevice.on('in-use', () => {
-      this.fireCharacteristicUpdateCallback(
-        this.platform.Characteristic.OutletInUse,
-        true
-      );
-    });
-    this.tplinkDevice.on('not-in-use', () => {
-      this.fireCharacteristicUpdateCallback(
-        this.platform.Characteristic.OutletInUse,
-        false
-      );
-    });
+    const { Accessory } = this.platform.api.hap;
+
+    if (this.category === Accessory.Categories.OUTLET) {
+      this.addCharacteristic(this.platform.Characteristic.OutletInUse, {
+        getValue: async () => {
+          return this.tplinkDevice.getInUse().then((value) => {
+            return value;
+          });
+        },
+      });
+      this.tplinkDevice.on('in-use', () => {
+        this.fireCharacteristicUpdateCallback(
+          this.platform.Characteristic.OutletInUse,
+          true
+        );
+      });
+      this.tplinkDevice.on('not-in-use', () => {
+        this.fireCharacteristicUpdateCallback(
+          this.platform.Characteristic.OutletInUse,
+          false
+        );
+      });
+    }
   }
 
   private addBrightnessCharacteristics(): void {

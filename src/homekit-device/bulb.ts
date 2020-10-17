@@ -1,3 +1,4 @@
+import type { Categories } from 'homebridge';
 import type { Bulb, LightState } from 'tplink-smarthome-api';
 
 import HomeKitDevice from '.';
@@ -12,8 +13,12 @@ import {
 export default class HomeKitDeviceBulb extends HomeKitDevice {
   private desiredLightState: LightState = {};
 
-  constructor(platform: TplinkSmarthomePlatform, readonly tplinkDevice: Bulb) {
-    super(platform, tplinkDevice);
+  constructor(
+    platform: TplinkSmarthomePlatform,
+    readonly tplinkDevice: Bulb,
+    readonly category: Categories
+  ) {
+    super(platform, tplinkDevice, category);
 
     this.addBasicCharacteristics();
 

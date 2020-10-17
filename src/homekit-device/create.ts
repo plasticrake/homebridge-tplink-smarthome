@@ -1,3 +1,5 @@
+import type { Categories } from 'homebridge';
+
 import type TplinkSmarthomePlatform from '../platform';
 import type { TplinkDevice } from '../utils';
 
@@ -10,10 +12,11 @@ import HomeKitDevicePlug from './plug';
  */
 export default function create(
   platform: TplinkSmarthomePlatform,
-  tplinkDevice: TplinkDevice
+  tplinkDevice: TplinkDevice,
+  category: Categories
 ): HomeKitDevice {
   if (tplinkDevice.deviceType === 'bulb') {
-    return new HomeKitDeviceBulb(platform, tplinkDevice);
+    return new HomeKitDeviceBulb(platform, tplinkDevice, category);
   }
-  return new HomeKitDevicePlug(platform, tplinkDevice);
+  return new HomeKitDevicePlug(platform, tplinkDevice, category);
 }
