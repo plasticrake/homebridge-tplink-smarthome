@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.0.0...v6.0.1) (2020-10-19)
+
+
+### Bug Fixes
+
+* don't add OutletInUse for SWITCH types ([59e9f42](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/59e9f42532b863766c70d289619ab8f20e01a760)), closes [#146](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/146)
+
 ## [6.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v5.2.0...v6.0.0) (2020-10-14)
 
 
