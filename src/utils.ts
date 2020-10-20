@@ -1,4 +1,4 @@
-import type { Characteristic, Logging, Service, WithUUID } from 'homebridge';
+import type { Characteristic, Service, WithUUID } from 'homebridge';
 
 import type { Bulb, Plug } from 'tplink-smarthome-api';
 
@@ -11,47 +11,6 @@ export function isObjectLike(
     (typeof candidate === 'object' && candidate !== null) ||
     typeof candidate === 'function'
   );
-}
-
-export function callbackify<T>(
-  func: (...args: unknown[]) => Promise<T>,
-  errFunc: (error: Error) => void
-): (error?: Error | null | undefined, value?: T | undefined) => void {
-  return (...args: unknown[]) => {
-    type Callback = (
-      error?: Error | null | undefined,
-      value?: T | undefined
-    ) => void;
-
-    const onlyArgs = [];
-    let callback: Callback;
-
-    for (const arg of args) {
-      if (typeof arg === 'function') {
-        callback = arg as Callback;
-        break;
-      }
-
-      onlyArgs.push(arg);
-    }
-
-    func(...onlyArgs)
-      .then((data) => callback(null, data))
-      .catch((err) => {
-        if (typeof errFunc === 'function') errFunc(err);
-        callback(err);
-      });
-  };
-}
-
-export function callbackifyLogError<T>(
-  acc: { name: string; log: Logging },
-  func: (...args: unknown[]) => Promise<T>
-): (error?: Error | null | undefined, value?: T | undefined) => void {
-  return callbackify(func.bind(acc), (reason) => {
-    acc.log.error('[%s] %s', acc.name, func.name);
-    acc.log.error(String(reason));
-  });
 }
 
 /**
