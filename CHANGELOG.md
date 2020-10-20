@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.0.1...v6.1.0) (2020-10-20)
+
+
+### Features
+
+* add identify functionality to bulbs ([0259e5e](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/0259e5ed9609c65b83b2a0bbbc35efdf3dda31a7))
+
+
+### Bug Fixes
+
+* case typo preventing saturation updates ([178df30](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/178df30e310c5c151894fafba5040ffb2778967f))
+* identify not working ([8b151e9](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/8b151e98915e326c2e0e76cda47f2eaa87199d90))
+* return last known or default values for characteristics ([59838ea](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/59838eacb2a7016ec10979075a724ad82be9d2e9))
+
 ### [6.0.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.0.0...v6.0.1) (2020-10-19)
 
 
