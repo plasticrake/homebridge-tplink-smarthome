@@ -5,6 +5,7 @@ import HomeKitDevice from '.';
 import type TplinkSmarthomePlatform from '../platform';
 import {
   deferAndCombine,
+  delay,
   isObjectLike,
   kelvinToMired,
   miredToKelvin,
@@ -284,6 +285,25 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
   identify(): void {
     this.log.debug(`[${this.name}] identify`);
-    this.log.warn(`[${this.name}] identify, not implemented`);
+    (async () => {
+      try {
+        const origLs = await this.getLightState();
+
+        for (let i = 0; i < 3; i += 1) {
+          /* eslint-disable no-await-in-loop */
+          await this.setLightState({ on_off: 1, brightness: 100 });
+          await delay(500);
+          await this.setLightState({ on_off: 1, brightness: 10 });
+          await delay(500);
+          /* eslint-enable no-await-in-loop */
+        }
+
+        this.setLightState(origLs);
+      } catch (err) {
+        this.log.error(`[${this.name}] identify error`);
+        this.log.error(err);
+      }
+      this.log.debug(`[${this.name}] identify complete`);
+    })();
   }
 }

@@ -4,13 +4,9 @@ import sinonChai from 'sinon-chai';
 
 import { Service } from 'hap-nodejs';
 
-import { deferAndCombine, isObjectLike, lookup } from '../src/utils';
+import { deferAndCombine, delay, isObjectLike, lookup } from '../src/utils';
 
 chai.use(sinonChai);
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 
 describe('utils', function () {
   describe('deferAndCombine', function () {
