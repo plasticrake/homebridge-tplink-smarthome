@@ -144,7 +144,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async () => {
         const sysinfo = await this.getSysInfo();
-        return sysinfo.brightness;
+        return sysinfo.brightness ?? 0;
       },
       setValue: async (value) => {
         if (typeof value === 'number') {

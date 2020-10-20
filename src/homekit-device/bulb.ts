@@ -94,7 +94,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
         return this.getLightState().then((ls) => {
-          return !!ls.on_off;
+          return ls.on_off === 1;
         });
       },
       setValue: async (value) => {
@@ -118,7 +118,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
       );
     });
 
-    this.tplinkDevice.on('lightstate-update', (lightState) => {
+    this.tplinkDevice.on('lightstate-update', (lightState: LightState) => {
       if (lightState.on_off != null) {
         this.fireCharacteristicUpdateCallback(
           this.platform.Characteristic.On,
@@ -172,9 +172,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
   private addBrightnessCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
-      getValue: async () => {
+      getValue: async (): Promise<number> => {
         return this.getLightState().then((ls) => {
-          return ls.brightness;
+          return ls.brightness ?? ls.dft_on_state?.brightness ?? 0;
         });
       },
       setValue: async (value) => {
@@ -201,16 +201,19 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         minValue: Math.ceil(kelvinToMired(max)), // K and Mired are reversed
         maxValue: Math.floor(kelvinToMired(min)), // K and Mired are reversed
       },
-      getValue: async () => {
+      getValue: async (): Promise<number> => {
         const ls = await this.getLightState();
         if (typeof ls.color_temp === 'number') {
           return Math.round(kelvinToMired(ls.color_temp));
         }
+        if (typeof ls.dft_on_state?.color_temp === 'number') {
+          return Math.round(kelvinToMired(ls.dft_on_state.color_temp));
+        }
         if (!('color_temp' in ls)) {
-          return null;
+          return Math.floor(kelvinToMired(min));
         }
         this.log.warn('getValue: Invalid ColorTemperature:', ls.color_temp);
-        return null;
+        return Math.floor(kelvinToMired(min));
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
@@ -226,9 +229,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
   private addColorCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Hue, {
-      getValue: async () => {
+      getValue: async (): Promise<number> => {
         const ls = await this.getLightState();
-        return ls.hue;
+        return ls.hue ?? ls.dft_on_state?.hue ?? 0;
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
@@ -240,9 +243,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
     });
 
     this.addCharacteristic(this.platform.Characteristic.Saturation, {
-      getValue: async () => {
+      getValue: async (): Promise<number> => {
         return this.getLightState().then((ls) => {
-          return ls.saturation;
+          return ls.saturation ?? ls.dft_on_state?.saturation ?? 0;
         });
       },
       setValue: async (value) => {
@@ -257,7 +260,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
   private addEnergyCharacteristics() {
     this.addCharacteristic(this.platform.customCharacteristics.Watts, {
-      getValue: async () => {
+      getValue: async (): Promise<number | null> => {
         const emeterRealtime = await this.getRealtime();
         if (isObjectLike(emeterRealtime)) {
           if (typeof emeterRealtime.power === 'number') {

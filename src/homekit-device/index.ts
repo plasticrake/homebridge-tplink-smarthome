@@ -2,7 +2,6 @@ import type {
   Categories,
   CharacteristicGetCallback,
   CharacteristicProps,
-  CharacteristicSetCallback,
   CharacteristicValue,
   Logger,
 } from 'homebridge';
@@ -13,7 +12,7 @@ import type { TplinkDevice } from '../utils';
 
 export type CharacteristicConfig = {
   getValue?: () => Promise<Parameters<CharacteristicGetCallback>[1]>;
-  setValue?: (value?: CharacteristicValue) => Promise<void>;
+  setValue?: (value: CharacteristicValue) => Promise<void>;
   props?: Partial<CharacteristicProps>;
   updateCallback?: (value: CharacteristicValue) => void;
 };
@@ -121,7 +120,7 @@ export default abstract class HomeKitDevice {
 
   async setCharacteristicValue(
     characteristic: { UUID: string },
-    value: Parameters<CharacteristicSetCallback>[1]
+    value: CharacteristicValue
   ): Promise<void> {
     this.log.debug(
       '[%s] setCharacteristicValue [%s]',
