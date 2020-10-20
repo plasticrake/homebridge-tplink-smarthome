@@ -153,11 +153,11 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
             lightState.hue
           );
         }
-        if (lightState.Saturation != null) {
+        if (lightState.saturation != null) {
           hueOrSatChanged = true;
           this.fireCharacteristicUpdateCallback(
             this.platform.Characteristic.Saturation,
-            lightState.Saturation
+            lightState.saturation
           );
         }
         if (hueOrSatChanged) {
