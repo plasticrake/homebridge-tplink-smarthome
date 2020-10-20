@@ -5,6 +5,8 @@ import { PlatformAccessoryEvent } from 'homebridge';
 import type {
   Categories,
   Characteristic,
+  CharacteristicGetCallback,
+  CharacteristicSetCallback,
   CharacteristicValue,
   Logging,
   PlatformAccessory,
@@ -18,7 +20,7 @@ import AccessoryInformation from './accessory-information';
 import { TplinkSmarthomeConfig } from './config';
 import HomekitDevice from './homekit-device';
 import type TplinkSmarthomePlatform from './platform';
-import { callbackify, getOrAddCharacteristic } from './utils';
+import { getOrAddCharacteristic } from './utils';
 import type { TplinkDevice } from './utils';
 
 export default class TplinkAccessory {
@@ -188,15 +190,6 @@ export default class TplinkAccessory {
     });
   }
 
-  private callbackify<T>(
-    func: (...args: unknown[]) => Promise<T>
-  ): (error?: Error | null | undefined, value?: T | undefined) => void {
-    return callbackify(func.bind(this), (reason: unknown) => {
-      this.log.error('[%s] %s', this.name, func.name);
-      this.log.error(String(reason));
-    });
-  }
-
   private setupCharacteristics(
     service: Service,
     characteristicTypes: Array<WithUUID<new () => Characteristic>>
@@ -232,22 +225,58 @@ export default class TplinkAccessory {
           characteristic.setProps(props);
         }
 
-        characteristic.on(
-          'get',
-          this.callbackify(() => {
-            return this.hkDevice.getCharacteristicValue(characteristic);
-          })
-        );
+        characteristic.on('get', (callback: CharacteristicGetCallback) => {
+          this.log.debug(
+            '[%s] get %s',
+            this.name,
+            this.platform.getCharacteristicName(characteristic)
+          );
+
+          this.hkDevice
+            .getCharacteristicValue(characteristic)
+            .then((value) => {
+              callback(null, value);
+            })
+            .catch((err) => {
+              this.log.error(
+                '[%s] get %s',
+                this.name,
+                this.platform.getCharacteristicName(characteristic)
+              );
+              this.log.error(String(err));
+              callback(err);
+            });
+        });
 
         if (this.hkDevice.supportsCharacteristicSet(characteristic)) {
           characteristic.on(
             'set',
-            this.callbackify((value) => {
-              return this.hkDevice.setCharacteristicValue(
-                characteristic,
-                value as CharacteristicValue // TODO: refactor
+            (
+              value: CharacteristicValue,
+              callback: CharacteristicSetCallback
+            ) => {
+              this.log.debug(
+                '[%s] set %s %s',
+                this.name,
+                this.platform.getCharacteristicName(characteristic),
+                value
               );
-            })
+
+              this.hkDevice
+                .setCharacteristicValue(characteristic, value)
+                .then(() => {
+                  callback(null);
+                })
+                .catch((err) => {
+                  this.log.error(
+                    '[%s] set %s',
+                    this.name,
+                    this.platform.getCharacteristicName(characteristic)
+                  );
+                  this.log.error(String(err));
+                  callback(err);
+                });
+            }
           );
         }
 

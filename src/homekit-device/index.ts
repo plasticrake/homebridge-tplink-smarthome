@@ -1,9 +1,9 @@
 import type {
   Categories,
-  CharacteristicGetCallback,
   CharacteristicProps,
   CharacteristicValue,
   Logger,
+  Nullable,
 } from 'homebridge';
 
 import type TplinkSmarthomePlatform from '../platform';
@@ -11,7 +11,7 @@ import type TplinkSmarthomePlatform from '../platform';
 import type { TplinkDevice } from '../utils';
 
 export type CharacteristicConfig = {
-  getValue?: () => Promise<Parameters<CharacteristicGetCallback>[1]>;
+  getValue?: () => Promise<Nullable<CharacteristicValue>>;
   setValue?: (value: CharacteristicValue) => Promise<void>;
   props?: Partial<CharacteristicProps>;
   updateCallback?: (value: CharacteristicValue) => void;
@@ -106,7 +106,7 @@ export default abstract class HomeKitDevice {
 
   async getCharacteristicValue(characteristic: {
     UUID: string;
-  }): Promise<unknown> {
+  }): Promise<Nullable<CharacteristicValue>> {
     this.log.debug(
       '[%s] getCharacteristicValue',
       this.name,
@@ -114,7 +114,7 @@ export default abstract class HomeKitDevice {
     );
 
     const c = this.getCharacteristic(characteristic);
-    if (!('getValue' in c) || c.getValue === undefined) return undefined;
+    if (!('getValue' in c) || c.getValue === undefined) return null;
     return c.getValue();
   }
 
@@ -123,10 +123,10 @@ export default abstract class HomeKitDevice {
     value: CharacteristicValue
   ): Promise<void> {
     this.log.debug(
-      '[%s] setCharacteristicValue [%s]',
+      '[%s] setCharacteristicValue %s %s',
       this.name,
-      value,
-      this.platform.getCharacteristicName(characteristic)
+      this.platform.getCharacteristicName(characteristic),
+      value
     );
 
     const c = this.getCharacteristic(characteristic);
@@ -139,10 +139,10 @@ export default abstract class HomeKitDevice {
     value: CharacteristicValue
   ): void {
     this.log.debug(
-      '[%s] fireCharacteristicUpdateCallback [%s]',
+      '[%s] fireCharacteristicUpdateCallback [%s] %s',
       this.name,
-      value,
-      this.platform.getCharacteristicName(characteristic)
+      this.platform.getCharacteristicName(characteristic),
+      value
     );
     const c = this.getCharacteristic(characteristic);
     if (c && typeof c.updateCallback === 'function') {
