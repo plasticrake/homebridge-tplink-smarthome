@@ -96,10 +96,9 @@ export default class TplinkAccessory {
     }
 
     this.homebridgeAccessory.context.deviceId = this.hkDevice.id;
-    this.homebridgeAccessory.on(
-      PlatformAccessoryEvent.IDENTIFY,
-      this.hkDevice.identify
-    );
+    this.homebridgeAccessory.on(PlatformAccessoryEvent.IDENTIFY, () => {
+      this.hkDevice.identify();
+    });
 
     services.forEach((serviceConstructor) => {
       const serviceName = this.platform.getServiceName(serviceConstructor);
