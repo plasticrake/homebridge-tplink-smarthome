@@ -42,12 +42,18 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
       this.addEnergyCharacteristics();
     }
 
-    this.getLightState = deferAndCombine(() => {
+    this.getLightState = deferAndCombine((requestCount) => {
+      this.log.debug(
+        `[${this.name}] executing deferred getLightState count: ${requestCount}`
+      );
       return this.tplinkDevice.lighting.getLightState();
     }, platform.config.waitTimeUpdate);
 
     this.setLightState = deferAndCombine(
-      () => {
+      (requestCount) => {
+        this.log.debug(
+          `[${this.name}] executing deferred setLightState count: ${requestCount}`
+        );
         if (Object.keys(this.desiredLightState).length === 0) {
           this.log.warn('setLightState called with empty desiredLightState');
           return Promise.resolve(true);

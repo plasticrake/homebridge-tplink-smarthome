@@ -27,7 +27,7 @@ export function isObjectLike(
  * @returns {(arg?: U) => Promise<T>}
  */
 export function deferAndCombine<T, U>(
-  fn: () => Promise<T>,
+  fn: (requestCount: number) => Promise<T>,
   timeout: number,
   runNowFn?: (arg: U) => void
 ): (arg?: U) => Promise<T> {
@@ -50,7 +50,7 @@ export function deferAndCombine<T, U>(
 
       setTimeout(() => {
         isWaiting = false;
-        fn()
+        fn(requests.length)
           .then((value) => {
             for (const d of requests) {
               d.resolve(value);

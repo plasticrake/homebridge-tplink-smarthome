@@ -27,16 +27,18 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
       this.addEnergyCharacteristics();
     }
 
-    this.getSysInfo = deferAndCombine(() => {
+    this.getSysInfo = deferAndCombine((requestCount) => {
+      this.log.debug(
+        `[${this.name}] executing deferred getSysInfo count: ${requestCount}`
+      );
       return this.tplinkDevice.getSysInfo();
     }, platform.config.waitTimeUpdate);
 
-    this.getPowerState = deferAndCombine(() => {
-      return this.tplinkDevice.getPowerState();
-    }, platform.config.waitTimeUpdate);
-
     this.setPowerState = deferAndCombine(
-      async () => {
+      async (requestCount) => {
+        this.log.debug(
+          `[${this.name}] executing deferred setPowerState count: ${requestCount}`
+        );
         if (this.desiredPowerState === undefined) {
           this.log.warn(
             'setPowerState called with undefined desiredPowerState'
@@ -56,7 +58,10 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
       }
     );
 
-    this.getRealtime = deferAndCombine(() => {
+    this.getRealtime = deferAndCombine((requestCount) => {
+      this.log.debug(
+        `[${this.name}] executing deferred getRealtime count: ${requestCount}`
+      );
       return this.tplinkDevice.emeter.getRealtime();
     }, platform.config.waitTimeUpdate);
   }
@@ -67,13 +72,6 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
    * @private
    */
   private getSysInfo: () => Promise<PlugSysinfo>;
-
-  /**
-   * Aggregates getPowerState requests
-   *
-   * @private
-   */
-  private getPowerState: () => Promise<boolean>;
 
   /**
    * Aggregates setPowerState requests
@@ -92,7 +90,9 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
   private addBasicCharacteristics(): void {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
-        return this.getPowerState();
+        return this.getSysInfo().then((si) => {
+          return si.relay_state === 1;
+        });
       },
       setValue: async (value) => {
         if (typeof value === 'boolean') {
