@@ -14,13 +14,15 @@ import type {
   WithUUID,
 } from 'homebridge';
 
+import chalk from 'chalk';
+
 import create from './homekit-device/create';
 
 import AccessoryInformation from './accessory-information';
 import { TplinkSmarthomeConfig } from './config';
 import HomekitDevice from './homekit-device';
 import type TplinkSmarthomePlatform from './platform';
-import { getOrAddCharacteristic } from './utils';
+import { getOrAddCharacteristic, prefixLogger } from './utils';
 import type { TplinkDevice } from './utils';
 
 export default class TplinkAccessory {
@@ -34,6 +36,11 @@ export default class TplinkAccessory {
 
   private readonly name: string;
 
+  private lsc: (
+    serviceOrCharacteristic: Service | Characteristic | { UUID: string },
+    characteristic?: Characteristic | { UUID: string }
+  ) => string;
+
   constructor(
     private readonly platform: TplinkSmarthomePlatform,
     private readonly config: TplinkSmarthomeConfig,
@@ -44,39 +51,38 @@ export default class TplinkAccessory {
   ) {
     const CustomCharacteristic = platform.customCharacteristics;
 
-    this.log = platform.log;
-
     this.hkDevice = create(platform, tplinkDevice, category);
 
     this.name = this.hkDevice.name;
 
-    const categoryName = platform.getCategoryName(category);
+    this.log = prefixLogger(
+      platform.log,
+      () => `${chalk.blue(`[${this.name}]`)}`
+    );
+
+    this.lsc = this.platform.lsc.bind(this.platform);
+
+    const categoryName = platform.getCategoryName(category) ?? '';
 
     if (homebridgeAccessory !== undefined) {
       this.homebridgeAccessory = homebridgeAccessory;
 
       this.log.debug(
-        `[${this.name}] Existing Accessory found [${
-          homebridgeAccessory.context.deviceId
-        }] [${homebridgeAccessory.UUID}] category: ${categoryName || ''}`
+        `Existing Accessory found [${homebridgeAccessory.context.deviceId}] [${homebridgeAccessory.UUID}] category: ${categoryName}`
       );
       this.homebridgeAccessory.displayName = this.name;
       if (this.homebridgeAccessory.category !== category) {
         this.log.warn(
-          `[${
-            this.name
-          }] Correcting Accessory Category from: ${platform.getCategoryName(
+          `Correcting Accessory Category from: ${platform.getCategoryName(
             this.homebridgeAccessory.category
-          )} to: ${categoryName || ''}`
+          )} to: ${categoryName}`
         );
         this.homebridgeAccessory.category = category;
       }
     } else {
       const uuid = platform.api.hap.uuid.generate(this.hkDevice.id);
       this.log.debug(
-        `[${this.name}] Creating new Accessory [${
-          this.hkDevice.id
-        }] [${uuid}] category: ${categoryName || ''}`
+        `Creating new Accessory [${this.hkDevice.id}] [${uuid}] category: ${categoryName}`
       );
       // eslint-disable-next-line new-cap
       this.homebridgeAccessory = new platform.api.platformAccessory(
@@ -115,7 +121,7 @@ export default class TplinkAccessory {
 
       let service = this.homebridgeAccessory.getService(serviceConstructor);
       if (!service) {
-        this.log.debug(`[${this.name}] Creating new ${serviceName} Service`);
+        this.log.debug(`Creating new ${serviceName} Service`);
         service = this.homebridgeAccessory.addService(
           serviceConstructor,
           this.name
@@ -181,8 +187,7 @@ export default class TplinkAccessory {
       if (service === this.services.Outlet) return;
       if (service === this.services.Switch) return;
       this.log.warn(
-        `[${this.name}] Removing stale Service: [%s] uuid:[%s] subtype:[%s]`,
-        this.platform.getServiceName(service),
+        `Removing stale Service: ${this.lsc(service)} uuid:[%s] subtype:[%s]`,
         service.UUID,
         service.subtype || ''
       );
@@ -205,9 +210,10 @@ export default class TplinkAccessory {
 
     characteristicsToRemove.forEach((characteristicToRemove) => {
       this.log.warn(
-        `[${this.name}] Removing stale Characteristic: [%s.%s] uuid:[%s]`,
-        this.platform.getServiceName(service),
-        this.platform.getCharacteristicName(characteristicToRemove),
+        `Removing stale Characteristic: ${this.lsc(
+          service,
+          characteristicToRemove
+        )} uuid:[%s]`,
         characteristicToRemove.UUID
       );
       service.removeCharacteristic(characteristicToRemove);
@@ -226,11 +232,7 @@ export default class TplinkAccessory {
         }
 
         characteristic.on('get', (callback: CharacteristicGetCallback) => {
-          this.log.debug(
-            '[%s] get %s',
-            this.name,
-            this.platform.getCharacteristicName(characteristic)
-          );
+          this.log.debug(`get ${this.lsc(characteristic)}`);
 
           this.hkDevice
             .getCharacteristicValue(characteristic)
@@ -238,11 +240,7 @@ export default class TplinkAccessory {
               callback(null, value);
             })
             .catch((err) => {
-              this.log.error(
-                '[%s] get %s',
-                this.name,
-                this.platform.getCharacteristicName(characteristic)
-              );
+              this.log.error(`get ${this.lsc(characteristic)}`);
               this.log.error(String(err));
               callback(err);
             });
@@ -255,12 +253,7 @@ export default class TplinkAccessory {
               value: CharacteristicValue,
               callback: CharacteristicSetCallback
             ) => {
-              this.log.debug(
-                '[%s] set %s %s',
-                this.name,
-                this.platform.getCharacteristicName(characteristic),
-                value
-              );
+              this.log.debug(`set ${this.lsc(characteristic)} %s`, value);
 
               this.hkDevice
                 .setCharacteristicValue(characteristic, value)
@@ -268,11 +261,7 @@ export default class TplinkAccessory {
                   callback(null);
                 })
                 .catch((err) => {
-                  this.log.error(
-                    '[%s] set %s',
-                    this.name,
-                    this.platform.getCharacteristicName(characteristic)
-                  );
+                  this.log.error(`set ${this.lsc(characteristic)}`);
                   this.log.error(String(err));
                   callback(err);
                 });

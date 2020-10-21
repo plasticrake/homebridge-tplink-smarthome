@@ -9,9 +9,11 @@ import type {
   Logging,
   PlatformAccessory,
   PlatformConfig,
+  Service,
   WithUUID,
 } from 'homebridge';
 
+import chalk from 'chalk';
 import { satisfies } from 'semver';
 import { Client } from 'tplink-smarthome-api';
 import type { Sysinfo } from 'tplink-smarthome-api';
@@ -52,11 +54,12 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     public readonly api: API
   ) {
     this.log.info(
-      '%s v%s, node %s, homebridge v%s',
+      '%s v%s, node %s, homebridge v%s, api v%s',
       packageConfig.name,
       packageConfig.version,
       process.version,
-      api.serverVersion
+      api.serverVersion,
+      api.version
     );
     if (!satisfies(process.version, packageConfig.engines.node)) {
       this.log.error(
@@ -71,19 +74,18 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
     this.customCharacteristics = Characteristics(api.hap.Characteristic);
 
-    const TplinkSmarthomeLog: Logging = Object.assign(() => {}, this.log, {
+    const tplinkApiLogger: Logging = Object.assign(() => {}, this.log, {
       prefix: `${this.log.prefix || PLATFORM_NAME}.API`,
     });
 
     const client = new Client({
-      logger: TplinkSmarthomeLog,
+      logger: tplinkApiLogger,
       defaultSendOptions: this.config.defaultSendOptions,
     });
 
     client.on('device-new', (device: TplinkDevice) => {
       this.log.info(
-        'New Device Online: [%s] %s [%s]',
-        device.alias,
+        `New Device Online: ${chalk.blue(`[${device.alias}]`)} %s [%s]`,
         device.deviceType,
         device.id,
         device.host,
@@ -94,8 +96,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
     client.on('device-online', (device: TplinkDevice) => {
       this.log.debug(
-        'Device Online: [%s] %s [%s]',
-        device.alias,
+        `Device Online: ${chalk.blue(`[${device.alias}]`)} %s [%s]`,
         device.deviceType,
         device.id,
         device.host,
@@ -108,7 +109,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
       const deviceAccessory = this.deviceAccessories.get(device.id);
       if (deviceAccessory !== undefined) {
         this.log.debug(
-          'Device Offline: [%s] %s [%s]',
+          `Device Offline: ${chalk.blue(`[${device.alias}]`)} %s [%s]`,
           deviceAccessory.homebridgeAccessory.displayName,
           device.deviceType,
           device.id,
@@ -134,10 +135,46 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     });
   }
 
+  /**
+   * Return string representation of Service/Characteristic for logging
+   *
+   * @internal
+   */
+  public lsc(
+    serviceOrCharacteristic: Service | Characteristic | { UUID: string },
+    characteristic?: Characteristic | { UUID: string }
+  ): string {
+    let serviceName: string | undefined;
+    let characteristicName: string | undefined;
+
+    if (serviceOrCharacteristic instanceof this.api.hap.Service) {
+      serviceName = this.getServiceName(serviceOrCharacteristic);
+    } else if (
+      serviceOrCharacteristic instanceof this.api.hap.Characteristic ||
+      ('UUID' in serviceOrCharacteristic &&
+        typeof serviceOrCharacteristic.UUID === 'string')
+    ) {
+      characteristicName = this.getCharacteristicName(serviceOrCharacteristic);
+    }
+
+    if (characteristic instanceof this.api.hap.Characteristic) {
+      characteristicName = this.getCharacteristicName(characteristic);
+    }
+
+    if (serviceName != null && characteristicName != null) {
+      return `[${chalk.yellow(serviceName)}.${chalk.green(
+        characteristicName
+      )}]`;
+    }
+    if (serviceName !== undefined) return `[${chalk.yellow(serviceName)}]`;
+    return `[${chalk.green(characteristicName)}]`;
+  }
+
   private createTplinkAccessory(
     accessory: PlatformAccessory | undefined,
     tplinkDevice: TplinkDevice
   ): TplinkAccessory {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const { config, Service } = this;
     const { Accessory } = this.api.hap;
 
@@ -220,8 +257,9 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
    */
   registerPlatformAccessory(platformAccessory: PlatformAccessory): void {
     this.log.debug(
-      'registerPlatformAccessory(%s)',
-      platformAccessory.displayName
+      `registerPlatformAccessory(${chalk.blue(
+        `[${platformAccessory.displayName}]`
+      )})`
     );
     this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
       platformAccessory,
@@ -233,12 +271,12 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
    */
   configureAccessory(accessory: PlatformAccessory): void {
     this.log.info(
-      'Configuring cached accessory: [%s] %s %s',
-      accessory.displayName,
-      accessory.context ? accessory.context.deviceId : null,
-      accessory.UUID
+      `Configuring cached accessory: ${chalk.blue(
+        `[${accessory.displayName}]`
+      )} UUID: ${accessory.UUID} deviceId: %s `,
+      accessory.context?.deviceId
     );
-    this.log.debug('%j', accessory);
+    this.log.debug('%O', accessory.context);
     this.homebridgeAccessories.set(accessory.UUID, accessory);
   }
 
@@ -258,7 +296,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
     if (deviceAccessory !== undefined) {
       if (device.deviceType === 'plug' && device.supportsEmeter) {
-        this.log.debug('getEmeterRealtime [%s]', device.alias);
+        this.log.debug(`getEmeterRealtime ${chalk.blue(`[${device.alias}]`)}`);
         device.emeter.getRealtime().catch((reason) => {
           this.log.error('[%s] %s', device.alias, 'emeter.getRealtime()');
           this.log.error(reason);
@@ -268,8 +306,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     }
 
     this.log.info(
-      'Adding: [%s] %s [%s]',
-      device.alias,
+      `Adding: ${chalk.blue(`[${device.alias}]`)} %s [%s]`,
       device.deviceType,
       deviceId
     );
@@ -288,7 +325,9 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
    */
   // @ts-ignore: future use
   private removeAccessory(homebridgeAccessory: PlatformAccessory): void {
-    this.log.info('Removing: %s', homebridgeAccessory.displayName);
+    this.log.info(
+      `Removing: ${chalk.blue(`[${homebridgeAccessory.displayName}]`)}`
+    );
 
     this.deviceAccessories.delete(homebridgeAccessory.context.deviceId);
     this.homebridgeAccessories.delete(homebridgeAccessory.UUID);

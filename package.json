@@ -54,6 +54,7 @@
     "postversion": "git push && git push --tags"
   },
   "dependencies": {
+    "chalk": "^4.1.0",
     "lodash.castarray": "^4.4.0",
     "lodash.defaults": "^4.2.0",
     "semver": "^7.3.2",

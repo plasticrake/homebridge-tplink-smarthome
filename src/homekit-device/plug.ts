@@ -28,16 +28,14 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
     }
 
     this.getSysInfo = deferAndCombine((requestCount) => {
-      this.log.debug(
-        `[${this.name}] executing deferred getSysInfo count: ${requestCount}`
-      );
+      this.log.debug(`executing deferred getSysInfo count: ${requestCount}`);
       return this.tplinkDevice.getSysInfo();
     }, platform.config.waitTimeUpdate);
 
     this.setPowerState = deferAndCombine(
       async (requestCount) => {
         this.log.debug(
-          `[${this.name}] executing deferred setPowerState count: ${requestCount}`
+          `executing deferred setPowerState count: ${requestCount}`
         );
         if (this.desiredPowerState === undefined) {
           this.log.warn(
@@ -59,9 +57,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
     );
 
     this.getRealtime = deferAndCombine((requestCount) => {
-      this.log.debug(
-        `[${this.name}] executing deferred getRealtime count: ${requestCount}`
-      );
+      this.log.debug(`executing deferred getRealtime count: ${requestCount}`);
       return this.tplinkDevice.emeter.getRealtime();
     }, platform.config.waitTimeUpdate);
   }
@@ -250,17 +246,17 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
   }
 
   identify(): void {
-    this.log.info(`[${this.name}] identify`);
+    this.log.info(`identify`);
     this.tplinkDevice
       .blink(1, 500)
       .then(() => {
         return this.tplinkDevice.blink(2, 500);
       })
       .then(() => {
-        this.log.debug(`[${this.name}] identify done`);
+        this.log.debug(`identify done`);
       })
       .catch((reason) => {
-        this.log.error(`[${this.name}] identify error`);
+        this.log.error(`identify complete`);
         this.log.error(reason);
       });
   }

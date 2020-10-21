@@ -1,14 +1,18 @@
 import type {
   Categories,
+  Characteristic,
   CharacteristicProps,
   CharacteristicValue,
   Logger,
   Nullable,
+  Service,
 } from 'homebridge';
 
-import type TplinkSmarthomePlatform from '../platform';
+import chalk from 'chalk';
 
+import type TplinkSmarthomePlatform from '../platform';
 import type { TplinkDevice } from '../utils';
+import { prefixLogger } from '../utils';
 
 export type CharacteristicConfig = {
   getValue?: () => Promise<Nullable<CharacteristicValue>>;
@@ -22,6 +26,11 @@ export default abstract class HomeKitDevice {
 
   characteristics: Record<string, CharacteristicConfig> = {};
 
+  private lsc: (
+    serviceOrCharacteristic: Service | Characteristic | { UUID: string },
+    characteristic?: Characteristic | { UUID: string }
+  ) => string;
+
   /**
    * Creates an instance of HomeKitDevice.
    */
@@ -30,7 +39,12 @@ export default abstract class HomeKitDevice {
     readonly tplinkDevice: TplinkDevice,
     readonly category: Categories
   ) {
-    this.log = platform.log;
+    this.log = prefixLogger(
+      platform.log,
+      () => `${chalk.blue(`[${this.name}]`)}`
+    );
+
+    this.lsc = this.platform.lsc.bind(this.platform);
 
     this.addCharacteristic(platform.Characteristic.Name, {
       getValue: async () => {
@@ -97,9 +111,8 @@ export default abstract class HomeKitDevice {
     UUID: string;
   }): CharacteristicConfig['props'] {
     this.log.debug(
-      '[%s] getCharacteristicProps',
-      this.name,
-      this.platform.getCharacteristicName(characteristic)
+      'getCharacteristicProps',
+      this.lsc(characteristic as Characteristic)
     );
     return this.getCharacteristic(characteristic).props;
   }
@@ -108,9 +121,7 @@ export default abstract class HomeKitDevice {
     UUID: string;
   }): Promise<Nullable<CharacteristicValue>> {
     this.log.debug(
-      '[%s] getCharacteristicValue',
-      this.name,
-      this.platform.getCharacteristicName(characteristic)
+      `getCharacteristicValue ${this.lsc(characteristic as Characteristic)}`
     );
 
     const c = this.getCharacteristic(characteristic);
@@ -123,9 +134,8 @@ export default abstract class HomeKitDevice {
     value: CharacteristicValue
   ): Promise<void> {
     this.log.debug(
-      '[%s] setCharacteristicValue %s %s',
-      this.name,
-      this.platform.getCharacteristicName(characteristic),
+      'setCharacteristicValue %s %s',
+      this.lsc(characteristic as Characteristic),
       value
     );
 
@@ -139,9 +149,9 @@ export default abstract class HomeKitDevice {
     value: CharacteristicValue
   ): void {
     this.log.debug(
-      '[%s] fireCharacteristicUpdateCallback [%s] %s',
-      this.name,
-      this.platform.getCharacteristicName(characteristic),
+      `fireCharacteristicUpdateCallback ${this.lsc(
+        characteristic as Characteristic
+      )} %s`,
       value
     );
     const c = this.getCharacteristic(characteristic);
@@ -154,17 +164,15 @@ export default abstract class HomeKitDevice {
     // Warn if characteristic exists, but do not warn if characteristic does not exist
     if (c) {
       this.log.warn(
-        '[%s] fireCharacteristicUpdateCallback [%s]: Unable to call updateCallback',
-        this.name,
-        value,
-        this.platform.getCharacteristicName(characteristic)
+        `fireCharacteristicUpdateCallback ${this.lsc(
+          characteristic
+        )}: Unable to call updateCallback`
       );
     } else {
       this.log.debug(
-        '[%s] fireCharacteristicUpdateCallback [%s]: Unable to call updateCallback',
-        this.name,
-        value,
-        this.platform.getCharacteristicName(characteristic)
+        `fireCharacteristicUpdateCallback [${this.lsc(
+          characteristic
+        )}]: Unable to call updateCallback`
       );
     }
   }
@@ -174,9 +182,7 @@ export default abstract class HomeKitDevice {
     callbackFn: NonNullable<CharacteristicConfig['updateCallback']>
   ): void {
     this.log.debug(
-      '[%s] setCharacteristicUpdateCallback [%s]',
-      this.name,
-      this.platform.getCharacteristicName(characteristic),
+      `setCharacteristicUpdateCallback ${this.lsc(characteristic)}`,
       callbackFn.name
     );
     const c = this.getCharacteristic(characteristic);
