@@ -1,6 +1,14 @@
-import type { Characteristic, Service, WithUUID } from 'homebridge';
+import type {
+  Characteristic,
+  Logger,
+  Logging,
+  LogLevel,
+  Service,
+  WithUUID,
+} from 'homebridge';
 
 import type { Bulb, Plug } from 'tplink-smarthome-api';
+import type { Buildable } from 'ts-essentials';
 
 export type TplinkDevice = Bulb | Plug;
 
@@ -122,4 +130,38 @@ export function lookupCharacteristicNameByUUID(
 
 export function miredToKelvin(mired: number): number {
   return 1e6 / mired;
+}
+
+function cloneLogger(logger: Logging) {
+  // @ts-ignore this doesn't work on function types
+  const clonedLogger: Buildable<Logging> = logger.info.bind(logger);
+  clonedLogger.info = logger.info;
+  clonedLogger.warn = logger.warn;
+  clonedLogger.error = logger.error;
+  clonedLogger.debug = logger.debug;
+  clonedLogger.log = logger.log;
+
+  clonedLogger.prefix = logger.prefix;
+
+  return clonedLogger as Logging;
+}
+
+export function prefixLogger(
+  logger: Logger,
+  prefix: string | (() => string)
+): Logging {
+  const newLogger = cloneLogger(logger as Logging);
+
+  const origLog = logger.log.bind(newLogger);
+
+  newLogger.log = function log(
+    level: LogLevel,
+    message: string,
+    ...parameters: unknown[]
+  ) {
+    const prefixEval = prefix instanceof Function ? prefix() : prefix;
+    origLog(level, `${prefixEval} ${message}`, ...parameters);
+  };
+
+  return newLogger;
 }

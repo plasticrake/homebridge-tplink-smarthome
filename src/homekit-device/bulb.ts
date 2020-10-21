@@ -43,16 +43,14 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
     }
 
     this.getLightState = deferAndCombine((requestCount) => {
-      this.log.debug(
-        `[${this.name}] executing deferred getLightState count: ${requestCount}`
-      );
+      this.log.debug(`executing deferred getLightState count: ${requestCount}`);
       return this.tplinkDevice.lighting.getLightState();
     }, platform.config.waitTimeUpdate);
 
     this.setLightState = deferAndCombine(
       (requestCount) => {
         this.log.debug(
-          `[${this.name}] executing deferred setLightState count: ${requestCount}`
+          `executing deferred setLightState count: ${requestCount}`
         );
         if (Object.keys(this.desiredLightState).length === 0) {
           this.log.warn('setLightState called with empty desiredLightState');
@@ -290,7 +288,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   }
 
   identify(): void {
-    this.log.debug(`[${this.name}] identify`);
+    this.log.debug(`identify`);
     (async () => {
       try {
         const origLs = await this.getLightState();
@@ -306,10 +304,10 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
         this.setLightState(origLs);
       } catch (err) {
-        this.log.error(`[${this.name}] identify error`);
+        this.log.error(`identify error`);
         this.log.error(err);
       }
-      this.log.debug(`[${this.name}] identify complete`);
+      this.log.debug(`identify complete`);
     })();
   }
 }
