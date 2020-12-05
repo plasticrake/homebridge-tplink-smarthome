@@ -28,6 +28,10 @@ export interface TplinkSmarthomeConfigInput {
   // Discovery
   // ------------------
   /**
+   * port to bind udp socket
+   */
+  port?: number | undefined;
+  /**
    * Broadcast Address. If discovery is not working tweak to match your subnet, eg: 192.168.0.255
    * @defaultValue '255.255.255.255'
    */
@@ -106,6 +110,7 @@ export type TplinkSmarthomeConfig = {
   };
 
   discoveryOptions: {
+    port: number | undefined;
     broadcast: string;
     discoveryInterval: number;
     deviceTypes?: Array<'plug' | 'bulb'>;
@@ -127,6 +132,7 @@ export const defaultConfig: TplinkSmarthomeConfigDefault = {
   inUseThreshold: 0,
   switchModels: ['HS200', 'HS210'],
 
+  port: undefined,
   broadcast: '255.255.255.255',
   pollingInterval: 10,
   deviceTypes: ['bulb', 'plug'],
@@ -180,6 +186,7 @@ export function parseConfig(
     defaultSendOptions,
 
     discoveryOptions: {
+      port: c.port,
       broadcast: c.broadcast,
       discoveryInterval: c.pollingInterval * 1000,
       deviceTypes: c.deviceTypes,

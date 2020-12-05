@@ -33,6 +33,12 @@
           "type": "string"
         }
       },
+      "port": {
+        "title": "Port",
+        "type": "number",
+        "description": "Port to bind UDP socket for discovery, eg: 51826",
+        "placeholder": "51826",
+      },
       "broadcast": {
         "title": "Broadcast Address",
         "type": "string",
