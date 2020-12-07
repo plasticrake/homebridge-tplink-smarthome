@@ -9,22 +9,23 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 ## Models Supported
 
-- **Plugs:** HS100, HS103, HS105, HS107, HS110, HS200, HS210, HS220, HS300, KP303, KP400
+- **Plugs:** HS100, HS103, HS105, HS107, HS110, HS300, KP105, KP303, KP400
+- **Switches:** HS200, HS210, HS220
 - **Bulbs:** LB100, LB110, LB120, LB130, LB200, LB230
 
 More models may be supported than listed. If you have another model working please let me know so I can add here.
 
 ## HomeKit
 
-| Model                                    | deviceType | Service   | Characteristics                                                                                                                                                                                    |
-| ---------------------------------------- | ---------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| HS100, HS103, HS105, HS107, KP303, KP400 | plug       | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
-| HS110, HS300                             | plug       | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
-| HS200, HS210                             | plug       | Switch    | On                                                                                                                                                                                                 |
-| HS220                                    | plug       | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
-| LB100, LB110, LB200                      | bulb       | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
-| LB120                                    | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
-| LB130, LB230                             | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
+| Model                                           | deviceType | Service   | Characteristics                                                                                                                                                                                    |
+| ----------------------------------------------- | ---------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HS100, HS103, HS105, HS107, KP105, KP303, KP400 | plug       | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
+| HS110, HS300                                    | plug       | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
+| HS200, HS210                                    | plug       | Switch    | On                                                                                                                                                                                                 |
+| HS220                                           | plug       | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
+| LB100, LB110, LB200                             | bulb       | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
+| LB120                                           | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
+| LB130, LB230                                    | bulb       | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
 
 ## Installation
 
