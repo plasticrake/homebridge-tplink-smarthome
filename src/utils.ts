@@ -40,7 +40,7 @@ export function deferAndCombine<T, U>(
   runNowFn?: (arg: U) => void
 ): (arg?: U) => Promise<T> {
   const requests: {
-    resolve: (value?: T | PromiseLike<T>) => void;
+    resolve: (value: T | PromiseLike<T>) => void;
     reject: (reason?: unknown) => void;
   }[] = [];
   let isWaiting = false;
