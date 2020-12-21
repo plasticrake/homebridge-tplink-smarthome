@@ -134,9 +134,9 @@ export default class TplinkAccessory {
     });
 
     if (this.services.Outlet) {
-      const characteristics: Array<WithUUID<
-        WithUUID<new () => Characteristic>
-      >> = [this.platform.Characteristic.Name, this.platform.Characteristic.On];
+      const characteristics: Array<
+        WithUUID<WithUUID<new () => Characteristic>>
+      > = [this.platform.Characteristic.Name, this.platform.Characteristic.On];
 
       const { Accessory } = platform.api.hap;
 
