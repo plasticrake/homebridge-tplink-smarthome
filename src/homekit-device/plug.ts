@@ -192,7 +192,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
           return (
             emeterProperties
               // @ts-ignore : safe
-              .map((prop) => emeterProperties[prop] as number)
+              .map((prop) => emeterRealtime[prop] as number)
               .reduce((acc, val) => acc * val, 1)
           );
         }
