@@ -28,6 +28,10 @@ export interface TplinkSmarthomeConfigInput {
   // Discovery
   // ------------------
   /**
+   * port to bind udp socket
+   */
+  discoveryPort?: number;
+  /**
    * Broadcast Address. If discovery is not working tweak to match your subnet, eg: 192.168.0.255
    * @defaultValue '255.255.255.255'
    */
@@ -83,6 +87,7 @@ type TplinkSmarthomeConfigDefault = {
   inUseThreshold: number;
   switchModels: Array<string>;
 
+  discoveryPort: number;
   broadcast: string;
   pollingInterval: number;
   deviceTypes: Array<'plug' | 'bulb'>;
@@ -106,6 +111,7 @@ export type TplinkSmarthomeConfig = {
   };
 
   discoveryOptions: {
+    port: number | undefined;
     broadcast: string;
     discoveryInterval: number;
     deviceTypes?: Array<'plug' | 'bulb'>;
@@ -127,6 +133,7 @@ export const defaultConfig: TplinkSmarthomeConfigDefault = {
   inUseThreshold: 0,
   switchModels: ['HS200', 'HS210'],
 
+  discoveryPort: 0,
   broadcast: '255.255.255.255',
   pollingInterval: 10,
   deviceTypes: ['bulb', 'plug'],
@@ -154,6 +161,7 @@ function isTplinkSmarthomeConfigInput(
     (!('pollingInterval' in c) || typeof c.pollingInterval === 'number') &&
     (!('inUseThreshold' in c) || typeof c.inUseThreshold === 'number') &&
     (!('switchModels' in c) || isArrayOfStrings(c.switchModels)) &&
+    (!('discoveryPort' in c) || typeof c.discoveryPort === 'number') &&
     (!('deviceTypes' in c) || isArrayOfStrings(c.deviceTypes)) &&
     (!('waitTimeUpdate' in c) || typeof c.waitTimeUpdate === 'number')
   );
@@ -180,6 +188,7 @@ export function parseConfig(
     defaultSendOptions,
 
     discoveryOptions: {
+      port: c.discoveryPort,
       broadcast: c.broadcast,
       discoveryInterval: c.pollingInterval * 1000,
       deviceTypes: c.deviceTypes,
