@@ -73,6 +73,7 @@ See [config.ts](src/config.ts) for documention on these options. It is recommend
   "inUseThreshold": 0,
   "switchModels": ["HS200", "HS210"],
 
+  "discoveryPort": 0,
   "broadcast": "255.255.255.255",
   "pollingInterval": 10,
   "deviceTypes": ["bulb", "plug"],
