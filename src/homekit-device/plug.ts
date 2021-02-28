@@ -1,4 +1,5 @@
-import type { Categories } from 'homebridge';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Categories } from 'homebridge'; // enum
 import type { Plug, PlugSysinfo } from 'tplink-smarthome-api';
 
 import HomeKitDevice from '.';
@@ -111,9 +112,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
       );
     });
 
-    const { Accessory } = this.platform.api.hap;
-
-    if (this.category === Accessory.Categories.OUTLET) {
+    if (this.category === Categories.OUTLET) {
       this.addCharacteristic(this.platform.Characteristic.OutletInUse, {
         getValue: async () => {
           return this.tplinkDevice.getInUse().then((value) => {

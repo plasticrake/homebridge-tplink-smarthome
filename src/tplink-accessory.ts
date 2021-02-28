@@ -1,9 +1,7 @@
-// homebridge import is a const enum and not an actual import
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { PlatformAccessoryEvent } from 'homebridge';
+import { Categories, PlatformAccessoryEvent } from 'homebridge'; // enum
 
 import type {
-  Categories,
   Characteristic,
   CharacteristicGetCallback,
   CharacteristicSetCallback,
@@ -138,9 +136,7 @@ export default class TplinkAccessory {
         WithUUID<WithUUID<new () => Characteristic>>
       > = [this.platform.Characteristic.Name, this.platform.Characteristic.On];
 
-      const { Accessory } = platform.api.hap;
-
-      if (category === Accessory.Categories.OUTLET) {
+      if (category === Categories.OUTLET) {
         characteristics.push(this.platform.Characteristic.OutletInUse);
       }
 

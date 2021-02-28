@@ -1,4 +1,6 @@
 import type { Characteristic, WithUUID } from 'homebridge';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Formats } from 'homebridge'; // enum
 
 export default function kilowattVoltAmpereHours(
   DefaultCharacteristic: typeof Characteristic
@@ -9,7 +11,7 @@ export default function kilowattVoltAmpereHours(
     constructor() {
       // @ts-ignore: unable to override class constructor parameters as its a type and not a value
       super('Apparent Energy', KilowattVoltAmpereHour.UUID, {
-        format: DefaultCharacteristic.Formats.UINT32,
+        format: Formats.UINT32,
         // @ts-ignore: custom unit
         unit: 'kVAh',
         minStep: 1,

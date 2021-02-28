@@ -1,9 +1,7 @@
-// homebridge import is a const enum and not an actual import
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { APIEvent } from 'homebridge';
+import { APIEvent, Categories } from 'homebridge'; // enum
 import type {
   API,
-  Categories,
   Characteristic,
   DynamicPlatformPlugin,
   Logging,
@@ -176,14 +174,13 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
   ): TplinkAccessory {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const { config, Service } = this;
-    const { Accessory } = this.api.hap;
 
     const [category, services] = ((): [
       Categories,
       Array<WithUUID<typeof Service>>
     ] => {
       if (tplinkDevice.deviceType === 'bulb') {
-        return [Accessory.Categories.LIGHTBULB, [Service.Lightbulb]];
+        return [Categories.LIGHTBULB, [Service.Lightbulb]];
       }
       // plug
       if (
@@ -191,12 +188,12 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
         config.switchModels.findIndex((m) => tplinkDevice.model.includes(m)) !==
           -1
       ) {
-        return [Accessory.Categories.SWITCH, [Service.Switch]];
+        return [Categories.SWITCH, [Service.Switch]];
       }
       if (tplinkDevice.supportsDimmer) {
-        return [Accessory.Categories.LIGHTBULB, [Service.Lightbulb]];
+        return [Categories.LIGHTBULB, [Service.Lightbulb]];
       }
-      return [Accessory.Categories.OUTLET, [Service.Outlet]];
+      return [Categories.OUTLET, [Service.Outlet]];
     })();
 
     return new TplinkAccessory(
@@ -211,12 +208,8 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
   getCategoryName(category: Categories): string | undefined {
     // @ts-ignore: this should work
+    // eslint-disable-next-line deprecation/deprecation
     return this.api.hap.Accessory.Categories[category];
-    // return lookup.bind(
-    //   null,
-    //   this.api.hap.Accessory.Categories,
-    //   undefined
-    // )(category);
   }
 
   getServiceName(service: { UUID: string }): string | undefined {
