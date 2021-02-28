@@ -150,25 +150,16 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
           0
         );
       } else {
-        let hueOrSatChanged = false;
         if (lightState.hue != null) {
-          hueOrSatChanged = true;
           this.fireCharacteristicUpdateCallback(
             this.platform.Characteristic.Hue,
             lightState.hue
           );
         }
         if (lightState.saturation != null) {
-          hueOrSatChanged = true;
           this.fireCharacteristicUpdateCallback(
             this.platform.Characteristic.Saturation,
             lightState.saturation
-          );
-        }
-        if (hueOrSatChanged) {
-          this.fireCharacteristicUpdateCallback(
-            this.platform.Characteristic.ColorTemperature,
-            0
           );
         }
       }
@@ -208,16 +199,19 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
       },
       getValue: async (): Promise<number> => {
         const ls = await this.getLightState();
-        if (typeof ls.color_temp === 'number') {
+        if (typeof ls.color_temp === 'number' && ls.color_temp > 0) {
           return Math.round(kelvinToMired(ls.color_temp));
         }
-        if (typeof ls.dft_on_state?.color_temp === 'number') {
+        if (
+          typeof ls.dft_on_state?.color_temp === 'number' &&
+          ls.dft_on_state.color_temp > 0
+        ) {
           return Math.round(kelvinToMired(ls.dft_on_state.color_temp));
         }
         if (!('color_temp' in ls)) {
           return Math.floor(kelvinToMired(min));
         }
-        this.log.warn('getValue: Invalid ColorTemperature:', ls.color_temp);
+
         return Math.floor(kelvinToMired(min));
       },
       setValue: async (value) => {
