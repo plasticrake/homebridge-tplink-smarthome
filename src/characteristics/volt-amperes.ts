@@ -9,10 +9,9 @@ export default function voltAmperes(
     constructor() {
       // @ts-ignore: unable to override class constructor parameters as its a type and not a value
       super('Apparent Power', VoltAmperes.UUID, {
-        format: DefaultCharacteristic.Formats.UINT16,
         // @ts-ignore: custom unit
         unit: 'VA',
-        minStep: 1,
+        minStep: 0.1,
       });
     }
   };
