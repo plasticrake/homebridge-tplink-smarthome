@@ -44,7 +44,6 @@
     "debugsim:only": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
     "prepare": "npm run build",
-    "prerelease": "npm test",
     "release": "standard-version --sign",
     "spellcheck": "cspell '{src,test}/**/*' *.md",
     "start": "homebridge --plugin-path .",
@@ -99,5 +98,10 @@
   "engines": {
     "homebridge": ">=1.1.0",
     "node": ">=10.17.0"
+  },
+  "standard-version": {
+    "scripts": {
+      "prerelease": "npm test"
+    }
   }
 }
