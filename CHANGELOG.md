@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0-beta.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.1.0...v6.2.0-beta.0) (2021-02-28)
+
+
+### Features
+
+* add discoveryPort configuration option ([#159](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/159))  ([eb13885](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/eb13885826d7241e45249ad93b339253d011d2e2))
+* change "Apprent Power" to float ([255d552](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/255d55226d0ed2248ed2063ea68788e7bb27f497))
+* logging improvements ([3105f31](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/3105f31172d4f110805456e1ec5f909a31d9524d))
+
+
+### Bug Fixes
+
+* don't update color temperature when 0 ([738aeed](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/738aeed91fd2217aa9eb56ae15de6964b7495334)), closes [#180](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/180)
+* warning for "Apparent Power" characteristic ([3aa6b29](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/3aa6b2966c7ac62ff5bb3e5f4e28ae189f17101c))
+
 ## [6.1.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.0.1...v6.1.0) (2020-10-20)
 
 
