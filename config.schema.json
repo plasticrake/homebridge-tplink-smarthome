@@ -33,11 +33,11 @@
           "type": "string"
         }
       },
-      "port": {
+      "discoveryPort": {
         "title": "Port",
         "type": "number",
-        "description": "Port to bind UDP socket for discovery, eg: 51826",
-        "placeholder": "51826",
+        "description": "Port to bind UDP socket for discovery. If port is not specified or is 0, the operating system will attempt to bind to a random port. Default: 0",
+        "placeholder": "0"
       },
       "broadcast": {
         "title": "Broadcast Address",
@@ -159,6 +159,7 @@
         "broadcast",
         "pollingInterval",
         "deviceTypes",
+        "discoveryPort",
         {
           "key": "macAddresses",
           "type": "array",
