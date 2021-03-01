@@ -3,13 +3,7 @@ import type { Bulb, LightState } from 'tplink-smarthome-api';
 
 import HomeKitDevice from '.';
 import type TplinkSmarthomePlatform from '../platform';
-import {
-  deferAndCombine,
-  delay,
-  isObjectLike,
-  kelvinToMired,
-  miredToKelvin,
-} from '../utils';
+import { deferAndCombine, delay, kelvinToMired, miredToKelvin } from '../utils';
 
 export default class HomeKitDeviceBulb extends HomeKitDevice {
   private desiredLightState: LightState = {};
@@ -98,9 +92,8 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addBasicCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
-        return this.getLightState().then((ls) => {
-          return ls.on_off === 1;
-        });
+        this.getLightState(); // this will eventually trigger update
+        return this.tplinkDevice.lighting.lightState.on_off === 1; // immediately returned cached value
       },
       setValue: async (value) => {
         if (typeof value === 'boolean') {
@@ -169,9 +162,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addBrightnessCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async (): Promise<number> => {
-        return this.getLightState().then((ls) => {
-          return ls.brightness ?? ls.dft_on_state?.brightness ?? 0;
-        });
+        this.getLightState(); // this will eventually trigger update
+        const ls = this.tplinkDevice.lighting.lightState;
+        return ls.brightness ?? ls.dft_on_state?.brightness ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
@@ -184,7 +177,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   }
 
   private addColorTemperatureCharacteristics() {
-    const range = this.tplinkDevice.getColorTemperatureRange;
+    const range = this.tplinkDevice.colorTemperatureRange;
     if (range == null) {
       this.log.error('Could not retrieve color temperature range');
       return;
@@ -198,7 +191,10 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         maxValue: Math.floor(kelvinToMired(min)), // K and Mired are reversed
       },
       getValue: async (): Promise<number> => {
-        const ls = await this.getLightState();
+        this.getLightState(); // this will eventually trigger update
+        const ls = this.tplinkDevice.lighting.lightState;
+
+        // immediately returned cached value
         if (typeof ls.color_temp === 'number' && ls.color_temp > 0) {
           return Math.round(kelvinToMired(ls.color_temp));
         }
@@ -229,8 +225,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addColorCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Hue, {
       getValue: async (): Promise<number> => {
-        const ls = await this.getLightState();
-        return ls.hue ?? ls.dft_on_state?.hue ?? 0;
+        this.getLightState(); // this will eventually trigger update
+        const ls = this.tplinkDevice.lighting.lightState;
+        return ls.hue ?? ls.dft_on_state?.hue ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
@@ -243,9 +240,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
     this.addCharacteristic(this.platform.Characteristic.Saturation, {
       getValue: async (): Promise<number> => {
-        return this.getLightState().then((ls) => {
-          return ls.saturation ?? ls.dft_on_state?.saturation ?? 0;
-        });
+        this.getLightState(); // this will eventually trigger update
+        const ls = this.tplinkDevice.lighting.lightState;
+        return ls.saturation ?? ls.dft_on_state?.saturation ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
@@ -260,15 +257,14 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addEnergyCharacteristics() {
     this.addCharacteristic(this.platform.customCharacteristics.Watts, {
       getValue: async (): Promise<number | null> => {
-        const emeterRealtime = await this.getRealtime();
-        if (isObjectLike(emeterRealtime)) {
-          if (typeof emeterRealtime.power === 'number') {
-            return emeterRealtime.power;
-          }
-          this.log.warn(`getValue: Invalid Watts:`, emeterRealtime.power);
-          return null;
+        await this.getRealtime(); // this will eventually trigger update
+
+        // immediately returned cached value
+        const emeterRealtime = this.tplinkDevice.emeter.realtime;
+        if (typeof emeterRealtime.power === 'number') {
+          return emeterRealtime.power;
         }
-        this.log.warn(`getValue: Invalid Watts:`, typeof emeterRealtime);
+        this.log.warn(`getValue: Invalid Watts:`, emeterRealtime.power);
         return null;
       },
     });
