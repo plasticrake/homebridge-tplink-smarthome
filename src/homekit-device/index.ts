@@ -188,4 +188,8 @@ export default abstract class HomeKitDevice {
     const c = this.getCharacteristic(characteristic);
     c.updateCallback = callbackFn;
   }
+
+  protected logRejection(reason: unknown): void {
+    this.log.error(JSON.stringify(reason));
+  }
 }

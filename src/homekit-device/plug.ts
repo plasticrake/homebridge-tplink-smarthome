@@ -4,7 +4,7 @@ import type { Plug, PlugSysinfo } from 'tplink-smarthome-api';
 
 import HomeKitDevice from '.';
 import type TplinkSmarthomePlatform from '../platform';
-import { deferAndCombine, isObjectLike } from '../utils';
+import { deferAndCombine } from '../utils';
 
 export default class HomeKitDevicePlug extends HomeKitDevice {
   private desiredPowerState?: boolean;
@@ -87,9 +87,8 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
   private addBasicCharacteristics(): void {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
-        return this.getSysInfo().then((si) => {
-          return si.relay_state === 1;
-        });
+        this.getSysInfo().catch(this.logRejection); // this will eventually trigger update
+        return this.tplinkDevice.relayState; // immediately returned cached value
       },
       setValue: async (value) => {
         if (typeof value === 'boolean') {
@@ -99,37 +98,26 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
         this.log.warn('setValue: Invalid On:', value);
       },
     });
-    this.tplinkDevice.on('power-on', () => {
+
+    this.tplinkDevice.on('power-update', (value) => {
       this.fireCharacteristicUpdateCallback(
         this.platform.Characteristic.On,
-        true
-      );
-    });
-    this.tplinkDevice.on('power-off', () => {
-      this.fireCharacteristicUpdateCallback(
-        this.platform.Characteristic.On,
-        false
+        value
       );
     });
 
     if (this.category === Categories.OUTLET) {
       this.addCharacteristic(this.platform.Characteristic.OutletInUse, {
         getValue: async () => {
-          return this.tplinkDevice.getInUse().then((value) => {
-            return value;
-          });
+          this.getSysInfo().catch(this.logRejection); // this will eventually trigger update
+          return this.tplinkDevice.inUse; // immediately returned cached value
         },
       });
-      this.tplinkDevice.on('in-use', () => {
+
+      this.tplinkDevice.on('in-use-update', (value) => {
         this.fireCharacteristicUpdateCallback(
           this.platform.Characteristic.OutletInUse,
-          true
-        );
-      });
-      this.tplinkDevice.on('not-in-use', () => {
-        this.fireCharacteristicUpdateCallback(
-          this.platform.Characteristic.OutletInUse,
-          false
+          value
         );
       });
     }
@@ -138,8 +126,8 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
   private addBrightnessCharacteristics(): void {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async () => {
-        const sysinfo = await this.getSysInfo();
-        return sysinfo.brightness ?? 0;
+        this.getSysInfo().catch(this.logRejection); // this will eventually trigger update
+        return this.tplinkDevice.dimmer.brightness; // immediately returned cached value
       },
       setValue: async (value) => {
         if (typeof value === 'number') {
@@ -149,75 +137,50 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
         this.log.warn('setValue: Invalid Brightness:', value);
       },
     });
-    // TODO: event for brightness change
-    // this.tplinkDevice.on('power-on', () => { this.fireCharacteristicUpdateCallback(Characteristic.On, true); });
-    // this.tplinkDevice.on('power-off', () => { this.fireCharacteristicUpdateCallback(Characteristic.On, false); });
+
+    this.tplinkDevice.on('brightness-update', (value) => {
+      this.fireCharacteristicUpdateCallback(
+        this.platform.Characteristic.Brightness,
+        value
+      );
+    });
   }
 
   private addEnergyCharacteristics(): void {
-    const emeterGetValue = (
-      characteristicName: string,
-      emeterProperties: string[]
-    ): (() => Promise<number | null>) => {
-      return async (): Promise<number | null> => {
-        const emeterRealtime = await this.getRealtime();
-        if (!isObjectLike(emeterRealtime)) {
-          this.log.warn(
-            `getValue: Invalid ${characteristicName}:`,
-            typeof emeterRealtime
-          );
-          return null;
-        }
-
-        let invalid = false;
-        emeterProperties.forEach((prop) => {
-          if (typeof emeterRealtime[prop] !== 'number') {
-            invalid = true;
-            this.log.warn(
-              `Invalid ${characteristicName} value:`,
-              `${prop}:`,
-              emeterRealtime[prop]
-            );
-          }
-        });
-        if (invalid) return null;
-
-        if (emeterProperties.length === 1) {
-          // return value if one property
-          return emeterRealtime[emeterProperties[0]] as number;
-        }
-        if (emeterProperties.length > 1) {
-          // return product of values if multiple properties
-          return (
-            emeterProperties
-              // @ts-ignore : safe
-              .map((prop) => emeterRealtime[prop] as number)
-              .reduce((acc, val) => acc * val, 1)
-          );
-        }
-
-        return null;
-      };
-    };
-
     this.addCharacteristic(this.platform.customCharacteristics.Amperes, {
-      getValue: emeterGetValue('Amperes', ['current']),
+      getValue: async () => {
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
+        return this.tplinkDevice.emeter.realtime.current ?? 0; // immediately returned cached value
+      },
     });
 
     this.addCharacteristic(this.platform.customCharacteristics.KilowattHours, {
-      getValue: emeterGetValue('KilowattHours', ['total']),
+      getValue: async () => {
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
+        return this.tplinkDevice.emeter.realtime.total ?? 0; // immediately returned cached value
+      },
     });
 
     this.addCharacteristic(this.platform.customCharacteristics.VoltAmperes, {
-      getValue: emeterGetValue('VoltAmperes', ['voltage', 'current']),
+      getValue: async () => {
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
+        const { realtime } = this.tplinkDevice.emeter;
+        return (realtime.voltage ?? 0) * (realtime.voltage ?? 0); // immediately returned cached value
+      },
     });
 
     this.addCharacteristic(this.platform.customCharacteristics.Volts, {
-      getValue: emeterGetValue('Volts', ['voltage']),
+      getValue: async () => {
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
+        return this.tplinkDevice.emeter.realtime.voltage ?? 0; // immediately returned cached value
+      },
     });
 
     this.addCharacteristic(this.platform.customCharacteristics.Watts, {
-      getValue: emeterGetValue('Watts', ['power']),
+      getValue: async () => {
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
+        return this.tplinkDevice.emeter.realtime.power ?? 0; // immediately returned cached value
+      },
     });
 
     this.tplinkDevice.on('emeter-realtime-update', (emeterRealtime) => {

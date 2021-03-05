@@ -1,7 +1,7 @@
 {
   "name": "homebridge-tplink-smarthome",
   "displayName": "Homebridge TPLink Smarthome",
-  "version": "6.2.0",
+  "version": "6.3.0-beta.0",
   "description": "TPLink Smarthome plugin for Homebridge",
   "keywords": [
     "homebridge-plugin",
@@ -58,7 +58,7 @@
     "lodash.castarray": "^4.4.0",
     "lodash.defaults": "^4.2.0",
     "semver": "^7.3.4",
-    "tplink-smarthome-api": "^3.2.0"
+    "tplink-smarthome-api": "^3.3.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.15",
