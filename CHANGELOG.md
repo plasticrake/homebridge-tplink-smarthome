@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.2.0...v6.3.0) (2021-03-05)
+
+
+### Features
+
+* change characteristic getters to use cached values ([#183](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/183)) ([8024dcc](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/8024dcc7ed14d05cedbb288393f9ed4766be6b26))
+
 ## [6.3.0-beta.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.2.0...v6.3.0-beta.0) (2021-03-01)
 
 
