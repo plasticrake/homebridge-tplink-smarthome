@@ -87,7 +87,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
   private addBasicCharacteristics(): void {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
-        this.getSysInfo(); // this will eventually trigger update
+        this.getSysInfo().catch(this.logRejection); // this will eventually trigger update
         return this.tplinkDevice.relayState; // immediately returned cached value
       },
       setValue: async (value) => {
@@ -109,7 +109,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
     if (this.category === Categories.OUTLET) {
       this.addCharacteristic(this.platform.Characteristic.OutletInUse, {
         getValue: async () => {
-          this.getSysInfo(); // this will eventually trigger update
+          this.getSysInfo().catch(this.logRejection); // this will eventually trigger update
           return this.tplinkDevice.inUse; // immediately returned cached value
         },
       });
@@ -126,7 +126,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
   private addBrightnessCharacteristics(): void {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async () => {
-        this.getSysInfo(); // this will eventually trigger update
+        this.getSysInfo().catch(this.logRejection); // this will eventually trigger update
         return this.tplinkDevice.dimmer.brightness; // immediately returned cached value
       },
       setValue: async (value) => {
@@ -149,21 +149,21 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
   private addEnergyCharacteristics(): void {
     this.addCharacteristic(this.platform.customCharacteristics.Amperes, {
       getValue: async () => {
-        this.getRealtime(); // this will eventually trigger update
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
         return this.tplinkDevice.emeter.realtime.current ?? 0; // immediately returned cached value
       },
     });
 
     this.addCharacteristic(this.platform.customCharacteristics.KilowattHours, {
       getValue: async () => {
-        this.getRealtime(); // this will eventually trigger update
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
         return this.tplinkDevice.emeter.realtime.total ?? 0; // immediately returned cached value
       },
     });
 
     this.addCharacteristic(this.platform.customCharacteristics.VoltAmperes, {
       getValue: async () => {
-        this.getRealtime(); // this will eventually trigger update
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
         const { realtime } = this.tplinkDevice.emeter;
         return (realtime.voltage ?? 0) * (realtime.voltage ?? 0); // immediately returned cached value
       },
@@ -171,14 +171,14 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
 
     this.addCharacteristic(this.platform.customCharacteristics.Volts, {
       getValue: async () => {
-        this.getRealtime(); // this will eventually trigger update
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
         return this.tplinkDevice.emeter.realtime.voltage ?? 0; // immediately returned cached value
       },
     });
 
     this.addCharacteristic(this.platform.customCharacteristics.Watts, {
       getValue: async () => {
-        this.getRealtime(); // this will eventually trigger update
+        this.getRealtime().catch(this.logRejection); // this will eventually trigger update
         return this.tplinkDevice.emeter.realtime.power ?? 0; // immediately returned cached value
       },
     });
