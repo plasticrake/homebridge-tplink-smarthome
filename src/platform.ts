@@ -89,7 +89,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
         device.host,
         device.port
       );
-      this.addAccessory(device);
+      this.foundDevice(device);
     });
 
     client.on('device-online', (device: TplinkDevice) => {
@@ -100,7 +100,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
         device.host,
         device.port
       );
-      this.addAccessory(device);
+      this.foundDevice(device);
     });
 
     client.on('device-offline', (device: TplinkDevice) => {
@@ -119,12 +119,57 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
     this.api.on(APIEvent.DID_FINISH_LAUNCHING, () => {
       this.log.debug(APIEvent.DID_FINISH_LAUNCHING);
+
       client.startDiscovery({
         ...this.config.discoveryOptions,
         filterCallback: (si: Sysinfo) => {
           return si.deviceId != null && si.deviceId.length > 0;
         },
       });
+
+      const refreshEmeterForAccessories = async (
+        accessories: TplinkAccessory[]
+      ) => {
+        for (const acc of accessories) {
+          const device = acc.tplinkDevice;
+          if (device.deviceType === 'plug' && device.supportsEmeter) {
+            this.log.debug(
+              `getEmeterRealtime ${chalk.blue(`[${device.alias}]`)}`
+            );
+            // eslint-disable-next-line no-await-in-loop
+            await device.emeter.getRealtime().catch((reason) => {
+              this.log.error('[%s] %s', device.alias, 'emeter.getRealtime()');
+              this.log.error(reason);
+            });
+          }
+        }
+      };
+
+      const refreshEmeter = async () => {
+        this.log.debug('refreshEmeter()');
+        try {
+          const deviceAccessories = this.deviceAccessoriesByHost;
+          const promises: Promise<unknown>[] = [];
+
+          for (const accForHost of deviceAccessories.values()) {
+            promises.push(refreshEmeterForAccessories(accForHost));
+          }
+          await Promise.all(promises);
+        } catch (err) {
+          this.log.error('refreshEmeter()');
+          this.log.error(err);
+        } finally {
+          this.log.debug(
+            'Scheduling next run of refreshEmeter() in %d(ms)',
+            this.config.discoveryOptions.discoveryInterval
+          );
+          setTimeout(() => {
+            refreshEmeter();
+          }, this.config.discoveryOptions.discoveryInterval);
+        }
+      };
+
+      refreshEmeter();
     });
 
     this.api.on('shutdown', () => {
@@ -166,6 +211,20 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     }
     if (serviceName !== undefined) return `[${chalk.yellow(serviceName)}]`;
     return `[${chalk.green(characteristicName)}]`;
+  }
+
+  private get deviceAccessoriesByHost(): Map<string, TplinkAccessory[]> {
+    const byHost: Map<string, TplinkAccessory[]> = new Map();
+    for (const [, tpLinkAccessory] of this.deviceAccessories) {
+      const { host } = tpLinkAccessory.tplinkDevice;
+      const arr = byHost.get(host);
+      if (arr != null) {
+        arr.push(tpLinkAccessory);
+      } else {
+        byHost.set(host, [tpLinkAccessory]);
+      }
+    }
+    return byHost;
   }
 
   private createTplinkAccessory(
@@ -276,7 +335,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
   /**
    * Adds a new or existing real device.
    */
-  private addAccessory(device: TplinkDevice): void {
+  private foundDevice(device: TplinkDevice): void {
     // TODO: refactor this function
     const deviceId = device.id;
 
@@ -288,13 +347,6 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     let deviceAccessory = this.deviceAccessories.get(deviceId);
 
     if (deviceAccessory !== undefined) {
-      if (device.deviceType === 'plug' && device.supportsEmeter) {
-        this.log.debug(`getEmeterRealtime ${chalk.blue(`[${device.alias}]`)}`);
-        device.emeter.getRealtime().catch((reason) => {
-          this.log.error('[%s] %s', device.alias, 'emeter.getRealtime()');
-          this.log.error(reason);
-        });
-      }
       return;
     }
 

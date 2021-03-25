@@ -43,7 +43,7 @@ export default class TplinkAccessory {
     private readonly platform: TplinkSmarthomePlatform,
     private readonly config: TplinkSmarthomeConfig,
     homebridgeAccessory: PlatformAccessory | undefined,
-    tplinkDevice: TplinkDevice,
+    public tplinkDevice: TplinkDevice,
     category: Categories,
     services: Array<WithUUID<typeof Service>>
   ) {
