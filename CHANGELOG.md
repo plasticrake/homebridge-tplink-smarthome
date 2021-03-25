@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.4.0-beta.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.3.0...v6.4.0-beta.0) (2021-03-25)
+
+
+### Features
+
+* emeter polling more friendly with multi-outlet plugs ([#190](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/190)) ([65b5865](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/65b5865607ad3158e57228edcb7be389c80402a4))
+
 ## [6.3.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.2.0...v6.3.0) (2021-03-05)
 
 
