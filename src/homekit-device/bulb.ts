@@ -92,7 +92,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addBasicCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
-        this.getLightState().catch(this.logRejection); // this will eventually trigger update
+        this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         return this.tplinkDevice.lighting.lightState.on_off === 1; // immediately returned cached value
       },
       setValue: async (value) => {
@@ -162,7 +162,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addBrightnessCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async (): Promise<number> => {
-        this.getLightState().catch(this.logRejection); // this will eventually trigger update
+        this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         const ls = this.tplinkDevice.lighting.lightState;
         return ls.brightness ?? ls.dft_on_state?.brightness ?? 0; // immediately returned cached value
       },
@@ -191,7 +191,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         maxValue: Math.floor(kelvinToMired(min)), // K and Mired are reversed
       },
       getValue: async (): Promise<number> => {
-        this.getLightState().catch(this.logRejection); // this will eventually trigger update
+        this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         const ls = this.tplinkDevice.lighting.lightState;
 
         // immediately returned cached value
@@ -225,7 +225,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addColorCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Hue, {
       getValue: async (): Promise<number> => {
-        this.getLightState().catch(this.logRejection); // this will eventually trigger update
+        this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         const ls = this.tplinkDevice.lighting.lightState;
         return ls.hue ?? ls.dft_on_state?.hue ?? 0; // immediately returned cached value
       },
@@ -240,7 +240,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
     this.addCharacteristic(this.platform.Characteristic.Saturation, {
       getValue: async (): Promise<number> => {
-        this.getLightState().catch(this.logRejection); // this will eventually trigger update
+        this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         const ls = this.tplinkDevice.lighting.lightState;
         return ls.saturation ?? ls.dft_on_state?.saturation ?? 0; // immediately returned cached value
       },
