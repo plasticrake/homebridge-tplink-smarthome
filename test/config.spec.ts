@@ -40,7 +40,7 @@ describe('config', function () {
     it('should throw ConfigParseError with incorrect types', function () {
       expect(() => {
         parseConfig(configInvalid);
-      }).to.throw(ConfigParseError, 'should be');
+      }).to.throw(ConfigParseError, 'must be');
     });
 
     it('should throw ConfigParseError with incorrect devices', function () {
@@ -48,7 +48,7 @@ describe('config', function () {
         parseConfig({
           devices: [{ host: 123 }],
         });
-      }).to.throw(ConfigParseError, '`devices[0].host` should be string');
+      }).to.throw(ConfigParseError, '`devices/0/host` must be string');
 
       expect(() => {
         parseConfig({
@@ -56,7 +56,7 @@ describe('config', function () {
         });
       }).to.throw(
         ConfigParseError,
-        "`devices[0]` should have required property 'host'\n`devices[0].port` should be string"
+        "`devices/0` must have required property 'host'\n`devices/0/port` must be string"
       );
 
       expect(() => {
@@ -65,7 +65,7 @@ describe('config', function () {
         });
       }).to.throw(
         ConfigParseError,
-        "`devices[0]` should have required property 'host'"
+        "`devices/0` must have required property 'host'"
       );
 
       expect(() => {
@@ -74,7 +74,7 @@ describe('config', function () {
         });
       }).to.throw(
         ConfigParseError,
-        "`devices[0]` should have required property 'host'"
+        "`devices/0` must have required property 'host'"
       );
     });
   });

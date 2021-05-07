@@ -1,4 +1,5 @@
-import Ajv from 'ajv';
+import Ajv, { ErrorObject as AjvErrorObject } from 'ajv';
+import addFormats from 'ajv-formats';
 import defaults from 'lodash.defaults';
 
 import { isObjectLike } from './utils';
@@ -11,16 +12,19 @@ export class ConfigParseError extends Error {
 
   constructor(
     message: string,
-    readonly errors?: Ajv.ErrorObject[] | null | undefined
+    readonly errors?:
+      | AjvErrorObject<string, Record<string, unknown>, unknown>[]
+      | null
+      | undefined
   ) {
     super(message);
 
-    // remove leading . from dataPath
+    // remove leading / from dataPath
     const errorsAsString =
       errors != null
         ? errors
             .map((e) => {
-              let msg = `\`${e.dataPath.replace(/^\./, '')}\` ${e.message}`;
+              let msg = `\`${e.instancePath.replace(/^\//, '')}\` ${e.message}`;
               if ('allowedValues' in e.params) {
                 msg += `. Allowed values: ${JSON.stringify(
                   e.params.allowedValues
@@ -246,6 +250,8 @@ export function parseConfig(
   config: Record<string, unknown>
 ): TplinkSmarthomeConfig {
   const ajv = new Ajv({ allErrors: true });
+  addFormats(ajv);
+  ajv.addVocabulary(['placeholder', 'titleMap']);
   // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
   const validate = ajv.compile(require('../config.schema.json').schema);
   const valid = validate(config);
