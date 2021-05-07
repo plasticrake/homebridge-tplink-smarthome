@@ -26,7 +26,7 @@ describe('TplinkSmarthomePlatform', function () {
   beforeEach(function () {
     platform = new TplinkSmarthomePlatform(
       log,
-      { platform: '', name: '' },
+      { platform: '', name: 'tplink' },
       new HomebridgeAPI()
     );
 
