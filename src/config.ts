@@ -1,7 +1,50 @@
+import Ajv from 'ajv';
 import defaults from 'lodash.defaults';
 
 import { isObjectLike } from './utils';
 
+export class ConfigParseError extends Error {
+  /**
+   * Set by `Error.captureStackTrace`
+   */
+  readonly stack = '';
+
+  constructor(
+    message: string,
+    readonly errors?: Ajv.ErrorObject[] | null | undefined
+  ) {
+    super(message);
+
+    // remove leading . from dataPath
+    const errorsAsString =
+      errors != null
+        ? errors
+            .map((e) => {
+              let msg = `\`${e.dataPath.replace(/^\./, '')}\` ${e.message}`;
+              if ('allowedValues' in e.params) {
+                msg += `. Allowed values: ${JSON.stringify(
+                  e.params.allowedValues
+                )}`;
+              }
+              return msg;
+            })
+            .join('\n')
+        : '';
+
+    this.name = 'ConfigParseError';
+    if (errorsAsString === '') {
+      this.message = message;
+    } else {
+      this.message = `${message}:\n${errorsAsString}`;
+    }
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+export interface DeviceConfigInput {
+  host: string;
+  port?: number | undefined;
+}
 export interface TplinkSmarthomeConfigInput {
   // ==================
   // HomeKit
@@ -61,7 +104,7 @@ export interface TplinkSmarthomeConfigInput {
   /**
    * Manual list of devices (see "Manually Specifying Devices" section below)
    */
-  devices?: Array<{ host: string; port?: number | undefined }>;
+  devices?: Array<DeviceConfigInput>;
 
   // ==================
   // Advanced Settings
@@ -152,17 +195,49 @@ function isArrayOfStrings(value: unknown): value is Array<string> {
   );
 }
 
+function isDeviceConfigInput(value: unknown): value is DeviceConfigInput {
+  return (
+    isObjectLike(value) &&
+    'host' in value &&
+    typeof value.host === 'string' &&
+    (!('port' in value) || typeof value.port === 'number')
+  );
+}
+
+function isArrayOfDeviceConfigInput(
+  value: unknown
+): value is Array<DeviceConfigInput> {
+  return (
+    Array.isArray(value) && value.every((item) => isDeviceConfigInput(item))
+  );
+}
+
 function isTplinkSmarthomeConfigInput(
   c: unknown
 ): c is TplinkSmarthomeConfigInput {
   return (
     isObjectLike(c) &&
-    (!('timeout' in c) || typeof c.timeout === 'number') &&
-    (!('pollingInterval' in c) || typeof c.pollingInterval === 'number') &&
+    (!('addCustomCharacteristics' in c) ||
+      typeof c.addCustomCharacteristics === 'boolean') &&
     (!('inUseThreshold' in c) || typeof c.inUseThreshold === 'number') &&
     (!('switchModels' in c) || isArrayOfStrings(c.switchModels)) &&
     (!('discoveryPort' in c) || typeof c.discoveryPort === 'number') &&
+    (!('broadcast' in c) || typeof c.broadcast === 'string') &&
+    (!('pollingInterval' in c) || typeof c.pollingInterval === 'number') &&
     (!('deviceTypes' in c) || isArrayOfStrings(c.deviceTypes)) &&
+    (!('macAddresses' in c) ||
+      isArrayOfStrings(c.macAddresses) ||
+      c.macAddresses === undefined) &&
+    (!('excludeMacAddresses' in c) ||
+      isArrayOfStrings(c.excludeMacAddresses) ||
+      c.excludeMacAddresses === undefined) &&
+    (!('devices' in c) ||
+      isArrayOfDeviceConfigInput(c.devices) ||
+      c.devices === undefined) &&
+    (!('timeout' in c) || typeof c.timeout === 'number') &&
+    (!('transport' in c) ||
+      typeof c.transport === 'string' ||
+      c.transport === undefined) &&
     (!('waitTimeUpdate' in c) || typeof c.waitTimeUpdate === 'number')
   );
 }
@@ -170,7 +245,15 @@ function isTplinkSmarthomeConfigInput(
 export function parseConfig(
   config: Record<string, unknown>
 ): TplinkSmarthomeConfig {
-  if (!isTplinkSmarthomeConfigInput(config)) throw new TypeError();
+  const ajv = new Ajv({ allErrors: true });
+  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+  const validate = ajv.compile(require('../config.schema.json').schema);
+  const valid = validate(config);
+  if (!valid)
+    throw new ConfigParseError('Error parsing config', validate.errors);
+
+  if (!isTplinkSmarthomeConfigInput(config))
+    throw new ConfigParseError('Error parsing config');
 
   const c = defaults(config, defaultConfig);
 

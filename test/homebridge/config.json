@@ -8,11 +8,13 @@
 
   "description": "test config",
 
-  "platforms": [{
-    "platform": "TplinkSmarthome",
-    "name": "TPLink",
-    "excludeMacAddresses": "aa:aa:aa:*"
-  }],
+  "platforms": [
+    {
+      "platform": "TplinkSmarthome",
+      "name": "TPLink",
+      "excludeMacAddresses": ["aa:aa:aa:*"]
+    }
+  ],
 
   "accessories": []
 }

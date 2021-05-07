@@ -6,13 +6,13 @@
   "footerDisplay": "",
   "schema": {
     "type": "object",
+    "required": ["name"],
     "properties": {
       "name": {
         "title": "Name",
         "type": "string",
         "default": "TplinkSmarthome",
-        "minLength": 1,
-        "required": true
+        "minLength": 1
       },
       "addCustomCharacteristics": {
         "title": "Adds energy monitoring characteristics viewable in Eve app",
@@ -28,7 +28,7 @@
       },
       "switchModels": {
         "type": "array",
-        "description": "Matching models are created in HomeKit as a Switch instead of an Outlet. Default: ['HS200', 'HS210']",
+        "description": "Matching models are created in HomeKit as a Switch instead of an Outlet. This is intended for wall switches. Default: ['HS200', 'HS210']",
         "items": {
           "type": "string"
         }
@@ -90,11 +90,11 @@
         "items": {
           "title": "Device",
           "type": "object",
+          "required": ["host"],
           "properties": {
             "host": {
               "title": "Host",
-              "type": "string",
-              "required": true
+              "type": "string"
             },
             "port": {
               "title": "Port",
