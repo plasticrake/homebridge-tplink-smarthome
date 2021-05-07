@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.4.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.4.0-beta.1...v6.4.0) (2021-05-07)
+
+
+### Features
+
+* configuration validation messages ([#195](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/195)) ([86b2bd2](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/86b2bd2c8c52eb5042d19c5d6a65e357cbbf462b))
+
 ## [6.4.0-beta.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.4.0-beta.0...v6.4.0-beta.1) (2021-03-25)
 
 
