@@ -75,9 +75,8 @@ describe('TplinkSmarthomePlatform', function () {
 
     describe('Context Missing', function () {
       it('should add platformAccessory to #homebridgeAccessories', function () {
-        const platformAccessory = platformAccessoriesIssues.get(
-          'CONTEXT_MISSING'
-        );
+        const platformAccessory =
+          platformAccessoriesIssues.get('CONTEXT_MISSING');
         platform.configureAccessory(platformAccessory);
 
         // eslint-disable-next-line @typescript-eslint/dot-notation

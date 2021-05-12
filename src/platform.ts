@@ -39,10 +39,8 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
   public config: TplinkSmarthomeConfig;
 
-  private readonly homebridgeAccessories: Map<
-    string,
-    PlatformAccessory
-  > = new Map();
+  private readonly homebridgeAccessories: Map<string, PlatformAccessory> =
+    new Map();
 
   private readonly deviceAccessories: Map<string, TplinkAccessory> = new Map();
 

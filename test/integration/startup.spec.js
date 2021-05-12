@@ -40,9 +40,8 @@ const setupHomebridge = function setupHomebridge(scenario) {
 
 const spyOnPlatformCtor = function spyOnPlatformCtor(homebridgeServer) {
   const platformIdentifier = `${PLUGIN_NAME}.${PLATFORM_NAME}`;
-  const plugin = homebridgeServer.pluginManager.getPluginForPlatform(
-    platformIdentifier
-  );
+  const plugin =
+    homebridgeServer.pluginManager.getPluginForPlatform(platformIdentifier);
 
   const platformCtor = plugin.getPlatformConstructor(platformIdentifier);
 
@@ -83,9 +82,8 @@ describe.skip('homebridge', function () {
         homebridgeServer = setupHomebridge(scenario.name);
         await homebridgeServer.start();
         tplinkSmarthomePlatformSpy = spyOnPlatformCtor(homebridgeServer);
-        tplinkSmarthomePlugin = homebridgeServer.pluginManager.getPluginForPlatform(
-          PLATFORM_NAME
-        );
+        tplinkSmarthomePlugin =
+          homebridgeServer.pluginManager.getPluginForPlatform(PLATFORM_NAME);
       });
 
       afterEach(function () {
