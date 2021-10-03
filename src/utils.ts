@@ -121,7 +121,7 @@ export function lookupCharacteristicNameByUUID(
   const keys = Object.keys(characteristic);
   for (let i = 0; i < keys.length; i += 1) {
     const key = keys[i];
-    // @ts-ignore: not sure how to make this correct in typescript
+    // @ts-expect-error: not sure how to make this correct in typescript
     const c = characteristic[key];
     if ('UUID' in c && c.UUID === uuid) {
       return key;
@@ -135,7 +135,7 @@ export function miredToKelvin(mired: number): number {
 }
 
 function cloneLogger(logger: Logging) {
-  // @ts-ignore this doesn't work on function types
+  // @ts-expect-error this doesn't work on function types
   const clonedLogger: Buildable<Logging> = logger.info.bind(logger);
   clonedLogger.info = logger.info;
   clonedLogger.warn = logger.warn;

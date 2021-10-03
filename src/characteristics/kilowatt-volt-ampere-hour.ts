@@ -9,10 +9,9 @@ export default function kilowattVoltAmpereHours(
     static readonly UUID = 'E863F127-079E-48FF-8F27-9C2605A29F52';
 
     constructor() {
-      // @ts-ignore: unable to override class constructor parameters as its a type and not a value
+      // @ts-expect-error no perms
       super('Apparent Energy', KilowattVoltAmpereHour.UUID, {
         format: Formats.UINT32,
-        // @ts-ignore: custom unit
         unit: 'kVAh',
         minStep: 1,
       });
