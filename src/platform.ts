@@ -63,6 +63,17 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
         packageConfig.engines.node
       );
     }
+    if (
+      api.versionGreaterOrEqual == null ||
+      !api.versionGreaterOrEqual('1.3.0')
+    ) {
+      this.log.error(
+        `homebridge-tplink-smarthome requires homebridge >= 1.3.0. Currently running: ${api.serverVersion}`
+      );
+      throw new Error(
+        `homebridge-tplink-smarthome requires homebridge >= 1.3.0. Currently running: ${api.serverVersion}`
+      );
+    }
 
     this.log.debug('config.json: %j', config);
     this.config = parseConfig(config);
