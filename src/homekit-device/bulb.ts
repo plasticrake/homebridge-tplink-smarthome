@@ -295,7 +295,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         this.setLightState(origLs);
       } catch (err) {
         this.log.error(`identify error`);
-        this.log.error(err);
+        this.log.error(String(err));
       }
       this.log.debug(`identify complete`);
     })();

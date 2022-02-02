@@ -155,7 +155,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
           await Promise.all(promises);
         } catch (err) {
           this.log.error('refreshEmeter()');
-          this.log.error(err);
+          this.log.error(String(err));
         } finally {
           this.log.debug(
             'Scheduling next run of refreshEmeter() in %d(ms)',
