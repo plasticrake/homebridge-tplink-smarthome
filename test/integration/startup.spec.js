@@ -9,7 +9,7 @@ const { Server } = require('homebridge/lib/server');
 // const { Plugin } = require('homebridge/lib/plugin');
 const { User } = require('homebridge/lib/user');
 
-const { PLATFORM_NAME, PLUGIN_NAME } = require('../../src/settings');
+const { PLATFORM_NAME, PLUGIN_NAME } = require('../../src/settings.ts');
 // const TplinkSmarthomePlatform = require('../../src/platform');
 
 chai.use(sinonChai);

@@ -16,7 +16,6 @@ declare module 'node-persist' {
 
     initSync(options?: InitOptions): void;
     getItem(key: string): any;
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     setItemSync(key: string, value: any): void;
     removeItemSync(key: string): void;
     persistSync(): void;

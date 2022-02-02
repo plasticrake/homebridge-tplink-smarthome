@@ -229,7 +229,6 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     accessory: PlatformAccessory | undefined,
     tplinkDevice: TplinkDevice
   ): TplinkAccessory {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     const { config, Service } = this;
 
     const [category, services] = ((): [

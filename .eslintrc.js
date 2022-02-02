@@ -17,6 +17,7 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint', 'eslint-plugin-tsdoc', 'deprecation'],
       extends: [
+        'airbnb-base',
         'airbnb-typescript/base',
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
