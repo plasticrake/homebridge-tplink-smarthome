@@ -99,6 +99,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         return this.tplinkDevice.sysInfo.light_state.on_off === 1; // immediately returned cached value
       },
       setValue: async (value) => {
+        this.log.debug(`Setting On to: ${value}`);
         if (typeof value === 'boolean') {
           await this.setLightState({ on_off: value ? 1 : 0 });
           return;
@@ -185,6 +186,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         return ls.brightness ?? ls.dft_on_state?.brightness ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
+        this.log.debug(`Setting Brightness to: ${value}`);
         if (typeof value === 'number') {
           await this.setLightState({ brightness: value });
           return;
@@ -229,6 +231,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         return Math.floor(kelvinToMired(min));
       },
       setValue: async (value) => {
+        this.log.debug(`Setting ColorTemperature to: ${value}`);
         if (typeof value === 'number') {
           await this.setLightState({
             color_temp: Math.round(miredToKelvin(value)),
@@ -248,6 +251,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         return ls.hue ?? ls.dft_on_state?.hue ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
+        this.log.debug(`Setting Hue to: ${value}`);
         if (typeof value === 'number') {
           await this.setLightState({ hue: value, color_temp: 0 });
           return;
@@ -263,6 +267,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         return ls.saturation ?? ls.dft_on_state?.saturation ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
+        this.log.debug(`Setting Saturation to: ${value}`);
         if (typeof value === 'number') {
           await this.setLightState({ saturation: value, color_temp: 0 });
           return;

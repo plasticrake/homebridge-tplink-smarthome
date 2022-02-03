@@ -91,6 +91,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
         return this.tplinkDevice.relayState; // immediately returned cached value
       },
       setValue: async (value) => {
+        this.log.debug(`Setting On to: ${value}`);
         if (typeof value === 'boolean') {
           await this.setPowerState(value);
           return;
@@ -130,6 +131,7 @@ export default class HomeKitDevicePlug extends HomeKitDevice {
         return this.tplinkDevice.dimmer.brightness; // immediately returned cached value
       },
       setValue: async (value) => {
+        this.log.debug(`Setting Brightness to: ${value}`);
         if (typeof value === 'number') {
           await this.tplinkDevice.dimmer.setBrightness(value);
           return;
