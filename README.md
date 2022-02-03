@@ -9,9 +9,10 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 ## Models Supported
 
-- **Plugs:** HS100, HS103, HS105, HS107, HS110, HS300, KP105, KP303, KP400
-- **Switches:** HS200, HS210, HS220
-- **Bulbs:** LB100, LB110, LB120, LB130, LB200, LB230
+- **Plugs:** EP40, HS100, HS103, HS105, HS107, HS110, HS300, KP105, KP115, KP303, KP400
+- **Switches:** ES20M, HS200, HS210, HS220
+- **Bulbs:** KL50, KL120, KL125, LB100, LB110, LB120, LB130, LB200, LB230
+- **Lightstrips:** KL430
 
 More models may be supported than listed. If you have another model working please let me know so I can add here.
 
@@ -21,19 +22,21 @@ More models may be supported than listed. If you have another model working plea
 | ----------------------------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | HS100, HS103, HS105, HS107, KP105, KP303, KP400 | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
 | HS110, HS300, KP115                             | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
+| EP40                                            | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
 | HS200, HS210                                    | Switch    | On                                                                                                                                                                                                 |
 | HS220                                           | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
-| LB100, LB110, LB200                             | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
-| LB120                                           | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
-| LB130, LB230                                    | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
+| KL50, LB100, LB110, LB200                       | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
+| LB120, KL120                                    | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
+| KL125, KL430, LB130, LB230                      | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
+| ES20M                                           | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
 
 ## Installation
 
 ### Manual Installation
 
-1. **Node v10 or greater is required.** Check by running: `node --version`
-2. Install Homebridge using: `npm install -g homebridge` or `sudo npm install -g --unsafe-perm homebridge` ([more details](https://github.com/nfarina/homebridge#installation))
-3. **Homebridge v1.1.0 or greater is required.** Check by running `homebridge --version`
+1. **Node v12.20.0 or greater is required.** Check by running: `node --version`
+2. Install Homebridge: ([instructions](https://github.com/homebridge/homebridge#installation))
+3. **Homebridge v1.3.0 or greater is required.** Check by running `homebridge --version`
 4. Install this plugin using: `npm install -g homebridge-tplink-smarthome`
 5. Update your configuration file. See the sample below.
 
@@ -71,7 +74,7 @@ See [config.ts](src/config.ts) for documention on these options. It is recommend
 
   "addCustomCharacteristics": true,
   "inUseThreshold": 0,
-  "switchModels": ["HS200", "HS210"],
+  "switchModels": ["HS200", "HS210"], // DO NOT CHANGE THIS unless you know what you are doing
 
   "discoveryPort": 0,
   "broadcast": "255.255.255.255",

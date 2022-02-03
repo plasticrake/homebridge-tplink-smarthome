@@ -1,5 +1,6 @@
 import type { Categories } from 'homebridge';
 import type { Bulb, LightState } from 'tplink-smarthome-api';
+import { BulbSysinfoLightState } from 'tplink-smarthome-api/lib/bulb';
 
 import HomeKitDevice from '.';
 import type TplinkSmarthomePlatform from '../platform';
@@ -38,7 +39,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
 
     this.getLightState = deferAndCombine((requestCount) => {
       this.log.debug(`executing deferred getLightState count: ${requestCount}`);
-      return this.tplinkDevice.lighting.getLightState();
+      return this.tplinkDevice.getSysInfo().then((si) => {
+        return si.light_state;
+      });
     }, platform.config.waitTimeUpdate);
 
     this.setLightState = deferAndCombine(
@@ -93,7 +96,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
     this.addCharacteristic(this.platform.Characteristic.On, {
       getValue: async () => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        return this.tplinkDevice.lighting.lightState.on_off === 1; // immediately returned cached value
+        return this.tplinkDevice.sysInfo.light_state.on_off === 1; // immediately returned cached value
       },
       setValue: async (value) => {
         if (typeof value === 'boolean') {
@@ -109,14 +112,26 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         true
       );
     });
+    this.tplinkDevice.on('lightstate-sysinfo-on', () => {
+      this.fireCharacteristicUpdateCallback(
+        this.platform.Characteristic.On,
+        true
+      );
+    });
     this.tplinkDevice.on('lightstate-off', () => {
       this.fireCharacteristicUpdateCallback(
         this.platform.Characteristic.On,
         false
       );
     });
+    this.tplinkDevice.on('lightstate-sysinfo-off', () => {
+      this.fireCharacteristicUpdateCallback(
+        this.platform.Characteristic.On,
+        false
+      );
+    });
 
-    this.tplinkDevice.on('lightstate-update', (lightState: LightState) => {
+    const updateListener = (lightState: LightState | BulbSysinfoLightState) => {
       if (lightState.on_off != null) {
         this.fireCharacteristicUpdateCallback(
           this.platform.Characteristic.On,
@@ -156,14 +171,17 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
           );
         }
       }
-    });
+    };
+
+    this.tplinkDevice.on('lightstate-update', updateListener);
+    this.tplinkDevice.on('lightstate-sysinfo-update', updateListener);
   }
 
   private addBrightnessCharacteristics() {
     this.addCharacteristic(this.platform.Characteristic.Brightness, {
       getValue: async (): Promise<number> => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        const ls = this.tplinkDevice.lighting.lightState;
+        const ls = this.tplinkDevice.sysInfo.light_state;
         return ls.brightness ?? ls.dft_on_state?.brightness ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
@@ -192,7 +210,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
       },
       getValue: async (): Promise<number> => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        const ls = this.tplinkDevice.lighting.lightState;
+        const ls = this.tplinkDevice.sysInfo.light_state;
 
         // immediately returned cached value
         if (typeof ls.color_temp === 'number' && ls.color_temp > 0) {
@@ -226,7 +244,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
     this.addCharacteristic(this.platform.Characteristic.Hue, {
       getValue: async (): Promise<number> => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        const ls = this.tplinkDevice.lighting.lightState;
+        const ls = this.tplinkDevice.sysInfo.light_state;
         return ls.hue ?? ls.dft_on_state?.hue ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
@@ -241,7 +259,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
     this.addCharacteristic(this.platform.Characteristic.Saturation, {
       getValue: async (): Promise<number> => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        const ls = this.tplinkDevice.lighting.lightState;
+        const ls = this.tplinkDevice.sysInfo.light_state;
         return ls.saturation ?? ls.dft_on_state?.saturation ?? 0; // immediately returned cached value
       },
       setValue: async (value) => {
@@ -257,7 +275,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addEnergyCharacteristics() {
     this.addCharacteristic(this.platform.customCharacteristics.Watts, {
       getValue: async (): Promise<number | null> => {
-        await this.getRealtime(); // this will eventually trigger update
+        await this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
 
         // immediately returned cached value
         const emeterRealtime = this.tplinkDevice.emeter.realtime;
@@ -270,6 +288,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
     });
 
     this.tplinkDevice.on('emeter-realtime-update', (emeterRealtime) => {
+      if (emeterRealtime.power == null) return;
       this.fireCharacteristicUpdateCallback(
         this.platform.customCharacteristics.Watts,
         emeterRealtime.power
