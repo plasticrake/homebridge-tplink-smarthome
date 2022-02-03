@@ -1,14 +1,12 @@
-import type {
-  Characteristic as CharacteristicClass,
-  CharacteristicProps,
-} from 'homebridge';
+import type { CharacteristicProps } from 'homebridge';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Formats, Perms } from 'homebridge'; // enum
 import type { MarkOptional } from 'ts-essentials';
+import DefaultCharacteristicClass from './types';
 
 export default function defaultCharacteristic(
-  Characteristic: typeof CharacteristicClass
-): typeof CharacteristicClass {
+  Characteristic: typeof DefaultCharacteristicClass
+): typeof DefaultCharacteristicClass {
   return class DefaultCharacteristic extends Characteristic {
     constructor(
       displayName: string,

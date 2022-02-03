@@ -24,7 +24,7 @@ import TplinkAccessory from './tplink-accessory';
 import { lookup, lookupCharacteristicNameByUUID, isObjectLike } from './utils';
 import type { TplinkDevice } from './utils';
 
-// @ts-ignore: okay for reading json
+// okay for reading json
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageConfig = require('../package.json');
 
@@ -274,7 +274,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
   }
 
   getCategoryName(category: Categories): string | undefined {
-    // @ts-ignore: this should work
+    // @ts-expect-error: this should work
     // eslint-disable-next-line deprecation/deprecation
     return this.api.hap.Accessory.Categories[category];
   }
@@ -376,7 +376,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
   /**
    * Removes an accessory and unregisters it from Homebridge
    */
-  // @ts-ignore: future use
+  // @ts-expect-error: future use
   private removeAccessory(homebridgeAccessory: PlatformAccessory): void {
     this.log.info(
       `Removing: ${chalk.blue(`[${homebridgeAccessory.displayName}]`)}`
