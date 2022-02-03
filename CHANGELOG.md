@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0-next.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.4.0...v7.0.0-next.0) (2022-02-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* requires homebridge >= 1.3.0
+* Requires node >= v12.20.0
+
+### Features
+
+* add support for light strips such as KL430 ([7f56165](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/7f5616592dcf60d3643c8a45dc579bd875861069)), closes [#113](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/113)
+* throw error if non-supported homebridge version ([8743552](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/8743552415a928b588e3d83bf5c70f4579344f8b))
+
+
+* upgrade tplink-smarthome-api ([eb7a670](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/eb7a670281841b8421759341ed5db734ba7cf038))
+
 ## [6.4.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.4.0-beta.1...v6.4.0) (2021-05-07)
 
 
