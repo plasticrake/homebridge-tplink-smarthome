@@ -92,7 +92,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
     client.on('device-new', (device: TplinkDevice) => {
       this.log.info(
-        `New Device Online: ${chalk.blue(`[${device.alias}]`)} %s [%s]`,
+        `Device First Online: ${chalk.blue(`[${device.alias}]`)} %s [%s]`,
         device.deviceType,
         device.id,
         device.host,
