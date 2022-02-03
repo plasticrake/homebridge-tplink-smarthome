@@ -28,7 +28,7 @@
       },
       "switchModels": {
         "type": "array",
-        "description": "Matching models are created in HomeKit as a Switch instead of an Outlet. This is intended for wall switches. Default: ['HS200', 'HS210']",
+        "description": "Matching models are created in HomeKit as a Switch instead of an Outlet. This is only intended for wall switches that do not support brightness and energy monitoring. DO NOT CHANGE THIS unless you know what you are doing. Default: ['HS200', 'HS210']",
         "items": {
           "type": "string"
         }
