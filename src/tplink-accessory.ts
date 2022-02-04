@@ -20,7 +20,11 @@ import AccessoryInformation from './accessory-information';
 import { TplinkSmarthomeConfig } from './config';
 import HomekitDevice from './homekit-device';
 import type TplinkSmarthomePlatform from './platform';
-import { getOrAddCharacteristic, prefixLogger } from './utils';
+import {
+  getOrAddCharacteristic,
+  hasCharacteristic,
+  prefixLogger,
+} from './utils';
 import type { TplinkDevice } from './utils';
 
 export default class TplinkAccessory {
@@ -274,9 +278,16 @@ export default class TplinkAccessory {
         return;
       }
       // Remove unsupported characteristic
-      service.removeCharacteristic(
-        service.getCharacteristic(CharacteristicType)
-      );
+      if (
+        hasCharacteristic(
+          service.characteristics.concat(service.optionalCharacteristics),
+          CharacteristicType
+        )
+      ) {
+        service.removeCharacteristic(
+          service.getCharacteristic(CharacteristicType)
+        );
+      }
     });
   }
 }

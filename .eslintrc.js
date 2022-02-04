@@ -33,6 +33,10 @@ module.exports = {
             'ts-check': 'allow-with-description',
           },
         ],
+        '@typescript-eslint/no-use-before-define': [
+          'error',
+          { functions: false },
+        ],
         'no-restricted-syntax': [
           'off',
           {
