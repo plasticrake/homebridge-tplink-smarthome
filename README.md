@@ -98,11 +98,7 @@ MAC Addresses are normalized, special characters are removed and made uppercase 
 
 ### Custom Characteristics in Eve
 
-Devices that support energy monitoring (HS110, etc) will have extra characteristics that are viewable in the Eve app (such as Watts). Turn this off by setting `addCustomCharacteristics` false. When this is on, you will see warnings on startup that you can ignore.
-
-```text
-HAP Warning: Characteristic E863F10D-079E-48FF-8F27-9C2605A29F52 not in required or optional characteristics for service 00000047-0000-1000-8000-0026BB765291. Adding anyway.
-```
+Devices that support energy monitoring (HS110, etc) will have extra characteristics that are viewable in the Eve app (such as Watts). Turn this off by setting `addCustomCharacteristics` false.
 
 ### Discovery and Broadcast
 

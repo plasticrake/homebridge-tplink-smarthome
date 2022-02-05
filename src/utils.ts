@@ -84,9 +84,31 @@ export function getOrAddCharacteristic(
   service: Service,
   characteristic: WithUUID<new () => Characteristic>
 ): Characteristic {
+  if (
+    !hasCharacteristic(
+      service.characteristics.concat(service.optionalCharacteristics),
+      characteristic
+    )
+  ) {
+    // This it to suppress warning: Characteristic not in required or optional characteristic section for service
+    service.addOptionalCharacteristic(characteristic);
+  }
+
   return (
     service.getCharacteristic(characteristic) ||
     service.addCharacteristic(characteristic)
+  );
+}
+
+export function hasCharacteristic(
+  characteristics: Array<Characteristic>,
+  characteristic: WithUUID<{ new (): Characteristic }>
+): boolean {
+  return (
+    characteristics.find(
+      (char) =>
+        char instanceof characteristic || char.UUID === characteristic.UUID
+    ) !== undefined
   );
 }
 
