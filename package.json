@@ -1,7 +1,7 @@
 {
   "name": "homebridge-tplink-smarthome",
   "displayName": "Homebridge TPLink Smarthome",
-  "version": "7.0.0-next.0",
+  "version": "7.0.0",
   "description": "TPLink Smarthome plugin for Homebridge",
   "keywords": [
     "homebridge-plugin",

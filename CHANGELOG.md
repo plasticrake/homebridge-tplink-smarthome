@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v7.0.0-next.0...v7.0.0) (2022-02-05)
+
+
+### Features
+
+* add setValue debug logging ([01faa61](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/01faa6149cf2d5a64bf8791ad0704161ee857e54)), closes [#93](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/93)
+* reword log "New Device Online" to "Device First Online" ([92ed0ae](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/92ed0aecf8e0f6dae03d7d15cdf03279a4b2f47b))
+* suppress warnings when adding custom characteristics ([#242](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/242)) ([7a016cc](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/7a016cc6a78be87cf0b0bec40b46812b44b28226)), closes [#201](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/201) [#161](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/161) [#151](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/151)
+
 ## [7.0.0-next.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v6.4.0...v7.0.0-next.0) (2022-02-03)
 
 
