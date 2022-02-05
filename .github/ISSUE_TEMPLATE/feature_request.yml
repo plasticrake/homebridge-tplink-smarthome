@@ -1,0 +1,32 @@
+name: 🚀 Feature Request
+description: Suggest an improvement or a new feature for this project.
+
+labels: ['enhancement']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hi. Thanks for taking the time to contribute to the homebridge-tplink-smarthome project!
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Current Situation
+      description: |
+        Please provide an overview of the current situation and illustrate potential problems or shortcomings.
+        You may add screenshots, log output or configuration files.
+      placeholder: A clear and concise description of the problem or situation that should be addressed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Change
+      description: |
+        Please provide a clear and concise description of the solution or change you propose and how it should work.
+        You may add screenshots, log output or configuration files.
+      placeholder: A clear and concise description of the solution or change you propose and how it should work.
+    validations:
+      required: true

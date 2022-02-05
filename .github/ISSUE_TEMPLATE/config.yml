@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: homebridge-tplink-smarthome Discussions
+    url: https://github.com/plasticrake/homebridge-tplink-smarthome/discussions
+    about: GitHub Discussions for this plugin.
+  - name: Homebridge Discord
+    url: https://discord.gg/UANeUTm
+    about: The Homebridge Discord Community. There is a tplink-smarthome topic.
+  - name: Homebridge Reddit
+    url: https://www.reddit.com/r/homebridge
+    about: The Homebridge Reddit Community - A place to discuss Homebridge, get help with it, ask questions about it, post plugins, and more.

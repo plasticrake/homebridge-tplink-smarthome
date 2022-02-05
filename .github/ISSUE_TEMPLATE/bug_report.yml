@@ -1,0 +1,106 @@
+name: 🐞 Bug Report
+description: File a bug report.
+
+labels: ['bug']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hi. Thanks for taking the time to fill out this bug report!
+        Before we start, be sure you are aware of the following points:
+        - Review the [README](https://github.com/plasticrake/homebridge-tplink-smarthome/blob/master/README.md) to ensure your issue isn't already covered.
+        - Avoid duplicating any existing issues.
+        - Aim to find a descriptive and precise title for your bug report.
+        - If this is a general support question please utilize [Discussions](https://github.com/plasticrake/homebridge-tplink-smarthome/discussions), [Discord](https://discord.gg/kqNCe2D), and/or [Reddit](https://www.reddit.com/r/homebridge/). GitHub Issues are intended for bug reports and feature requests.
+        - **If this template isn't filled out completely your issue may be closed due to lack of information.**
+
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the bug you encountered.
+      options:
+        - label: I have searched the existing issues
+          required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-changed
+    attributes:
+      label: What, if anything, has recently changed?
+      description: Have there been any changes to your setup? Did you upgrade homebridge? Did you upgrade this plugin? Add a new device? Get a new router? ...etc.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of this plugin are you using?
+    validations:
+      required: true
+
+  - type: input
+    id: node_version
+    attributes:
+      label: Node Version
+      description: What version of Node is Homebridge running on?
+      placeholder: node --version
+    validations:
+      required: true
+
+  - type: input
+    id: homebridge_version
+    attributes:
+      label: Homebridge Version
+      description: What version of Homebridge?
+      placeholder: homebridge --version
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Which OS/Platform?
+      options:
+        - Linux
+        - macOS
+        - Windows
+        - Docker (Linux)
+        - Other (Please describe)
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output.
+      placeholder: |
+        - Remove any sensitive information, passwords, etc.
+        - If output is long:
+          - Please extract only the relevant portions if possible (remove other plugin's output, etc)
+          - Consider creating a gist, etc
+        - However, please include the beginning of the log where the homebridge initialization happens if possible
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: |
+        Please provide the content the TplinkSmarthome platform section of your configuration (e.g. `config.json`).
+        Be sure to **remove any sensitive information** (passwords, tokens, etc.).
+      placeholder: Please copy and paste the TplinkSmarthome platform section of your config.json
+      render: json
+    validations:
+      required: true
