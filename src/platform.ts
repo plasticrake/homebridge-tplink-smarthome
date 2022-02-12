@@ -147,7 +147,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
       ) => {
         for (const acc of accessories) {
           const device = acc.tplinkDevice;
-          if (device.deviceType === 'plug' && device.supportsEmeter) {
+          if (device.supportsEmeter) {
             this.log.debug(
               `getEmeterRealtime ${chalk.blue(`[${device.alias}]`)}`
             );
