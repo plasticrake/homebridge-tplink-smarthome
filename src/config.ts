@@ -61,6 +61,11 @@ export interface TplinkSmarthomeConfigInput {
    */
   addCustomCharacteristics?: boolean;
   /**
+   * How often to check device energy monitoring the background (seconds). Set to 0 to disable.
+   * @defaultValue 20
+   */
+  emeterPollingInterval?: number;
+  /**
    * (Watts) For plugs that support energy monitoring (e.g. HS110), min power draw for OutletInUse
    * @defaultValue 0
    */
@@ -131,6 +136,7 @@ export interface TplinkSmarthomeConfigInput {
 
 type TplinkSmarthomeConfigDefault = {
   addCustomCharacteristics: boolean;
+  emeterPollingInterval: number;
   inUseThreshold: number;
   switchModels: Array<string>;
 
@@ -149,6 +155,7 @@ type TplinkSmarthomeConfigDefault = {
 
 export type TplinkSmarthomeConfig = {
   addCustomCharacteristics: boolean;
+  emeterPollingInterval: number;
   switchModels: Array<string>;
   waitTimeUpdate: number;
 
@@ -177,6 +184,7 @@ export type TplinkSmarthomeConfig = {
 
 export const defaultConfig: TplinkSmarthomeConfigDefault = {
   addCustomCharacteristics: true,
+  emeterPollingInterval: 20,
   inUseThreshold: 0,
   switchModels: ['HS200', 'HS210'],
 
@@ -223,6 +231,8 @@ function isTplinkSmarthomeConfigInput(
     isObjectLike(c) &&
     (!('addCustomCharacteristics' in c) ||
       typeof c.addCustomCharacteristics === 'boolean') &&
+    (!('emeterPollingInterval' in c) ||
+      typeof c.emeterPollingInterval === 'number') &&
     (!('inUseThreshold' in c) || typeof c.inUseThreshold === 'number') &&
     (!('switchModels' in c) || isArrayOfStrings(c.switchModels)) &&
     (!('discoveryPort' in c) || typeof c.discoveryPort === 'number') &&
@@ -270,6 +280,7 @@ export function parseConfig(
 
   return {
     addCustomCharacteristics: Boolean(c.addCustomCharacteristics),
+    emeterPollingInterval: c.emeterPollingInterval * 1000,
     switchModels: c.switchModels,
 
     waitTimeUpdate: c.waitTimeUpdate,

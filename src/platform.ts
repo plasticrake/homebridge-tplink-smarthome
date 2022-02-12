@@ -161,7 +161,9 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
       };
 
       const refreshEmeter = async () => {
-        this.log.debug('refreshEmeter()');
+        this.log.debug(`${chalk.magenta('refreshEmeter()')}`);
+        if (this.config.emeterPollingInterval <= 0) return;
+
         try {
           const deviceAccessories = this.deviceAccessoriesByHost;
           const promises: Promise<unknown>[] = [];
@@ -171,20 +173,22 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
           }
           await Promise.all(promises);
         } catch (err) {
-          this.log.error('refreshEmeter()');
+          this.log.error(`Error in ${chalk.magenta('refreshEmeter()')}:`);
           this.log.error(String(err));
         } finally {
           this.log.debug(
-            'Scheduling next run of refreshEmeter() in %d(ms)',
-            this.config.discoveryOptions.discoveryInterval
+            `Scheduling next run of ${chalk.magenta(
+              'refreshEmeter()'
+            )} in %d(ms)`,
+            this.config.emeterPollingInterval
           );
           setTimeout(() => {
             refreshEmeter();
-          }, this.config.discoveryOptions.discoveryInterval);
+          }, this.config.emeterPollingInterval);
         }
       };
 
-      refreshEmeter();
+      if (this.config.emeterPollingInterval > 0) refreshEmeter();
     });
 
     this.api.on('shutdown', () => {
