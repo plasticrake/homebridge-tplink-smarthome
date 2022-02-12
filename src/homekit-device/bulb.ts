@@ -1,40 +1,53 @@
-import type { Categories } from 'homebridge';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Categories } from 'homebridge'; // enum
+import type { PlatformAccessory, Service } from 'homebridge';
 import type { Bulb, LightState } from 'tplink-smarthome-api';
-import { BulbSysinfoLightState } from 'tplink-smarthome-api/lib/bulb';
+import type { BulbSysinfoLightState } from 'tplink-smarthome-api/lib/bulb';
 
-import HomeKitDevice from '.';
+import HomekitDevice from '.';
+import { TplinkSmarthomeConfig } from '../config';
 import type TplinkSmarthomePlatform from '../platform';
-import { deferAndCombine, delay, kelvinToMired, miredToKelvin } from '../utils';
+import type { TplinkSmarthomeAccessoryContext } from '../platform';
+import {
+  deferAndCombine,
+  delay,
+  getOrAddCharacteristic,
+  kelvinToMired,
+  miredToKelvin,
+} from '../utils';
 
-export default class HomeKitDeviceBulb extends HomeKitDevice {
+export default class HomeKitDeviceBulb extends HomekitDevice {
   private desiredLightState: LightState = {};
 
   constructor(
     platform: TplinkSmarthomePlatform,
-    readonly tplinkDevice: Bulb,
-    readonly category: Categories
+    readonly config: TplinkSmarthomeConfig,
+    homebridgeAccessory:
+      | PlatformAccessory<TplinkSmarthomeAccessoryContext>
+      | undefined,
+    readonly tplinkDevice: Bulb
   ) {
-    super(platform, tplinkDevice, category);
+    super(
+      platform,
+      config,
+      homebridgeAccessory,
+      tplinkDevice,
+      Categories.LIGHTBULB
+    );
 
-    this.addBasicCharacteristics();
-
-    if (tplinkDevice.supportsBrightness) {
-      this.addBrightnessCharacteristics();
-    }
-
-    if (tplinkDevice.supportsColorTemperature) {
-      this.addColorTemperatureCharacteristics();
-    }
-
-    if (tplinkDevice.supportsColor) {
-      this.addColorCharacteristics();
-    }
+    const primaryService = this.addLightbulbService({
+      supportsBrightness: tplinkDevice.supportsBrightness,
+      supportsColorTemperature: tplinkDevice.supportsColorTemperature,
+      supportsColor: tplinkDevice.supportsColor,
+    });
 
     if (
       platform.config.addCustomCharacteristics &&
       tplinkDevice.supportsEmeter
     ) {
-      this.addEnergyCharacteristics();
+      this.addEnergyCharacteristics(primaryService);
+    } else {
+      this.removeEnergyCharacteristics(primaryService);
     }
 
     this.getLightState = deferAndCombine((requestCount) => {
@@ -92,125 +105,147 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
    */
   private getRealtime: () => Promise<unknown>;
 
-  private addBasicCharacteristics() {
-    this.addCharacteristic(this.platform.Characteristic.On, {
-      getValue: async () => {
+  private addLightbulbService({
+    supportsBrightness,
+    supportsColorTemperature,
+    supportsColor,
+  }: {
+    supportsBrightness: boolean;
+    supportsColorTemperature: boolean;
+    supportsColor: boolean;
+  }) {
+    const { Lightbulb } = this.platform.Service;
+    const { Characteristic } = this.platform;
+
+    const lightbulbService =
+      this.homebridgeAccessory.getService(Lightbulb) ??
+      this.addService(Lightbulb, this.name);
+
+    const onCharacteristic = getOrAddCharacteristic(
+      lightbulbService,
+      Characteristic.On
+    );
+
+    onCharacteristic
+      .onGet(() => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         return this.tplinkDevice.sysInfo.light_state.on_off === 1; // immediately returned cached value
-      },
-      setValue: async (value) => {
-        this.log.debug(`Setting On to: ${value}`);
+      })
+      .onSet(async (value) => {
+        this.log.info(`Setting On to: ${value}`);
         if (typeof value === 'boolean') {
           await this.setLightState({ on_off: value ? 1 : 0 });
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
-      },
-    });
+      });
+
     this.tplinkDevice.on('lightstate-on', () => {
-      this.fireCharacteristicUpdateCallback(
-        this.platform.Characteristic.On,
-        true
-      );
+      onCharacteristic.updateValue(true);
     });
     this.tplinkDevice.on('lightstate-sysinfo-on', () => {
-      this.fireCharacteristicUpdateCallback(
-        this.platform.Characteristic.On,
-        true
-      );
+      onCharacteristic.updateValue(true);
     });
     this.tplinkDevice.on('lightstate-off', () => {
-      this.fireCharacteristicUpdateCallback(
-        this.platform.Characteristic.On,
-        false
-      );
+      onCharacteristic.updateValue(false);
     });
     this.tplinkDevice.on('lightstate-sysinfo-off', () => {
-      this.fireCharacteristicUpdateCallback(
-        this.platform.Characteristic.On,
-        false
-      );
+      onCharacteristic.updateValue(false);
     });
-
-    const updateListener = (lightState: LightState | BulbSysinfoLightState) => {
+    const onUpdateListener = (
+      lightState: LightState | BulbSysinfoLightState
+    ) => {
       if (lightState.on_off != null) {
-        this.fireCharacteristicUpdateCallback(
-          this.platform.Characteristic.On,
-          lightState.on_off === 1
-        );
-      }
-      if (lightState.brightness != null) {
-        this.fireCharacteristicUpdateCallback(
-          this.platform.Characteristic.Brightness,
-          lightState.brightness
-        );
-      }
-      if (lightState.color_temp != null && lightState.color_temp > 0) {
-        this.fireCharacteristicUpdateCallback(
-          this.platform.Characteristic.ColorTemperature,
-          Math.round(kelvinToMired(lightState.color_temp))
-        );
-        this.fireCharacteristicUpdateCallback(
-          this.platform.Characteristic.Hue,
-          0
-        );
-        this.fireCharacteristicUpdateCallback(
-          this.platform.Characteristic.Saturation,
-          0
-        );
-      } else {
-        if (lightState.hue != null) {
-          this.fireCharacteristicUpdateCallback(
-            this.platform.Characteristic.Hue,
-            lightState.hue
-          );
-        }
-        if (lightState.saturation != null) {
-          this.fireCharacteristicUpdateCallback(
-            this.platform.Characteristic.Saturation,
-            lightState.saturation
-          );
-        }
+        onCharacteristic.updateValue(lightState.on_off === 1);
       }
     };
+    this.tplinkDevice.on('lightstate-update', onUpdateListener);
+    this.tplinkDevice.on('lightstate-sysinfo-update', onUpdateListener);
 
-    this.tplinkDevice.on('lightstate-update', updateListener);
-    this.tplinkDevice.on('lightstate-sysinfo-update', updateListener);
+    if (supportsBrightness) {
+      this.addBrightnessCharacteristic(lightbulbService);
+    } else {
+      this.removeBrightnessCharacteristic(lightbulbService);
+    }
+
+    if (supportsColorTemperature) {
+      this.addColorTemperatureCharacteristic(lightbulbService);
+    } else {
+      this.removeColorTemperatureCharacteristic(lightbulbService);
+    }
+
+    if (supportsColor) {
+      this.addColorCharacteristics(lightbulbService);
+    } else {
+      this.removeColorCharacteristics(lightbulbService);
+    }
+
+    return lightbulbService;
   }
 
-  private addBrightnessCharacteristics() {
-    this.addCharacteristic(this.platform.Characteristic.Brightness, {
-      getValue: async (): Promise<number> => {
+  private addBrightnessCharacteristic(lightbulbService: Service) {
+    const brightnessCharacteristic = getOrAddCharacteristic(
+      lightbulbService,
+      this.platform.Characteristic.Brightness
+    );
+
+    brightnessCharacteristic
+      .onGet(() => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         const ls = this.tplinkDevice.sysInfo.light_state;
         return ls.brightness ?? ls.dft_on_state?.brightness ?? 0; // immediately returned cached value
-      },
-      setValue: async (value) => {
-        this.log.debug(`Setting Brightness to: ${value}`);
+      })
+      .onSet(async (value) => {
+        this.log.info(`Setting Brightness to: ${value}`);
         if (typeof value === 'number') {
           await this.setLightState({ brightness: value });
           return;
         }
         this.log.warn('setValue: Invalid Brightness:', value);
-      },
-    });
+      });
+
+    const brightnessUpdateListener = (
+      lightState: LightState | BulbSysinfoLightState
+    ) => {
+      if (lightState.brightness != null) {
+        brightnessCharacteristic.updateValue(lightState.brightness);
+      }
+    };
+    this.tplinkDevice.on('lightstate-update', brightnessUpdateListener);
+    this.tplinkDevice.on('lightstate-sysinfo-update', brightnessUpdateListener);
+
+    return brightnessCharacteristic;
   }
 
-  private addColorTemperatureCharacteristics() {
+  private removeBrightnessCharacteristic(service: Service) {
+    this.removeCharacteristicIfExists(
+      service,
+      this.platform.Characteristic.Brightness
+    );
+  }
+
+  private addColorTemperatureCharacteristic(lightbulbService: Service) {
     const range = this.tplinkDevice.colorTemperatureRange;
+
     if (range == null) {
       this.log.error('Could not retrieve color temperature range');
-      return;
+      return undefined;
     }
 
     const { min, max } = range;
 
-    this.addCharacteristic(this.platform.Characteristic.ColorTemperature, {
-      props: {
-        minValue: Math.ceil(kelvinToMired(max)), // K and Mired are reversed
-        maxValue: Math.floor(kelvinToMired(min)), // K and Mired are reversed
-      },
-      getValue: async (): Promise<number> => {
+    const colorTemperatureCharacteristic = getOrAddCharacteristic(
+      lightbulbService,
+      this.platform.Characteristic.ColorTemperature
+    );
+
+    colorTemperatureCharacteristic.setProps({
+      minValue: Math.ceil(kelvinToMired(max)), // K and Mired are reversed
+      maxValue: Math.floor(kelvinToMired(min)), // K and Mired are reversed
+    });
+
+    colorTemperatureCharacteristic
+      .onGet(() => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         const ls = this.tplinkDevice.sysInfo.light_state;
 
@@ -229,9 +264,9 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
         }
 
         return Math.floor(kelvinToMired(min));
-      },
-      setValue: async (value) => {
-        this.log.debug(`Setting ColorTemperature to: ${value}`);
+      })
+      .onSet(async (value) => {
+        this.log.info(`Setting ColorTemperature to: ${value}`);
         if (typeof value === 'number') {
           await this.setLightState({
             color_temp: Math.round(miredToKelvin(value)),
@@ -239,66 +274,136 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
           return;
         }
         this.log.warn('setValue: Invalid ColorTemperature:', value);
-      },
-    });
+      });
+
+    if (colorTemperatureCharacteristic != null) {
+      const colorTemperatureUpdateListener = (
+        lightState: LightState | BulbSysinfoLightState
+      ) => {
+        if (lightState.color_temp != null && lightState.color_temp > 0) {
+          colorTemperatureCharacteristic.updateValue(
+            Math.round(kelvinToMired(lightState.color_temp))
+          );
+        }
+      };
+      this.tplinkDevice.on('lightstate-update', colorTemperatureUpdateListener);
+      this.tplinkDevice.on(
+        'lightstate-sysinfo-update',
+        colorTemperatureUpdateListener
+      );
+    }
+
+    return colorTemperatureCharacteristic;
   }
 
-  private addColorCharacteristics() {
-    this.addCharacteristic(this.platform.Characteristic.Hue, {
-      getValue: async (): Promise<number> => {
+  private removeColorTemperatureCharacteristic(service: Service) {
+    this.removeCharacteristicIfExists(
+      service,
+      this.platform.Characteristic.ColorTemperature
+    );
+  }
+
+  private addColorCharacteristics(lightbulbService: Service) {
+    const hueCharacteristic = getOrAddCharacteristic(
+      lightbulbService,
+      this.platform.Characteristic.Hue
+    );
+
+    hueCharacteristic
+      .onGet(() => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         const ls = this.tplinkDevice.sysInfo.light_state;
         return ls.hue ?? ls.dft_on_state?.hue ?? 0; // immediately returned cached value
-      },
-      setValue: async (value) => {
-        this.log.debug(`Setting Hue to: ${value}`);
+      })
+      .onSet(async (value) => {
+        this.log.info(`Setting Hue to: ${value}`);
         if (typeof value === 'number') {
           await this.setLightState({ hue: value, color_temp: 0 });
           return;
         }
         this.log.warn('setValue: Invalid Hue:', value);
-      },
-    });
+      });
 
-    this.addCharacteristic(this.platform.Characteristic.Saturation, {
-      getValue: async (): Promise<number> => {
+    const saturationCharacteristic = getOrAddCharacteristic(
+      lightbulbService,
+      this.platform.Characteristic.Saturation
+    );
+
+    saturationCharacteristic
+      .onGet(() => {
         this.getLightState().catch(this.logRejection.bind(this)); // this will eventually trigger update
         const ls = this.tplinkDevice.sysInfo.light_state;
         return ls.saturation ?? ls.dft_on_state?.saturation ?? 0; // immediately returned cached value
-      },
-      setValue: async (value) => {
-        this.log.debug(`Setting Saturation to: ${value}`);
+      })
+      .onSet(async (value) => {
+        this.log.info(`Setting Saturation to: ${value}`);
         if (typeof value === 'number') {
           await this.setLightState({ saturation: value, color_temp: 0 });
           return;
         }
         this.log.warn('setValue: Invalid Saturation:', value);
-      },
+      });
+
+    const colorUpdateListener = (
+      lightState: LightState | BulbSysinfoLightState
+    ) => {
+      if (lightState.color_temp != null && lightState.color_temp > 0) {
+        hueCharacteristic.updateValue(0);
+        saturationCharacteristic.updateValue(0);
+      } else {
+        if (lightState.hue != null) {
+          hueCharacteristic.updateValue(lightState.hue);
+        }
+        if (lightState.saturation != null) {
+          saturationCharacteristic.updateValue(lightState.saturation);
+        }
+      }
+    };
+    this.tplinkDevice.on('lightstate-update', colorUpdateListener);
+    this.tplinkDevice.on('lightstate-sysinfo-update', colorUpdateListener);
+
+    return { hueCharacteristic, saturationCharacteristic };
+  }
+
+  private removeColorCharacteristics(service: Service) {
+    [
+      this.platform.Characteristic.Hue,
+      this.platform.Characteristic.Saturation,
+    ].forEach((c) => {
+      this.removeCharacteristicIfExists(service, c);
     });
   }
 
-  private addEnergyCharacteristics() {
-    this.addCharacteristic(this.platform.customCharacteristics.Watts, {
-      getValue: async (): Promise<number | null> => {
-        this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
+  private addEnergyCharacteristics(lightbulbService: Service) {
+    const wattsCharacteristic = getOrAddCharacteristic(
+      lightbulbService,
+      this.platform.customCharacteristics.Watts
+    );
 
-        // immediately returned cached value
-        const emeterRealtime = this.tplinkDevice.emeter.realtime;
-        if (typeof emeterRealtime.power === 'number') {
-          return emeterRealtime.power;
-        }
-        this.log.warn(`getValue: Invalid Watts:`, emeterRealtime.power);
-        return null;
-      },
+    wattsCharacteristic.onGet(() => {
+      this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
+
+      // immediately returned cached value
+      const emeterRealtime = this.tplinkDevice.emeter.realtime;
+      if (typeof emeterRealtime.power === 'number') {
+        return emeterRealtime.power;
+      }
+      this.log.warn(`getValue: Invalid Watts:`, emeterRealtime.power);
+      return null;
     });
 
     this.tplinkDevice.on('emeter-realtime-update', (emeterRealtime) => {
-      if (emeterRealtime.power == null) return;
-      this.fireCharacteristicUpdateCallback(
-        this.platform.customCharacteristics.Watts,
-        emeterRealtime.power
+      wattsCharacteristic.updateValue(
+        emeterRealtime.power ?? new Error('Could not retrieve watts')
       );
     });
+  }
+
+  private removeEnergyCharacteristics(lightbulbService: Service) {
+    this.removeCharacteristicIfExists(
+      lightbulbService,
+      this.platform.customCharacteristics.Watts
+    );
   }
 
   identify(): void {

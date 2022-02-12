@@ -74,7 +74,7 @@ See [config.ts](src/config.ts) for documention on these options. It is recommend
 
   "addCustomCharacteristics": true,
   "inUseThreshold": 0,
-  "switchModels": ["HS200", "HS210"], // DO NOT CHANGE THIS unless you know what you are doing
+  "switchModels": ["HS200", "HS210"],
 
   "discoveryPort": 0,
   "broadcast": "255.255.255.255",

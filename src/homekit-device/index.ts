@@ -1,30 +1,27 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { PlatformAccessoryEvent } from 'homebridge'; // enum
 import type {
   Categories,
   Characteristic,
-  CharacteristicProps,
-  CharacteristicValue,
   Logger,
-  Nullable,
+  PlatformAccessory,
   Service,
+  WithUUID,
 } from 'homebridge';
 
 import chalk from 'chalk';
 
+import AccessoryInformation from '../accessory-information';
+import type { TplinkSmarthomeConfig } from '../config';
 import type TplinkSmarthomePlatform from '../platform';
+import type { TplinkSmarthomeAccessoryContext } from '../platform';
 import type { TplinkDevice } from '../utils';
 import { prefixLogger } from '../utils';
 
-export type CharacteristicConfig = {
-  getValue?: () => Promise<Nullable<CharacteristicValue>>;
-  setValue?: (value: CharacteristicValue) => Promise<void>;
-  props?: Partial<CharacteristicProps>;
-  updateCallback?: (value: CharacteristicValue) => void;
-};
-
-export default abstract class HomeKitDevice {
+export default abstract class HomekitDevice {
   readonly log: Logger;
 
-  characteristics: Record<string, CharacteristicConfig> = {};
+  homebridgeAccessory: PlatformAccessory<TplinkSmarthomeAccessoryContext>;
 
   private lsc: (
     serviceOrCharacteristic: Service | Characteristic | { UUID: string },
@@ -36,6 +33,10 @@ export default abstract class HomeKitDevice {
    */
   constructor(
     readonly platform: TplinkSmarthomePlatform,
+    readonly config: TplinkSmarthomeConfig,
+    homebridgeAccessory:
+      | PlatformAccessory<TplinkSmarthomeAccessoryContext>
+      | undefined,
     readonly tplinkDevice: TplinkDevice,
     readonly category: Categories
   ) {
@@ -46,10 +47,67 @@ export default abstract class HomeKitDevice {
 
     this.lsc = this.platform.lsc.bind(this.platform);
 
-    this.addCharacteristic(platform.Characteristic.Name, {
-      getValue: async () => {
-        return this.name;
-      },
+    const categoryName = platform.getCategoryName(category) ?? '';
+
+    if (homebridgeAccessory == null) {
+      const uuid = platform.api.hap.uuid.generate(this.id);
+
+      this.log.debug(
+        `Creating new Accessory [${this.id}] [${uuid}] category: ${categoryName}`
+      );
+
+      // eslint-disable-next-line new-cap
+      this.homebridgeAccessory = new platform.api.platformAccessory(
+        this.name,
+        uuid,
+        category
+      );
+
+      this.homebridgeAccessory.context.deviceId = this.id;
+      this.platform.registerPlatformAccessory(this.homebridgeAccessory);
+    } else {
+      this.homebridgeAccessory = homebridgeAccessory;
+
+      this.log.debug(
+        `Existing Accessory found [${homebridgeAccessory.context.deviceId}] [${homebridgeAccessory.UUID}] category: ${categoryName}`
+      );
+      this.homebridgeAccessory.displayName = this.name;
+      if (this.homebridgeAccessory.category !== category) {
+        this.log.warn(
+          `Correcting Accessory Category from: ${platform.getCategoryName(
+            this.homebridgeAccessory.category
+          )} to: ${categoryName}`
+        );
+        this.homebridgeAccessory.category = category;
+      }
+      this.homebridgeAccessory.context.deviceId = this.id;
+      this.platform.api.updatePlatformAccessories([this.homebridgeAccessory]);
+    }
+
+    const accInfo = AccessoryInformation(platform.api.hap)(
+      this.homebridgeAccessory,
+      this
+    );
+    if (accInfo == null) {
+      this.log.error('Could not retrieve default AccessoryInformation');
+    }
+
+    // Remove Old Services
+    this.homebridgeAccessory.services.forEach((service) => {
+      if (service instanceof platform.Service.AccessoryInformation) return;
+      if (service instanceof platform.Service.Lightbulb) return;
+      if (service instanceof platform.Service.Outlet) return;
+      if (service instanceof platform.Service.Switch) return;
+      this.log.warn(
+        `Removing stale Service: ${this.lsc(service)} uuid:[%s] subtype:[%s]`,
+        service.UUID,
+        service.subtype || ''
+      );
+      this.homebridgeAccessory.removeService(service);
+    });
+
+    this.homebridgeAccessory.on(PlatformAccessoryEvent.IDENTIFY, () => {
+      this.identify();
     });
   }
 
@@ -84,112 +142,51 @@ export default abstract class HomeKitDevice {
 
   abstract identify(): void;
 
-  supportsCharacteristic(characteristic: { UUID: string }): boolean {
-    return this.getCharacteristic(characteristic) !== undefined;
-  }
-
-  supportsCharacteristicSet(characteristic: { UUID: string }): boolean {
-    const c = this.getCharacteristic(characteristic);
-    if (c === undefined) return false;
-    return typeof c.setValue === 'function';
-  }
-
-  addCharacteristic(
-    characteristic: { UUID: string },
-    config: CharacteristicConfig
-  ): void {
-    this.characteristics[characteristic.UUID] = config;
-  }
-
-  private getCharacteristic(characteristic: {
-    UUID: string;
-  }): CharacteristicConfig {
-    return this.characteristics[characteristic.UUID];
-  }
-
-  getCharacteristicProps(characteristic: {
-    UUID: string;
-  }): CharacteristicConfig['props'] {
-    this.log.debug(
-      'getCharacteristicProps',
-      this.lsc(characteristic as Characteristic)
-    );
-    return this.getCharacteristic(characteristic).props;
-  }
-
-  async getCharacteristicValue(characteristic: {
-    UUID: string;
-  }): Promise<Nullable<CharacteristicValue>> {
-    this.log.debug(
-      `getCharacteristicValue ${this.lsc(characteristic as Characteristic)}`
-    );
-
-    const c = this.getCharacteristic(characteristic);
-    if (!('getValue' in c) || c.getValue === undefined) return null;
-    return c.getValue();
-  }
-
-  async setCharacteristicValue(
-    characteristic: { UUID: string },
-    value: CharacteristicValue
-  ): Promise<void> {
-    this.log.debug(
-      'setCharacteristicValue %s %s',
-      this.lsc(characteristic as Characteristic),
-      value
-    );
-
-    const c = this.getCharacteristic(characteristic);
-    if (!('setValue' in c) || c.setValue === undefined) return undefined;
-    return c.setValue(value);
-  }
-
-  fireCharacteristicUpdateCallback(
-    characteristic: { UUID: string },
-    value: CharacteristicValue
-  ): void {
-    this.log.debug(
-      `fireCharacteristicUpdateCallback ${this.lsc(
-        characteristic as Characteristic
-      )} %s`,
-      value
-    );
-    const c = this.getCharacteristic(characteristic);
-    if (c && typeof c.updateCallback === 'function') {
-      c.updateCallback(value);
-      return;
-    }
-
-    // Characteristic may not be setup on device (e.g. addCustomCharacteristics is false)
-    // Warn if characteristic exists, but do not warn if characteristic does not exist
-    if (c) {
-      this.log.warn(
-        `fireCharacteristicUpdateCallback ${this.lsc(
-          characteristic
-        )}: Unable to call updateCallback`
-      );
-    } else {
-      this.log.debug(
-        `fireCharacteristicUpdateCallback [${this.lsc(
-          characteristic
-        )}]: Unable to call updateCallback`
-      );
-    }
-  }
-
-  setCharacteristicUpdateCallback(
-    characteristic: { UUID: string },
-    callbackFn: NonNullable<CharacteristicConfig['updateCallback']>
-  ): void {
-    this.log.debug(
-      `setCharacteristicUpdateCallback ${this.lsc(characteristic)}`,
-      callbackFn.name
-    );
-    const c = this.getCharacteristic(characteristic);
-    c.updateCallback = callbackFn;
+  addService(
+    serviceConstructor: WithUUID<Service | typeof Service>,
+    name: string
+  ) {
+    const serviceName = this.platform.getServiceName(serviceConstructor);
+    this.log.debug(`Creating new ${serviceName} Service`);
+    return this.homebridgeAccessory.addService(serviceConstructor, name);
   }
 
   protected logRejection(reason: unknown): void {
     this.log.error(JSON.stringify(reason));
+  }
+
+  protected removeServiceIfExists(service: WithUUID<typeof Service>) {
+    const foundService = this.homebridgeAccessory.getService(service);
+    if (foundService != null) {
+      this.log.warn(
+        `Removing stale Service: ${this.lsc(service, foundService)} uuid:[%s]`,
+        foundService.UUID
+      );
+
+      this.homebridgeAccessory.removeService(foundService);
+    }
+  }
+
+  protected removeCharacteristicIfExists(
+    service: Service,
+    characteristic: WithUUID<new () => Characteristic>
+  ) {
+    // testCharacteristic parameter has an incorrect type
+    if (
+      service.testCharacteristic(
+        characteristic as unknown as WithUUID<typeof Characteristic>
+      )
+    ) {
+      const characteristicToRemove = service.getCharacteristic(characteristic);
+      this.log.warn(
+        `Removing stale Characteristic: ${this.lsc(
+          service,
+          characteristicToRemove
+        )} uuid:[%s]`,
+        characteristicToRemove.UUID
+      );
+
+      service.removeCharacteristic(characteristicToRemove);
+    }
   }
 }

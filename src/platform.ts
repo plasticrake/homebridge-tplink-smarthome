@@ -20,29 +20,34 @@ import { parseConfig } from './config';
 import type { TplinkSmarthomeConfig } from './config';
 import Characteristics from './characteristics';
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
-import TplinkAccessory from './tplink-accessory';
 import { lookup, lookupCharacteristicNameByUUID, isObjectLike } from './utils';
 import type { TplinkDevice } from './utils';
+import create from './homekit-device/create';
+import HomekitDevice from './homekit-device';
 
 // okay for reading json
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageConfig = require('../package.json');
+
+export type TplinkSmarthomeAccessoryContext = {
+  deviceId?: string;
+};
 
 export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
   public readonly Service = this.api.hap.Service;
 
   public readonly Characteristic = this.api.hap.Characteristic;
 
-  public customCharacteristics: {
-    [key: string]: WithUUID<new () => Characteristic>;
-  };
+  public customCharacteristics: ReturnType<typeof Characteristics>;
 
   public config: TplinkSmarthomeConfig;
 
-  private readonly homebridgeAccessories: Map<string, PlatformAccessory> =
-    new Map();
+  private readonly configuredAccessories: Map<
+    string,
+    PlatformAccessory<TplinkSmarthomeAccessoryContext>
+  > = new Map();
 
-  private readonly deviceAccessories: Map<string, TplinkAccessory> = new Map();
+  private readonly homekitDevicesById: Map<string, HomekitDevice> = new Map();
 
   constructor(
     public readonly log: Logging,
@@ -113,7 +118,8 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     });
 
     client.on('device-offline', (device: TplinkDevice) => {
-      const deviceAccessory = this.deviceAccessories.get(device.id);
+      const deviceAccessory = this.homekitDevicesById.get(device.id);
+
       if (deviceAccessory !== undefined) {
         this.log.debug(
           `Device Offline: ${chalk.blue(`[${device.alias}]`)} %s [%s]`,
@@ -137,7 +143,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
       });
 
       const refreshEmeterForAccessories = async (
-        accessories: TplinkAccessory[]
+        accessories: HomekitDevice[]
       ) => {
         for (const acc of accessories) {
           const device = acc.tplinkDevice;
@@ -222,9 +228,9 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     return `[${chalk.green(characteristicName)}]`;
   }
 
-  private get deviceAccessoriesByHost(): Map<string, TplinkAccessory[]> {
-    const byHost: Map<string, TplinkAccessory[]> = new Map();
-    for (const [, tpLinkAccessory] of this.deviceAccessories) {
+  private get deviceAccessoriesByHost(): Map<string, HomekitDevice[]> {
+    const byHost: Map<string, HomekitDevice[]> = new Map();
+    for (const [, tpLinkAccessory] of this.homekitDevicesById) {
       const { host } = tpLinkAccessory.tplinkDevice;
       const arr = byHost.get(host);
       if (arr != null) {
@@ -236,41 +242,11 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     return byHost;
   }
 
-  private createTplinkAccessory(
-    accessory: PlatformAccessory | undefined,
+  private createHomekitDevice(
+    accessory: PlatformAccessory<TplinkSmarthomeAccessoryContext> | undefined,
     tplinkDevice: TplinkDevice
-  ): TplinkAccessory {
-    const { config, Service } = this;
-
-    const [category, services] = ((): [
-      Categories,
-      Array<WithUUID<typeof Service>>
-    ] => {
-      if (tplinkDevice.deviceType === 'bulb') {
-        return [Categories.LIGHTBULB, [Service.Lightbulb]];
-      }
-      // plug
-      if (
-        config.switchModels &&
-        config.switchModels.findIndex((m) => tplinkDevice.model.includes(m)) !==
-          -1
-      ) {
-        return [Categories.SWITCH, [Service.Switch]];
-      }
-      if (tplinkDevice.supportsDimmer) {
-        return [Categories.LIGHTBULB, [Service.Lightbulb]];
-      }
-      return [Categories.OUTLET, [Service.Outlet]];
-    })();
-
-    return new TplinkAccessory(
-      this,
-      this.config,
-      accessory,
-      tplinkDevice,
-      category,
-      services
-    );
+  ): HomekitDevice {
+    return create(this, this.config, accessory, tplinkDevice);
   }
 
   getCategoryName(category: Categories): string | undefined {
@@ -315,7 +291,9 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
    *
    * Calls {@link external:homebridge.API#registerPlatformAccessories}
    */
-  registerPlatformAccessory(platformAccessory: PlatformAccessory): void {
+  registerPlatformAccessory(
+    platformAccessory: PlatformAccessory<TplinkSmarthomeAccessoryContext>
+  ): void {
     this.log.debug(
       `registerPlatformAccessory(${chalk.blue(
         `[${platformAccessory.displayName}]`
@@ -329,7 +307,9 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
   /**
    * Function invoked when homebridge tries to restore cached accessory
    */
-  configureAccessory(accessory: PlatformAccessory): void {
+  configureAccessory(
+    accessory: PlatformAccessory<TplinkSmarthomeAccessoryContext>
+  ): void {
     this.log.info(
       `Configuring cached accessory: ${chalk.blue(
         `[${accessory.displayName}]`
@@ -337,14 +317,14 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
       accessory.context?.deviceId
     );
     this.log.debug('%O', accessory.context);
-    this.homebridgeAccessories.set(accessory.UUID, accessory);
+
+    this.configuredAccessories.set(accessory.UUID, accessory);
   }
 
   /**
    * Adds a new or existing real device.
    */
   private foundDevice(device: TplinkDevice): void {
-    // TODO: refactor this function
     const deviceId = device.id;
 
     if (deviceId == null || deviceId.length === 0) {
@@ -352,9 +332,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
       return;
     }
 
-    let deviceAccessory = this.deviceAccessories.get(deviceId);
-
-    if (deviceAccessory !== undefined) {
+    if (this.homekitDevicesById.get(deviceId) !== undefined) {
       return;
     }
 
@@ -365,27 +343,11 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     );
 
     const uuid = this.api.hap.uuid.generate(deviceId);
-    const homebridgeAccessory = this.homebridgeAccessories.get(uuid);
+    const accessory = this.configuredAccessories.get(uuid);
 
-    deviceAccessory = this.createTplinkAccessory(homebridgeAccessory, device);
-
-    this.deviceAccessories.set(deviceId, deviceAccessory);
-    this.homebridgeAccessories.set(uuid, deviceAccessory.homebridgeAccessory);
-  }
-
-  /**
-   * Removes an accessory and unregisters it from Homebridge
-   */
-  // @ts-expect-error: future use
-  private removeAccessory(homebridgeAccessory: PlatformAccessory): void {
-    this.log.info(
-      `Removing: ${chalk.blue(`[${homebridgeAccessory.displayName}]`)}`
+    this.homekitDevicesById.set(
+      device.id,
+      this.createHomekitDevice(accessory, device)
     );
-
-    this.deviceAccessories.delete(homebridgeAccessory.context.deviceId);
-    this.homebridgeAccessories.delete(homebridgeAccessory.UUID);
-    this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [
-      homebridgeAccessory,
-    ]);
   }
 }
