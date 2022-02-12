@@ -145,7 +145,7 @@ export default class HomeKitDevicePlug extends HomekitDevice {
       });
 
     this.tplinkDevice.on('power-update', (value) => {
-      onCharacteristic.updateValue(value);
+      this.updateValue(outletService, onCharacteristic, value);
     });
 
     if (this.category === Categories.OUTLET) {
@@ -160,7 +160,7 @@ export default class HomeKitDevicePlug extends HomekitDevice {
       });
 
       this.tplinkDevice.on('in-use-update', (value) => {
-        outletInUseCharacteristic.updateValue(value);
+        this.updateValue(outletService, outletInUseCharacteristic, value);
       });
     }
 
@@ -206,7 +206,7 @@ export default class HomeKitDevicePlug extends HomekitDevice {
       });
 
     this.tplinkDevice.on('brightness-update', (value) => {
-      brightnessCharacteristic.updateValue(value);
+      this.updateValue(service, brightnessCharacteristic, value);
     });
 
     return service;
@@ -261,13 +261,15 @@ export default class HomeKitDevicePlug extends HomekitDevice {
     });
 
     this.tplinkDevice.on('emeter-realtime-update', (emeterRealtime) => {
-      amperesCharacteristic.updateValue(emeterRealtime.current);
-      kilowattCharacteristic.updateValue(emeterRealtime.total);
-      voltAmperesCharacteristic.updateValue(
+      this.updateValue(service, amperesCharacteristic, emeterRealtime.current);
+      this.updateValue(service, kilowattCharacteristic, emeterRealtime.total);
+      this.updateValue(
+        service,
+        voltAmperesCharacteristic,
         emeterRealtime.voltage * emeterRealtime.current
       );
-      voltsCharacteristic.updateValue(emeterRealtime.voltage);
-      wattsCharacteristic.updateValue(emeterRealtime.power);
+      this.updateValue(service, voltsCharacteristic, emeterRealtime.voltage);
+      this.updateValue(service, wattsCharacteristic, emeterRealtime.power);
     });
   }
 

@@ -3,7 +3,10 @@ import { PlatformAccessoryEvent } from 'homebridge'; // enum
 import type {
   Categories,
   Characteristic,
+  CharacteristicValue,
+  HapStatusError,
   Logger,
+  Nullable,
   PlatformAccessory,
   Service,
   WithUUID,
@@ -141,6 +144,15 @@ export default abstract class HomekitDevice {
   }
 
   abstract identify(): void;
+
+  updateValue(
+    service: Service,
+    characteristic: Characteristic,
+    value: Nullable<CharacteristicValue> | Error | HapStatusError
+  ) {
+    this.log.debug(`Updating ${this.lsc(service, characteristic)} ${value}`);
+    characteristic.updateValue(value);
+  }
 
   addService(
     serviceConstructor: WithUUID<Service | typeof Service>,
