@@ -280,7 +280,7 @@ export default class HomeKitDeviceBulb extends HomeKitDevice {
   private addEnergyCharacteristics() {
     this.addCharacteristic(this.platform.customCharacteristics.Watts, {
       getValue: async (): Promise<number | null> => {
-        await this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
+        this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
 
         // immediately returned cached value
         const emeterRealtime = this.tplinkDevice.emeter.realtime;
