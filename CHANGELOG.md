@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v7.0.0...v7.0.1) (2022-02-12)
+
+
+### Bug Fixes
+
+* **Bulb:** remove await from get of Watts ([d751d9f](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/d751d9f5842f37b794f06085ce5e37d7572ca97f))
+
 ## [7.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v7.0.0-next.0...v7.0.0) (2022-02-05)
 
 
