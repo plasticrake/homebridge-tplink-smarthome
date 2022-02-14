@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.1.0-next.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v7.0.1...v7.1.0-next.0) (2022-02-14)
+
+
+### Features
+
+* **Bulb:** add bulb devices to energy monitoring polling ([a587c80](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/a587c806f91870ba142181dedea6866c17d46b88))
+* add emeterPollingInterval configuration ([0c4995b](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/0c4995bc265acd259569dba1783150a6e5e7b7a1))
+* improve debug logging for updateValue ([edcbc7e](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/edcbc7e93564428dcd51e81e2b9027d3b18d6663))
+
 ### [7.0.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v7.0.0...v7.0.1) (2022-02-12)
 
 
