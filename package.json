@@ -40,6 +40,7 @@
     "clean": "rimraf lib/",
     "cleancache": "rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories",
     "clean:debug": "rm -rf $PWD/test/homebridge/persist && rm -rf $PWD/test/homebridge/accessories",
+    "clean:debug:acc": "rm -rf $PWD/test/homebridge/accessories",
     "debug": "npm run build && npm run debug:only",
     "debug:only": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
     "debugsim": "npm run build && npm run debugsim:only",
@@ -61,7 +62,7 @@
     "lodash.castarray": "^4.4.0",
     "lodash.defaults": "^4.2.0",
     "semver": "^7.3.5",
-    "tplink-smarthome-api": "4.1.0"
+    "tplink-smarthome-api": "4.2.0"
   },
   "devDependencies": {
     "@types/chai": "^4.3.0",
@@ -72,8 +73,8 @@
     "@types/semver": "^7.3.9",
     "@types/sinon": "^10.0.11",
     "@types/sinon-chai": "^3.2.8",
-    "@typescript-eslint/eslint-plugin": "^5.11.0",
-    "@typescript-eslint/parser": "^5.11.0",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
     "chai": "^4.3.6",
     "cspell": "^5.18.4",
     "eslint": "^8.9.0",
