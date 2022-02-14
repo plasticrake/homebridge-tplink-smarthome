@@ -36,7 +36,7 @@
   ],
   "scripts": {
     "prebuild": "npm run clean",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.source.json",
     "clean": "rimraf lib/",
     "cleancache": "rm -rf ~/.homebridge/persist && rm -rf ~/.homebridge/accessories",
     "clean:debug": "rm -rf $PWD/test/homebridge/persist && rm -rf $PWD/test/homebridge/accessories",
@@ -45,7 +45,7 @@
     "debug:only": "homebridge --debug --user-storage-path $PWD/test/homebridge --plugin-path .",
     "debugsim": "npm run build && npm run debugsim:only",
     "debugsim:only": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
-    "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts . && tsc --noEmit",
     "prepare": "npm run build",
     "release": "standard-version --sign",
     "spellcheck": "cspell '{src,test}/**/*' *.md",
