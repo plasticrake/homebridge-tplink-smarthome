@@ -58,11 +58,11 @@ describe('TplinkSmarthomePlatform', function () {
   describe('#configureAccessory', function () {
     platformAccessories.forEach(function (platformAccessory) {
       describe(platformAccessory.displayName, function () {
-        it('should add platformAccessory to #homebridgeAccessories', function () {
+        it('should add platformAccessory to #configuredAccessories', function () {
           platform.configureAccessory(platformAccessory);
 
           // eslint-disable-next-line @typescript-eslint/dot-notation
-          const hbAccessories = platform['homebridgeAccessories'];
+          const hbAccessories = platform['configuredAccessories'];
 
           expect(hbAccessories).to.be.a('Map');
           expect(hbAccessories).to.have.property('size', 1);
@@ -74,13 +74,13 @@ describe('TplinkSmarthomePlatform', function () {
     });
 
     describe('Context Missing', function () {
-      it('should add platformAccessory to #homebridgeAccessories', function () {
+      it('should add platformAccessory to #configuredAccessories', function () {
         const platformAccessory =
           platformAccessoriesIssues.get('CONTEXT_MISSING');
         platform.configureAccessory(platformAccessory);
 
         // eslint-disable-next-line @typescript-eslint/dot-notation
-        const hbAccessories = platform['homebridgeAccessories'];
+        const hbAccessories = platform['configuredAccessories'];
 
         expect(hbAccessories).to.be.a('Map');
         expect(hbAccessories).to.have.property('size', 1);
