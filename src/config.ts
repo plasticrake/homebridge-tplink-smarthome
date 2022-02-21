@@ -132,6 +132,12 @@ export interface TplinkSmarthomeConfigInput {
    * @defaultValue 100
    */
   waitTimeUpdate?: number;
+  /**
+   * When true, sets the device port to the port the device used when responding to the discovery ping.
+   * When false, always uses default port (9999).
+   * You probably don't want to change this.
+   */
+  devicesUseDiscoveryPort?: boolean;
 }
 
 type TplinkSmarthomeConfigDefault = {
@@ -151,6 +157,7 @@ type TplinkSmarthomeConfigDefault = {
   timeout: number;
   transport: 'tcp' | 'udp' | undefined;
   waitTimeUpdate: number;
+  devicesUseDiscoveryPort: boolean;
 };
 
 export type TplinkSmarthomeConfig = {
@@ -168,6 +175,7 @@ export type TplinkSmarthomeConfig = {
     port: number | undefined;
     broadcast: string;
     discoveryInterval: number;
+    devicesUseDiscoveryPort: boolean;
     deviceTypes?: Array<'plug' | 'bulb'>;
     deviceOptions: {
       defaultSendOptions: {
@@ -199,6 +207,7 @@ export const defaultConfig: TplinkSmarthomeConfigDefault = {
   timeout: 15,
   transport: undefined,
   waitTimeUpdate: 100,
+  devicesUseDiscoveryPort: false,
 };
 
 function isArrayOfStrings(value: unknown): value is Array<string> {
@@ -291,6 +300,7 @@ export function parseConfig(
       port: c.discoveryPort,
       broadcast: c.broadcast,
       discoveryInterval: c.pollingInterval * 1000,
+      devicesUseDiscoveryPort: c.devicesUseDiscoveryPort,
       deviceTypes: c.deviceTypes,
       deviceOptions: {
         defaultSendOptions,

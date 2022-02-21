@@ -131,6 +131,12 @@
         "type": "integer",
         "description": "The time (ms) to wait to combine similar commands for a device before sending a command to a device. Default: 100.",
         "placeholder": "100"
+      },
+      "devicesUseDiscoveryPort": {
+        "title": "Devices Use Discovery Port",
+        "description": "When true, sets the device port to the port the device used when responding to the discovery ping. When false, always uses default port (9999). You probably don't want to change this.",
+        "type": "boolean",
+        "default": false
       }
     }
   },
@@ -212,7 +218,12 @@
       "title": "Advanced Settings (Optional)",
       "description": "Don't change these, unless you understand what you're doing.",
       "expandable": true,
-      "items": ["timeout", "waitTimeUpdate", "transport"]
+      "items": [
+        "timeout",
+        "waitTimeUpdate",
+        "transport",
+        "devicesUseDiscoveryPort"
+      ]
     }
   ]
 }
