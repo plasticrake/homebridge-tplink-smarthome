@@ -27,7 +27,7 @@ More models may be supported than listed. If you have another model working plea
 | HS220                                           | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
 | KL50, LB100, LB110, LB200                       | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
 | LB120, KL120                                    | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
-| KL125, KL430, LB130, LB230                      | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
+| KL125, KL400L5, KL430, LB130, LB230             | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Hue<br/>Saturation<br/>Watts (Custom)                                                                                                                   |
 | ES20M                                           | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
 
 ## Installation
