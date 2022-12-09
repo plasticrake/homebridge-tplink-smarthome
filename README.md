@@ -10,7 +10,7 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 ## Models Supported
 
 - **Plugs:** EP40, HS100, HS103, HS105, HS107, HS110, HS300, KP105, KP115, KP303, KP400
-- **Switches:** ES20M, HS200, HS210, HS220
+- **Switches:** ES20M, HS200, HS210, HS220, HS230
 - **Bulbs:** KL50, KL120, KL125, LB100, LB110, LB120, LB130, LB200, LB230
 - **Lightstrips:** KL430
 
@@ -24,6 +24,7 @@ More models may be supported than listed. If you have another model working plea
 | HS110, HS300, KP115                             | Outlet    | On<br/>OutletInUse (based on energy monitoring)<br/>Volts (Custom)<br/>Amperes (Custom)<br/>Watts (Custom)<br/>VoltAmperes (Custom)<br/>KilowattHours (Custom)<br/>KilowattVoltAmpereHour (Custom) |
 | EP40                                            | Outlet    | On<br/>OutletInUse (based on On state)                                                                                                                                                             |
 | HS200, HS210                                    | Switch    | On                                                                                                                                                                                                 |
+| HS230                                           | Switch    | On<br/>Brightness                                                                                                                                                                                 |
 | HS220                                           | Lightbulb | On<br/>Brightness                                                                                                                                                                                  |
 | KL50, LB100, LB110, LB200                       | Lightbulb | On<br/>Brightness<br/>Watts (Custom)                                                                                                                                                               |
 | LB120, KL120                                    | Lightbulb | On<br/>Brightness<br/>ColorTemperature<br/>Watts (Custom)                                                                                                                                          |
