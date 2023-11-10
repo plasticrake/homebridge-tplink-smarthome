@@ -107,6 +107,7 @@ export function hasCharacteristic(
   return (
     characteristics.find(
       (char) =>
+        // @ts-expect-error: still want to check UUID
         char instanceof characteristic || char.UUID === characteristic.UUID
     ) !== undefined
   );
