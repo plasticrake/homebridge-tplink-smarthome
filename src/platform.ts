@@ -34,9 +34,9 @@ export type TplinkSmarthomeAccessoryContext = {
 };
 
 export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
-  public readonly Service = this.api.hap.Service;
+  public readonly Service;
 
-  public readonly Characteristic = this.api.hap.Characteristic;
+  public readonly Characteristic;
 
   public customCharacteristics: ReturnType<typeof Characteristics>;
 
@@ -79,6 +79,9 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
         `homebridge-tplink-smarthome requires homebridge >= 1.3.0. Currently running: ${api.serverVersion}`
       );
     }
+
+    this.Service = this.api.hap.Service;
+    this.Characteristic = this.api.hap.Characteristic;
 
     this.log.debug('config.json: %j', config);
     this.config = parseConfig(config);
