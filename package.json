@@ -48,7 +48,7 @@
     "debugsim:only": "homebridge --debug --user-storage-path $PWD/test/homebridge-simulator --plugin-path .",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts . && tsc --noEmit",
     "prepare": "npm run build",
-    "release": "standard-version --sign",
+    "release": "commit-and-tag-version --sign",
     "spellcheck": "cspell '{src,test}/**/*' *.md",
     "start": "homebridge --plugin-path .",
     "pretest": "npm run lint",
@@ -79,6 +79,7 @@
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "chai": "^4.3.10",
+    "commit-and-tag-version": "^12.0.0",
     "cspell": "^8.0.0",
     "eslint": "^8.53.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -98,7 +99,6 @@
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0",
     "source-map-support": "^0.5.21",
-    "standard-version": "^9.5.0",
     "tplink-smarthome-simulator": "^5.0.1",
     "ts-essentials": "^9.4.1",
     "ts-node": "^10.9.1",
@@ -108,7 +108,7 @@
     "homebridge": ">=1.6.0",
     "node": ">=18"
   },
-  "standard-version": {
+  "commit-and-tag-version": {
     "scripts": {
       "prerelease": "npm test"
     }
