@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { EventEmitter } from 'events';
 import { HomebridgeAPI } from 'homebridge/lib/api';
 // const rewire = require('rewire');
@@ -64,9 +63,9 @@ describe('TplinkSmarthomePlatform', function () {
           // eslint-disable-next-line @typescript-eslint/dot-notation
           const hbAccessories = platform['configuredAccessories'];
 
-          expect(hbAccessories).to.be.a('Map');
-          expect(hbAccessories).to.have.property('size', 1);
-          expect(hbAccessories.get(platformAccessory.UUID)).to.equal(
+          expect(hbAccessories).toBeInstanceOf(Map);
+          expect(hbAccessories).toHaveProperty('size', 1);
+          expect(hbAccessories.get(platformAccessory.UUID)).toBe(
             platformAccessory
           );
         });
@@ -82,9 +81,9 @@ describe('TplinkSmarthomePlatform', function () {
         // eslint-disable-next-line @typescript-eslint/dot-notation
         const hbAccessories = platform['configuredAccessories'];
 
-        expect(hbAccessories).to.be.a('Map');
-        expect(hbAccessories).to.have.property('size', 1);
-        expect(hbAccessories.get(platformAccessory.UUID)).to.equal(
+        expect(hbAccessories).toBeInstanceOf(Map);
+        expect(hbAccessories).toHaveProperty('size', 1);
+        expect(hbAccessories.get(platformAccessory.UUID)).toBe(
           platformAccessory
         );
       });

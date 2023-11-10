@@ -1,22 +1,16 @@
-import chai, { expect } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-
 import { Service } from 'hap-nodejs';
 
 import { deferAndCombine, delay, isObjectLike, lookup } from '../src/utils';
 
-chai.use(sinonChai);
-
 describe('utils', function () {
   describe('deferAndCombine', function () {
-    let spy: sinon.SinonSpy;
+    let spy: jest.Mock;
     let deferredFn: () => Promise<unknown>;
     const deferTime = 100;
 
     beforeEach(function () {
       let index = 0;
-      spy = sinon.spy();
+      spy = jest.fn();
       deferredFn = deferAndCombine(() => {
         index += 1;
         return new Promise((resolve) => {
@@ -26,55 +20,57 @@ describe('utils', function () {
       }, deferTime);
     });
 
-    it('should batch 3 calls made within the timeout', async function () {
-      this.timeout(deferTime * 2);
-      this.slow(deferTime * 1.2);
+    it(
+      'should batch 3 calls made within the timeout',
+      async function () {
+        const startTimer = Date.now();
+        const results = await Promise.all([
+          deferredFn(),
+          deferredFn(),
+          deferredFn(),
+        ]);
+        expect(Date.now() - startTimer).toBeGreaterThanOrEqual(deferTime);
+        expect(Date.now() - startTimer).toBeLessThanOrEqual(deferTime * 1.1);
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith(1);
+        expect(results).toEqual([1, 1, 1]);
+      },
+      deferTime * 2
+    );
 
-      const startTimer = Date.now();
-      const results = await Promise.all([
-        deferredFn(),
-        deferredFn(),
-        deferredFn(),
-      ]);
-      expect(Date.now() - startTimer)
-        .to.be.at.least(deferTime)
-        .and.be.at.most(deferTime * 1.1);
-      expect(spy).to.be.calledOnceWithExactly(1);
-      expect(results).to.have.lengthOf(3);
-      expect(results).to.eql([1, 1, 1]);
-    });
+    it(
+      'should separately batch calls made outside the timeout',
+      async function () {
+        const startTimer = Date.now();
 
-    it('should separately batch calls made outside the timeout', async function () {
-      this.timeout(deferTime * 4);
-      this.slow(deferTime * 2.4);
+        const batchOne = Promise.all([
+          deferredFn(),
+          deferredFn(),
+          deferredFn(),
+        ]);
 
-      const startTimer = Date.now();
+        await delay(deferTime);
+        const batchTwo = Promise.all([deferredFn(), deferredFn()]);
 
-      const batchOne = Promise.all([deferredFn(), deferredFn(), deferredFn()]);
+        const resultsOne = await batchOne;
+        const resultsTwo = await batchTwo;
 
-      await delay(deferTime);
-      const batchTwo = Promise.all([deferredFn(), deferredFn()]);
+        expect(Date.now() - startTimer).toBeGreaterThanOrEqual(deferTime * 2);
+        expect(Date.now() - startTimer).toBeLessThanOrEqual(deferTime * 2.2);
 
-      const resultsOne = await batchOne;
-      const resultsTwo = await batchTwo;
+        expect(spy).toHaveBeenCalledTimes(2);
+        expect(spy).toHaveBeenCalledWith(1);
 
-      expect(Date.now() - startTimer)
-        .to.be.at.least(deferTime * 2)
-        .and.be.at.most(deferTime * 2.2);
-      expect(spy).to.be.calledTwice;
-      expect(spy).to.be.calledWith(1);
-
-      expect(resultsOne).to.have.lengthOf(3);
-      expect(resultsOne).to.eql([1, 1, 1]);
-
-      expect(resultsTwo).to.have.lengthOf(2);
-      expect(resultsTwo).to.eql([2, 2]);
-    });
+        expect(resultsOne).toEqual([1, 1, 1]);
+        expect(resultsTwo).toEqual([2, 2]);
+      },
+      deferTime * 4
+    );
   });
 
   describe('lookup', function () {
     it('should lookup with default compareFn', function () {
-      expect(lookup({ aKey: 'a', bKey: 'b' }, undefined, 'a')).to.eql('aKey');
+      expect(lookup({ aKey: 'a', bKey: 'b' }, undefined, 'a')).toEqual('aKey');
     });
 
     it('should lookup with compareFn', function () {
@@ -85,7 +81,7 @@ describe('utils', function () {
             isObjectLike(objProp) && 'key' in objProp && objProp.key === search,
           'b'
         )
-      ).to.eql('bKey');
+      ).toEqual('bKey');
     });
 
     it('should lookup Service', function () {
@@ -101,7 +97,7 @@ describe('utils', function () {
           },
           Service.Outlet
         )
-      ).to.equal('Outlet');
+      ).toEqual('Outlet');
     });
   });
 });
