@@ -155,7 +155,9 @@ export default abstract class HomekitDevice {
   }
 
   addService(
-    serviceConstructor: WithUUID<Service | typeof Service>,
+    serviceConstructor:
+      | typeof this.platform.Service.Outlet
+      | typeof this.platform.Service.Lightbulb, // WithUUID<Service | typeof Service>,
     name: string
   ) {
     const serviceName = this.platform.getServiceName(serviceConstructor);

@@ -12,7 +12,7 @@
     {
       "platform": "TplinkSmarthome",
       "name": "TPLink",
-      "macAddresses": "aa:aa:aa:*"
+      "macAddresses": ["aa:aa:aa:*"]
     }
   ],
 
