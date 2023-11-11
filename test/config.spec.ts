@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-import { parseConfig, defaultConfig, ConfigParseError } from '../src/config';
+import { ConfigParseError, defaultConfig, parseConfig } from '../src/config';
 
 describe('config', function () {
   describe('parseConfig', function () {
@@ -11,7 +10,7 @@ describe('config', function () {
     const configInvalid = {
       platform: 'TplinkSmarthomeApi',
       name: 'tplinkSmarthomeApi',
-      addCaddCustomCharacteristics: 'true',
+      addCustomCharacteristics: 'true',
       inUseThreshold: 'foo',
       switchModels: 'foo',
       discoveryPort: 'foo',
@@ -28,19 +27,21 @@ describe('config', function () {
 
     it('should provide defaults with no config options', function () {
       const parsedConfig = parseConfig(minimalConfig);
-      expect(parsedConfig).to.not.be.null;
+      expect(parsedConfig).not.toBeNull();
 
       const parsedDefaultConfig = parseConfig({
         ...defaultConfig,
         name: 'defaultName',
       });
-      expect(parsedConfig).to.eql(parsedDefaultConfig);
+      expect(parsedConfig).toEqual(parsedDefaultConfig);
     });
 
     it('should throw ConfigParseError with incorrect types', function () {
       expect(() => {
         parseConfig(configInvalid);
-      }).to.throw(ConfigParseError, 'must be');
+      })
+        .toThrow(ConfigParseError)
+        .toThrow('must be');
     });
 
     it('should throw ConfigParseError with incorrect devices', function () {
@@ -48,34 +49,35 @@ describe('config', function () {
         parseConfig({
           devices: [{ host: 123 }],
         });
-      }).to.throw(ConfigParseError, '`devices/0/host` must be string');
+      })
+        .toThrow(ConfigParseError)
+        .toThrow('`devices/0/host` must be string');
 
       expect(() => {
         parseConfig({
           devices: [{ port: 123 }],
         });
-      }).to.throw(
-        ConfigParseError,
-        "`devices/0` must have required property 'host'\n`devices/0/port` must be string"
-      );
+      })
+        .toThrow(ConfigParseError)
+        .toThrow(
+          "`devices/0` must have required property 'host'\n`devices/0/port` must be string"
+        );
 
       expect(() => {
         parseConfig({
           devices: [{ badHost: 'host' }],
         });
-      }).to.throw(
-        ConfigParseError,
-        "`devices/0` must have required property 'host'"
-      );
+      })
+        .toThrow(ConfigParseError)
+        .toThrow("`devices/0` must have required property 'host'");
 
       expect(() => {
         parseConfig({
           devices: [{ badHost: 'host' }],
         });
-      }).to.throw(
-        ConfigParseError,
-        "`devices/0` must have required property 'host'"
-      );
+      })
+        .toThrow(ConfigParseError)
+        .toThrow("`devices/0` must have required property 'host'");
     });
   });
 });

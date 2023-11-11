@@ -1,18 +1,12 @@
-import chai, { expect } from 'chai';
 import fs from 'fs-extra';
-import path from 'path';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-
 import { HAPStorage } from 'hap-nodejs';
 import { DynamicPlatformPlugin, PlatformPluginConstructor } from 'homebridge';
 import { PluginManager } from 'homebridge/lib/pluginManager';
 import { Server } from 'homebridge/lib/server';
 import { User } from 'homebridge/lib/user';
+import path from 'path';
 
 import { PLATFORM_NAME, PLUGIN_NAME } from '../../src/settings';
-
-chai.use(sinonChai);
 
 const platformIdentifier = `${PLUGIN_NAME}.${PLATFORM_NAME}`;
 
@@ -46,7 +40,7 @@ describe('homebridge', function () {
     });
   }
 
-  before(async function () {
+  beforeAll(async function () {
     // Storage path can only be set before being accessed
     User.setStoragePath(homebridgeStorageFolder);
     HAPStorage.setCustomStoragePath(User.persistPath());
@@ -72,8 +66,6 @@ describe('homebridge', function () {
       let activeDynamicPlatform: DynamicPlatformPlugin | undefined;
 
       beforeEach(async function () {
-        this.timeout(5000);
-
         homebridgeServer = setupHomebridge(scenario.name);
         await homebridgeServer.start();
 
@@ -82,36 +74,30 @@ describe('homebridge', function () {
           tplinkSmarthomePlugin.getPlatformConstructor(PLATFORM_NAME);
         activeDynamicPlatform =
           tplinkSmarthomePlugin.getActiveDynamicPlatform(PLATFORM_NAME);
-      });
+      }, 5000);
 
       afterEach(function () {
         homebridgeServer.teardown();
-        sinon.restore();
+        jest.resetAllMocks();
       });
 
       it('plugin was loaded', function () {
-        expect(tplinkSmarthomePlugin).to.have.property(
-          'pluginName',
-          PLUGIN_NAME
-        );
-        expect(tplinkSmarthomePlugin).to.have.property('disabled', false);
-        expect(tplinkSmarthomePlugin).to.have.property(
-          'pluginPath',
-          pluginPath
-        );
-        expect(tplinkSmarthomePlatform).to.be.a('function');
+        expect(tplinkSmarthomePlugin).toHaveProperty('pluginName', PLUGIN_NAME);
+        expect(tplinkSmarthomePlugin).toHaveProperty('disabled', false);
+        expect(tplinkSmarthomePlugin).toHaveProperty('pluginPath', pluginPath);
+        expect(tplinkSmarthomePlatform).toBeInstanceOf(Function);
       });
 
       describe('startup', function () {
         if (scenario.shouldInitPlatform) {
           it('should load Platform', function () {
-            expect(activeDynamicPlatform).to.be.instanceOf(
+            expect(activeDynamicPlatform).toBeInstanceOf(
               tplinkSmarthomePlatform
             );
           });
         } else {
           it('should not load Platform', function () {
-            expect(activeDynamicPlatform).to.be.undefined;
+            expect(activeDynamicPlatform).toBeUndefined();
           });
         }
       });

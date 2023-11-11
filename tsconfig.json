@@ -3,5 +3,6 @@
   "compilerOptions": {
     "outDir": "./build"
   },
-  "include": ["src/**/*", "test/**/*", ".eslintrc.js"]
+  "include": ["src/**/*", "test/**/*", ".eslintrc.js"],
+  "files": ["node_modules/jest-chain/types/index.d.ts"]
 }
