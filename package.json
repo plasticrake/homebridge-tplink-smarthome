@@ -64,7 +64,7 @@
     "lodash.castarray": "^4.4.0",
     "lodash.defaults": "^4.2.0",
     "semver": "^7.5.4",
-    "tplink-smarthome-api": "4.2.0"
+    "tplink-smarthome-api": "~5.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

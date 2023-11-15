@@ -261,15 +261,33 @@ export default class HomeKitDevicePlug extends HomekitDevice {
     });
 
     this.tplinkDevice.on('emeter-realtime-update', (emeterRealtime) => {
-      this.updateValue(service, amperesCharacteristic, emeterRealtime.current);
-      this.updateValue(service, kilowattCharacteristic, emeterRealtime.total);
+      this.updateValue(
+        service,
+        amperesCharacteristic,
+        emeterRealtime.current ?? null
+      );
+      this.updateValue(
+        service,
+        kilowattCharacteristic,
+        emeterRealtime.total ?? null
+      );
       this.updateValue(
         service,
         voltAmperesCharacteristic,
-        emeterRealtime.voltage * emeterRealtime.current
+        emeterRealtime.voltage != null && emeterRealtime.current != null
+          ? emeterRealtime.voltage * emeterRealtime.current
+          : null
       );
-      this.updateValue(service, voltsCharacteristic, emeterRealtime.voltage);
-      this.updateValue(service, wattsCharacteristic, emeterRealtime.power);
+      this.updateValue(
+        service,
+        voltsCharacteristic,
+        emeterRealtime.voltage ?? null
+      );
+      this.updateValue(
+        service,
+        wattsCharacteristic,
+        emeterRealtime.power ?? null
+      );
     });
   }
 
