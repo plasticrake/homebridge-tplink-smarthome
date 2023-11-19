@@ -16,6 +16,8 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 More models may be supported than listed. If you have another model working please let me know so I can add here.
 
+**Tapo devices are not supported and are out of scope with this plugin.**
+
 ## HomeKit
 
 | Model                                           | Service   | Characteristics                                                                                                                                                                                    |
