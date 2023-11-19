@@ -43,7 +43,6 @@ export default class HomeKitDevicePlug extends HomekitDevice {
     let primaryService;
     if (tplinkDevice.supportsDimmer) {
       primaryService = this.addLightbulbService();
-      this.addBrightnessCharacteristic(primaryService);
       this.removeOutletService();
     } else {
       primaryService = this.addOutletService();
@@ -124,29 +123,7 @@ export default class HomeKitDevicePlug extends HomekitDevice {
       this.homebridgeAccessory.getService(Outlet) ??
       this.addService(Outlet, this.name);
 
-    const onCharacteristic = getOrAddCharacteristic(
-      outletService,
-      Characteristic.On
-    );
-
-    onCharacteristic
-      .onGet(() => {
-        this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        return this.tplinkDevice.relayState; // immediately returned cached value
-      })
-      .onSet(async (value) => {
-        this.log.info(`Setting On to: ${value}`);
-        if (typeof value === 'boolean') {
-          await this.setPowerState(value);
-          return;
-        }
-        this.log.warn('setValue: Invalid On:', value);
-        throw new Error(`setValue: Invalid On: ${value}`);
-      });
-
-    this.tplinkDevice.on('power-update', (value) => {
-      this.updateValue(outletService, onCharacteristic, value);
-    });
+    this.addOnCharacteristic(outletService);
 
     if (this.category === Categories.OUTLET) {
       const outletInUseCharacteristic = getOrAddCharacteristic(
@@ -178,11 +155,43 @@ export default class HomeKitDevicePlug extends HomekitDevice {
       this.homebridgeAccessory.getService(Lightbulb) ??
       this.addService(Lightbulb, this.name);
 
+    this.addOnCharacteristic(lightbulbService);
+
     return lightbulbService;
   }
 
   private removeLightbulbService() {
     this.removeServiceIfExists(this.platform.Service.Lightbulb);
+  }
+
+  private addOnCharacteristic(service: Service) {
+    const onCharacteristic = getOrAddCharacteristic(
+      service,
+      this.platform.Characteristic.On
+    );
+
+    onCharacteristic
+      .onGet(() => {
+        this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
+        return this.tplinkDevice.relayState; // immediately returned cached value
+      })
+      .onSet(async (value) => {
+        this.log.info(`Setting On to: ${value}`);
+        if (typeof value === 'boolean') {
+          await this.setPowerState(value);
+          return;
+        }
+        this.log.warn('setValue: Invalid On:', value);
+        throw new Error(`setValue: Invalid On: ${value}`);
+      });
+
+    this.tplinkDevice.on('power-update', (value) => {
+      this.updateValue(service, onCharacteristic, value);
+    });
+
+    this.addBrightnessCharacteristic(service);
+
+    return service;
   }
 
   private addBrightnessCharacteristic(service: Service) {
