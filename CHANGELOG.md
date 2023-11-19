@@ -2,12 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [8.0.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.1-0...v8.0.1) (2023-11-19)
+
+
+### Bug Fixes
+
+* **Plug:** dimmer switch on/off ([#323](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/323)) ([deff054](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/deff0549eb7c9d419a259257aa053f800e57b24a))
+
+* **Plug:** dimmer not turning off using brightness slider ([1c2f76b](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/1c2f76bc4b92c88bfd367d8b738a42fe03327d1f))
+
 ## [8.0.1-1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.1-0...v8.0.1-1) (2023-11-19)
 
 
 ### Bug Fixes
 
-* **Plug:** dimmer not turning off ([1c2f76b](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/1c2f76bc4b92c88bfd367d8b738a42fe03327d1f))
+* **Plug:** dimmer not turning off using brightness slider ([1c2f76b](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/1c2f76bc4b92c88bfd367d8b738a42fe03327d1f))
 
 ## [8.0.1-0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.0...v8.0.1-0) (2023-11-19)
 
