@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [8.0.1-0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.0...v8.0.1-0) (2023-11-19)
+
+
+### Bug Fixes
+
+* **Plug:** Fix for dimmer switch brightness change ([d267e40](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/d267e40ee0ab11f6182269dea16d5a0a2b328063))
+
 ## [8.0.0](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v7.0.1...v8.0.0) (2023-11-17)
 
 
