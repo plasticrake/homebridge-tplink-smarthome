@@ -9,7 +9,7 @@ TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge)
 
 ## Models Supported
 
-- **Plugs:** EP25, EP40, HS100, HS103, HS105, HS107, HS110, HS300, KP105, KP115, KP303, KP400
+- **Plugs:** EP25, EP40, HS100, HS103, HS105, HS107, HS110, HS300, KP105, KP115, KP303, KP400, KP405
 - **Switches:** ES20M, HS200, HS210, HS220, HS230
 - **Bulbs:** KL50, KL120, KL125, LB100, LB110, LB120, LB130, LB200, LB230
 - **Lightstrips:** KL400, KL430
