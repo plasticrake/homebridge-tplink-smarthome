@@ -41,13 +41,26 @@ export default class HomeKitDevicePlug extends HomekitDevice {
     );
 
     let primaryService;
-    if (tplinkDevice.supportsDimmer) {
+    if (this.category === Categories.LIGHTBULB) {
       primaryService = this.addLightbulbService();
       this.removeOutletService();
-    } else {
+      this.removeSwitchService();
+    } else if (this.category === Categories.OUTLET) {
       primaryService = this.addOutletService();
       this.removeBrightnessCharacteristic(primaryService);
       this.removeLightbulbService();
+      this.removeSwitchService();
+    } else if (this.category === Categories.SWITCH) {
+      primaryService = this.addSwitchService();
+      this.removeBrightnessCharacteristic(primaryService);
+      this.removeLightbulbService();
+      this.removeOutletService();
+    } else {
+      throw new Error(
+        `constructor: Invalid category: ${
+          this.category
+        } (${this.category.toString()})`
+      );
     }
 
     if (
@@ -146,6 +159,22 @@ export default class HomeKitDevicePlug extends HomekitDevice {
 
   private removeOutletService() {
     this.removeServiceIfExists(this.platform.Service.Outlet);
+  }
+
+  private addSwitchService() {
+    const { Switch } = this.platform.Service;
+
+    const switchService =
+      this.homebridgeAccessory.getService(Switch) ??
+      this.addService(Switch, this.name);
+
+    this.addOnCharacteristic(switchService);
+
+    return switchService;
+  }
+
+  private removeSwitchService() {
+    this.removeServiceIfExists(this.platform.Service.Switch);
   }
 
   private addLightbulbService() {
