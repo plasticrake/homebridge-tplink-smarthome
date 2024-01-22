@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [8.0.2](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.1...v8.0.2) (2024-01-22)
+
+
+### Bug Fixes
+
+* **Plug:** correctly handle switches ([#329](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/329)) ([3923404](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/39234042cd3030ced1c5d74eb54a37ca64d8f3ed)), closes [#322](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/322)
+
 ## [8.0.1](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.1-0...v8.0.1) (2023-11-19)
 
 
