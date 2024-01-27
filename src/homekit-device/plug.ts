@@ -236,10 +236,11 @@ export default class HomeKitDevicePlug extends HomekitDevice {
       .onSet(async (value) => {
         this.log.info(`Setting Brightness to: ${value}`);
         if (typeof value === 'number') {
-          await this.tplinkDevice.dimmer.setDimmerTransition({
-            brightness: value,
-            duration: 1,
-          });
+          if (value > 0) {
+            await this.tplinkDevice.dimmer.setBrightness(value);
+          } else {
+            await this.tplinkDevice.setPowerState(false);
+          }
           return;
         }
         this.log.warn('setValue: Invalid Brightness:', value);
