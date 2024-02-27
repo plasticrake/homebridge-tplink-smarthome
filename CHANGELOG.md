@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [8.0.3](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.2...v8.0.3) (2024-02-27)
+
+
+### Bug Fixes
+
+* **Plug:** Allow brightness to be set without powering on device ([#335](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/335)) ([e0de1be](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/e0de1bea7c768a2abe3f5415d9686f1b0f3a703b)), closes [#333](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/333)
+
 ## [8.0.2](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.1...v8.0.2) (2024-01-22)
 
 
