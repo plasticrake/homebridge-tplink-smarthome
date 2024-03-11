@@ -100,13 +100,10 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
       .onSet(async (value) => {
         this.log.info(`Setting On to: ${value} for ${childDevice.alias}`);
         if (typeof value === 'boolean') {
-          if (value === true) {
-              var command = { 'system': { 'set_relay_state': { 'state': 1, 'context': { 'child_ids': [`${this.tplinkDevice.id}0${childDevice.id}`] } } } };
-            } else {
-              var command = { 'system': { 'set_relay_state': { 'state': 0, 'context': { 'child_ids': [`${this.tplinkDevice.id}0${childDevice.id}`] } } } };
-          }
-          const responseString = await this.tplinkDevice.sendCommand(command);
-          this.log.debug(`${this.tplinkDevice.id}0${childDevice.id} Response: ${responseString}`);
+          await this.tplinkDevice.sendCommand(
+            `{"system":{"set_relay_state":{"state":${value ? 1 : 0}}}}`,
+            childDevice.id,
+          );
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
