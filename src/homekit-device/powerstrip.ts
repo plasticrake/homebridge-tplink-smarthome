@@ -31,7 +31,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     this.tplinkDevice.sysInfo.children?.forEach((child, index) => {
       var service = this.addOutletService(child, index);
 
-      service = this.configureOutletService(service, child, index);
+      service = this.configureOutletService(service, child);
     });
 
     this.log.debug(`Device ID: ${this.tplinkDevice.id}`);
@@ -102,11 +102,11 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     return outletService;
   }
 
-  private configureOutletService(service: Service, child: PlugChild, index: number) {
+  private configureOutletService(service: Service, child: PlugChild) {
 
-    this.addOnCharacteristic(service, child, index);
+    this.addOnCharacteristic(service, child);
 
-    this.addOutletInUseCharacteristic(service);
+    this.addOutletInUseCharacteristic(service, child);
 
     if (
       this.platform.config.addCustomCharacteristics &&
@@ -120,7 +120,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     return service;
   }
 
-  private addOnCharacteristic(service: Service, childDevice: PlugChild, index: number) {
+  private addOnCharacteristic(service: Service, childDevice: PlugChild) {
     const onCharacteristic = getOrAddCharacteristic(
       service,
       this.platform.Characteristic.On
@@ -129,38 +129,29 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     onCharacteristic
       .onGet(() => {
         this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        const child = this.tplinkDevice.sysInfo.children?.find(child => child.id === childDevice.id);
-        return child ? child.state : this.tplinkDevice.relayState; // immediately returned cached value
+        return childDevice.state; // immediately returned cached value
       })
       .onSet(async (value) => {
-        this.log.info(`Setting On to: ${value} for ${childDevice.alias} [outlet-${index + 1}]`);
+        this.log.info(`Setting On to: ${value} for ${childDevice.alias}`);
         if (typeof value === 'boolean') {
-          const child = this.tplinkDevice.sysInfo.children?.find(child => child.id === childDevice.id);
-          if (child) {
-            if (value === true) {
+          if (value === true) {
               var command = { 'system': { 'set_relay_state': { 'state': 1, 'context': { 'child_ids': [childDevice.id] } } } };
             } else {
               var command = { 'system': { 'set_relay_state': { 'state': 0, 'context': { 'child_ids': [childDevice.id] } } } };
-            }
-            this.tplinkDevice.send(command);
-          } else {
-            await this.setPowerState(value);
           }
-          await this.setPowerState(value);
+          await this.tplinkDevice.send(command);
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
         throw new Error(`setValue: Invalid On: ${value}`);
       });
 
-    this.tplinkDevice.on('power-update', (value) => {
-      this.updateValue(service, onCharacteristic, value);
-    });
+    onCharacteristic.updateValue(childDevice.state);
 
     return service;
   }
 
-  private addOutletInUseCharacteristic(service: Service) {
+  private addOutletInUseCharacteristic(service: Service, childDevice: PlugChild) {
     const outletInUseCharacteristic = getOrAddCharacteristic(
         service,
         this.platform.Characteristic.OutletInUse
@@ -168,12 +159,10 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
 
       outletInUseCharacteristic.onGet(() => {
         this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        return this.tplinkDevice.inUse; // immediately returned cached value
+        return childDevice.state; // immediately returned cached value
       });
 
-      this.tplinkDevice.on('in-use-update', (value) => {
-        this.updateValue(service, outletInUseCharacteristic, value);
-      });
+      outletInUseCharacteristic.updateValue(childDevice.state);
 
     return service;
   }
