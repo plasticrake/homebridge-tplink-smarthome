@@ -54,15 +54,21 @@ export interface TplinkSmarthomeConfigInput {
   // HomeKit
   // ------------------
   /**
+   * Create Multi-Outlet Devices as a Power Strip
+   * Enable to create a single power strip accessory with multiple outlets, used for models HS107, KP200, HS300, KP303, KP400, and EP40.
+   * @defaultValue false
+   */
+    powerStrip?: boolean;
+  /**
    * Adds energy monitoring characteristics viewable in Eve app
    * plug: Amperes, KilowattHours, VoltAmperes, Volts, Watts
    * bulb: Watts
-   * @defaultValue true
+   * @defaultValue false
    */
   addCustomCharacteristics?: boolean;
   /**
    * How often to check device energy monitoring the background (seconds). Set to 0 to disable.
-   * @defaultValue 20
+   * @defaultValue 0
    */
   emeterPollingInterval?: number;
   /**
@@ -125,6 +131,7 @@ export interface TplinkSmarthomeConfigInput {
   timeout?: number;
   /**
    * Use 'tcp' or 'udp' for device communication. Discovery will always use 'udp'
+   * @defaultValue "udp"
    */
   transport?: 'tcp' | 'udp';
   /**
@@ -141,6 +148,7 @@ export interface TplinkSmarthomeConfigInput {
 }
 
 type TplinkSmarthomeConfigDefault = {
+  powerStrip: boolean;
   addCustomCharacteristics: boolean;
   emeterPollingInterval: number;
   inUseThreshold: number;
@@ -161,6 +169,7 @@ type TplinkSmarthomeConfigDefault = {
 };
 
 export type TplinkSmarthomeConfig = {
+  powerStrip: boolean;
   addCustomCharacteristics: boolean;
   emeterPollingInterval: number;
   switchModels: Array<string>;
@@ -191,8 +200,9 @@ export type TplinkSmarthomeConfig = {
 };
 
 export const defaultConfig: TplinkSmarthomeConfigDefault = {
-  addCustomCharacteristics: true,
-  emeterPollingInterval: 20,
+  powerStrip: false,
+  addCustomCharacteristics: false,
+  emeterPollingInterval: 0,
   inUseThreshold: 0,
   switchModels: ['HS200', 'HS210'],
 
@@ -205,7 +215,7 @@ export const defaultConfig: TplinkSmarthomeConfigDefault = {
   devices: undefined,
 
   timeout: 15,
-  transport: undefined,
+  transport: 'udp',
   waitTimeUpdate: 100,
   devicesUseDiscoveryPort: false,
 };
@@ -238,6 +248,8 @@ function isTplinkSmarthomeConfigInput(
 ): c is TplinkSmarthomeConfigInput {
   return (
     isObjectLike(c) &&
+    (!('powerStrip' in c) ||
+      typeof c.powerStrip === 'boolean') &&
     (!('addCustomCharacteristics' in c) ||
       typeof c.addCustomCharacteristics === 'boolean') &&
     (!('emeterPollingInterval' in c) ||
@@ -288,6 +300,7 @@ export function parseConfig(
   };
 
   return {
+    powerStrip: Boolean(c.powerStrip),
     addCustomCharacteristics: Boolean(c.addCustomCharacteristics),
     emeterPollingInterval: c.emeterPollingInterval * 1000,
     switchModels: c.switchModels,

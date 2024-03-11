@@ -76,7 +76,7 @@ export default abstract class HomekitDevice {
       );
       this.homebridgeAccessory.displayName = this.name;
       if (this.homebridgeAccessory.category !== category) {
-        this.log.warn(
+        this.log.debug(
           `Correcting Accessory Category from: ${platform.getCategoryName(
             this.homebridgeAccessory.category
           )} to: ${categoryName}`
@@ -101,7 +101,7 @@ export default abstract class HomekitDevice {
       if (service instanceof platform.Service.Lightbulb) return;
       if (service instanceof platform.Service.Outlet) return;
       if (service instanceof platform.Service.Switch) return;
-      this.log.warn(
+      this.log.debug(
         `Removing stale Service: ${this.lsc(service)} uuid:[%s] subtype:[%s]`,
         service.UUID,
         service.subtype || ''
@@ -158,11 +158,12 @@ export default abstract class HomekitDevice {
     serviceConstructor:
       | typeof this.platform.Service.Outlet
       | typeof this.platform.Service.Lightbulb, // WithUUID<Service | typeof Service>,
-    name: string
+    name: string,
+    subType?: string
   ) {
     const serviceName = this.platform.getServiceName(serviceConstructor);
-    this.log.debug(`Creating new ${serviceName} Service`);
-    return this.homebridgeAccessory.addService(serviceConstructor, name);
+    this.log.debug(`Creating new ${serviceName} Service on ${name}${subType ? ` [${subType}]` : ''}`);
+    return this.homebridgeAccessory.addService(serviceConstructor, name, subType);
   }
 
   protected logRejection(reason: unknown): void {
@@ -172,7 +173,7 @@ export default abstract class HomekitDevice {
   protected removeServiceIfExists(service: WithUUID<typeof Service>) {
     const foundService = this.homebridgeAccessory.getService(service);
     if (foundService != null) {
-      this.log.warn(
+      this.log.debug(
         `Removing stale Service: ${this.lsc(service, foundService)} uuid:[%s]`,
         foundService.UUID
       );
@@ -192,7 +193,7 @@ export default abstract class HomekitDevice {
       )
     ) {
       const characteristicToRemove = service.getCharacteristic(characteristic);
-      this.log.warn(
+      this.log.debug(
         `Removing stale Characteristic: ${this.lsc(
           service,
           characteristicToRemove
