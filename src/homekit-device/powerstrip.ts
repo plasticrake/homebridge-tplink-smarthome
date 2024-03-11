@@ -34,6 +34,8 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
       service = this.configureOutletService(service, child, index);
     });
 
+    this.log.debug(`Device ID: ${this.tplinkDevice.id}`);
+
     this.getSysInfo = deferAndCombine((requestCount) => {
       this.log.debug(`executing deferred getSysInfo count: ${requestCount}`);
       return this.tplinkDevice.getSysInfo();
