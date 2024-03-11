@@ -104,7 +104,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
 
   private configureOutletService(service: Service, child: PlugChild, index: number) {
 
-    this.addOnCharacteristic(service, child.alias, child.id, index);
+    this.addOnCharacteristic(service, child, index);
 
     this.addOutletInUseCharacteristic(service);
 
@@ -120,7 +120,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     return service;
   }
 
-  private addOnCharacteristic(service: Service, childAlias: string, childId: string, index: number) {
+  private addOnCharacteristic(service: Service, childDevice: PlugChild, index: number) {
     const onCharacteristic = getOrAddCharacteristic(
       service,
       this.platform.Characteristic.On
@@ -129,13 +129,13 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     onCharacteristic
       .onGet(() => {
         this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        const child = this.tplinkDevice.sysInfo.children?.find(child => child.id === childId);
+        const child = this.tplinkDevice.sysInfo.children?.find(child => child.id === childDevice.id);
         return child ? child.state : this.tplinkDevice.relayState; // immediately returned cached value
       })
       .onSet(async (value) => {
-        this.log.info(`Setting On to: ${value} for ${childAlias} [outlet-${index + 1}]`);
+        this.log.info(`Setting On to: ${value} for ${childDevice.alias} [outlet-${index + 1}]`);
         if (typeof value === 'boolean') {
-          const child = this.tplinkDevice.sysInfo.children?.find(child => child.id === childId);
+          const child = this.tplinkDevice.sysInfo.children?.find(child => child.id === childDevice.id);
           if (child) {
             if (value === true) {
               child.state = 1;
