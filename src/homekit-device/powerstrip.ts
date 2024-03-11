@@ -101,9 +101,9 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
         this.log.info(`Setting On to: ${value} for ${childDevice.alias}`);
         if (typeof value === 'boolean') {
           if (value === true) {
-              var command = { 'system': { 'set_relay_state': { 'state': 1, 'context': { 'child_ids': `${this.tplinkDevice.id}0${childDevice.id}` } } } };
+              var command = { 'system': { 'set_relay_state': { 'state': 1, 'context': { 'child_ids': [`${this.tplinkDevice.id}0${childDevice.id}`] } } } };
             } else {
-              var command = { 'system': { 'set_relay_state': { 'state': 0, 'context': { 'child_ids': `${this.tplinkDevice.id}0${childDevice.id}` } } } };
+              var command = { 'system': { 'set_relay_state': { 'state': 0, 'context': { 'child_ids': [`${this.tplinkDevice.id}0${childDevice.id}`] } } } };
           }
           const responseString = await this.tplinkDevice.send(command);
           this.log.debug(`Response: ${responseString}`);
