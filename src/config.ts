@@ -60,6 +60,12 @@ export interface TplinkSmarthomeConfigInput {
    */
     powerStrip?: boolean;
   /**
+   * Breakout Child Devices
+   * Enabled by default to breakout all child devices into individual accessories. If the powerStrip Option is enabled, this will be set to false.
+   * @defaultValue true
+   */
+    breakoutChildren?: boolean;
+  /**
    * Adds energy monitoring characteristics viewable in Eve app
    * plug: Amperes, KilowattHours, VoltAmperes, Volts, Watts
    * bulb: Watts
@@ -149,6 +155,7 @@ export interface TplinkSmarthomeConfigInput {
 
 type TplinkSmarthomeConfigDefault = {
   powerStrip: boolean;
+  breakoutChildren: boolean;
   addCustomCharacteristics: boolean;
   emeterPollingInterval: number;
   inUseThreshold: number;
@@ -170,6 +177,7 @@ type TplinkSmarthomeConfigDefault = {
 
 export type TplinkSmarthomeConfig = {
   powerStrip: boolean;
+  breakoutChildren: boolean;
   addCustomCharacteristics: boolean;
   emeterPollingInterval: number;
   switchModels: Array<string>;
@@ -201,6 +209,7 @@ export type TplinkSmarthomeConfig = {
 
 export const defaultConfig: TplinkSmarthomeConfigDefault = {
   powerStrip: false,
+  breakoutChildren: true,
   addCustomCharacteristics: false,
   emeterPollingInterval: 0,
   inUseThreshold: 0,
@@ -250,6 +259,8 @@ function isTplinkSmarthomeConfigInput(
     isObjectLike(c) &&
     (!('powerStrip' in c) ||
       typeof c.powerStrip === 'boolean') &&
+    (!('breakoutChildren' in c) ||
+      typeof c.breakoutChildren === 'boolean') &&
     (!('addCustomCharacteristics' in c) ||
       typeof c.addCustomCharacteristics === 'boolean') &&
     (!('emeterPollingInterval' in c) ||
@@ -301,6 +312,7 @@ export function parseConfig(
 
   return {
     powerStrip: Boolean(c.powerStrip),
+    breakoutChildren: c.powerStrip ? false : (c.breakoutChildren || true),
     addCustomCharacteristics: Boolean(c.addCustomCharacteristics),
     emeterPollingInterval: c.emeterPollingInterval * 1000,
     switchModels: c.switchModels,
