@@ -105,7 +105,12 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
             } else {
               var command = { 'system': { 'set_relay_state': { 'state': 0, 'context': { 'child_ids': [childDevice.id] } } } };
           }
-          await this.tplinkDevice.send(command);
+          const responseString = await this.tplinkDevice.send(command);
+          const response = JSON.parse(responseString);
+          if (response.system.set_relay_state.err_code !== 0) {
+            this.log.warn('Failed to set relay state:', response.system.set_relay_state.err_msg);
+            throw new Error(`Failed to set relay state: ${response.system.set_relay_state.err_msg}`);
+          }
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
