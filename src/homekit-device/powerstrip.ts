@@ -106,10 +106,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
               var command = { 'system': { 'set_relay_state': { 'state': 0, 'context': { 'childIds': `${this.tplinkDevice.id}0${childDevice.id}` } } } };
           }
           const responseString = await this.tplinkDevice.send(command);
-          const response = JSON.parse(responseString);
-
-          this.log.warn(`Command: ${command} Response: ${response}`);
-
+          this.log.debug(`Response: ${responseString}`);
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
