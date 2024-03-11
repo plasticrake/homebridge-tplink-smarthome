@@ -28,7 +28,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
       Categories.OUTLET
     );
 
-    tplinkDevice.sysInfo.children?.forEach((child, index) => {
+    this.tplinkDevice.sysInfo.children?.forEach((child, index) => {
       var service = this.addOutletService(child, index);
 
       service = this.configureOutletService(service, child, index);
@@ -104,7 +104,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
 
   private configureOutletService(service: Service, child: PlugChild, index: number) {
 
-    this.addOnCharacteristic(service, child.alias, index);
+    this.addOnCharacteristic(service, child.alias, child.id, index);
 
     this.addOutletInUseCharacteristic(service);
 
@@ -120,7 +120,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     return service;
   }
 
-  private addOnCharacteristic(service: Service, alias: string, index: number) {
+  private addOnCharacteristic(service: Service, childAlias: string, childId: string, index: number) {
     const onCharacteristic = getOrAddCharacteristic(
       service,
       this.platform.Characteristic.On
@@ -129,11 +129,22 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     onCharacteristic
       .onGet(() => {
         this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        return this.tplinkDevice.relayState; // immediately returned cached value
+        const child = this.tplinkDevice.sysInfo.children?.find(child => child.id === childId);
+        return child ? child.state : this.tplinkDevice.relayState; // immediately returned cached value
       })
       .onSet(async (value) => {
-        this.log.info(`Setting On to: ${value} for ${alias} [outlet-${index + 1}]`);
+        this.log.info(`Setting On to: ${value} for ${childAlias} [outlet-${index + 1}]`);
         if (typeof value === 'boolean') {
+          const child = this.tplinkDevice.sysInfo.children?.find(child => child.id === childId);
+          if (child) {
+            if (value === true) {
+              child.state = 1;
+            } else {
+              child.state = 0;
+            }
+          } else {
+            await this.setPowerState(value);
+          }
           await this.setPowerState(value);
           return;
         }
