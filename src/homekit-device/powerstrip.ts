@@ -10,7 +10,6 @@ import type { TplinkSmarthomeAccessoryContext } from '../platform';
 import { deferAndCombine, getOrAddCharacteristic } from '../utils';
 
 export default class HomeKitDevicePowerStrip extends HomekitDevice {
-  private desiredPowerState?: boolean;
 
   constructor(
     platform: TplinkSmarthomePlatform,
@@ -41,30 +40,6 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
       return this.tplinkDevice.getSysInfo();
     }, platform.config.waitTimeUpdate);
 
-    this.setPowerState = deferAndCombine(
-      async (requestCount) => {
-        this.log.debug(
-          `executing deferred setPowerState count: ${requestCount}`
-        );
-        if (this.desiredPowerState === undefined) {
-          this.log.warn(
-            'setPowerState called with undefined desiredPowerState'
-          );
-          return Promise.resolve(true);
-        }
-
-        const ret = await this.tplinkDevice.setPowerState(
-          this.desiredPowerState
-        );
-        this.desiredPowerState = undefined;
-        return ret;
-      },
-      platform.config.waitTimeUpdate,
-      (value: boolean) => {
-        this.desiredPowerState = value;
-      }
-    );
-
     this.getRealtime = deferAndCombine((requestCount) => {
       this.log.debug(`executing deferred getRealtime count: ${requestCount}`);
       return this.tplinkDevice.emeter.getRealtime();
@@ -77,13 +52,6 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
    * @private
    */
   private getSysInfo: () => Promise<PlugSysinfo>;
-
-  /**
-   * Aggregates setPowerState requests
-   *
-   * @private
-   */
-  private setPowerState: (value: boolean) => Promise<true>;
 
   /**
    * Aggregates getRealtime requests
