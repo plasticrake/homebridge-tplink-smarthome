@@ -150,7 +150,7 @@ export default abstract class HomekitDevice {
     characteristic: Characteristic,
     value: Nullable<CharacteristicValue> | Error | HapStatusError
   ) {
-    this.log.debug(`Updating ${this.lsc(service, characteristic)} on ${service} to ${value}`);
+    this.log.debug(`Updating ${this.lsc(service, characteristic)} on ${this.lsc(service)} to ${value}`);
     characteristic.updateValue(value);
   }
 
