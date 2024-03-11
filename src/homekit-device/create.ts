@@ -30,7 +30,7 @@ export default function create(
       homebridgeAccessory,
       tplinkDevice
     );
-  } else if (powerStripModels.includes(tplinkDevice.model) && config.powerStrip) {
+  } else if (powerStripModels.includes(tplinkDevice.model.slice(0,-4)) && config.powerStrip) {
     return new HomeKitDevicePowerStrip(
       platform,
       config,
