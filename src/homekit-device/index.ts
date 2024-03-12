@@ -162,8 +162,10 @@ export default abstract class HomekitDevice {
     value: Nullable<CharacteristicValue> | Error | HapStatusError,
     childDevice: PlugChild
   ) {
-    this.log.debug(`Updating ${this.lsc(service, characteristic)} on ${childDevice.alias} to ${value}`);
-    characteristic.updateValue(value);
+    const homekitState = value === 1 ? true : false;
+
+    this.log.debug(`Updating ${this.lsc(service, characteristic)} on ${childDevice.alias} to ${homekitState}`);
+    characteristic.updateValue(homekitState);
   }
 
   addService(
