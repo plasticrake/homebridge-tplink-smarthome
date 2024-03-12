@@ -339,8 +339,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
       return;
     }
 
-    const existingAccessory = this.homekitDevicesById.get(deviceId);
-    if (existingAccessory !== undefined) {
+    if (this.homekitDevicesById.get(deviceId) !== undefined) {
       return;
     }
 
