@@ -14,17 +14,23 @@
         "default": "TplinkSmarthome",
         "minLength": 1
       },
+      "powerStrip": {
+        "title": "Create Multi-Outlet Devices as a Power Strip",
+        "description": "Enable to create a single power strip accessory with multiple outlets, used for models HS107, KP200, HS300, KP303, KP400, and EP40. Default: false",
+        "type": "boolean",
+        "default": false
+      },
       "addCustomCharacteristics": {
         "title": "Adds energy monitoring characteristics viewable in Eve app",
-        "description": "<b>Plug</b>: Amperes, KilowattHours, VoltAmperes, Volts, Watts.<br/><b>Bulb</b>: Watts",
+        "description": "<b>Plug</b>: Amperes, KilowattHours, VoltAmperes, Volts, Watts.<br/><b>Bulb</b>: Watts</br>Default: false",
         "type": "boolean",
-        "default": true
+        "default": false
       },
       "emeterPollingInterval": {
         "title": "Energy Monitoring Polling Interval (seconds)",
         "type": "integer",
         "description": "How often to check device energy monitoring the background (seconds). Set to 0 to disable.",
-        "placeholder": "20"
+        "placeholder": "0"
       },
       "inUseThreshold": {
         "title": "In Use Threshold (Watts)",
@@ -118,8 +124,8 @@
       },
       "transport": {
         "type": "string",
-        "description": "Use TCP or UDP for device communication. Discovery will always use UDP. Default: TCP",
-        "placeholder": "tcp",
+        "description": "Use TCP or UDP for device communication. Discovery will always use UDP. Default: UDP",
+        "placeholder": "udp",
         "enum": ["tcp", "udp"],
         "titleMap": [
           { "name": "TCP", "value": "tcp" },
@@ -148,6 +154,7 @@
       "description": "Customize how devices are exposed in HomeKit",
       "expandable": true,
       "items": [
+        "powerStrip",
         "addCustomCharacteristics",
         "emeterPollingInterval",
         "inUseThreshold",

@@ -7,6 +7,7 @@ import type { TplinkDevice } from '../utils';
 import HomekitDevice from '.';
 import HomeKitDeviceBulb from './bulb';
 import HomeKitDevicePlug from './plug';
+import HomeKitDevicePowerStrip from './powerstrip';
 import { TplinkSmarthomeConfig } from '../config';
 
 /**
@@ -20,8 +21,17 @@ export default function create(
     | undefined,
   tplinkDevice: TplinkDevice
 ): HomekitDevice {
+  const powerStripModels = ['HS107', 'KP200', 'HS300', 'KP303', 'KP400', 'EP40'];
+
   if (tplinkDevice.deviceType === 'bulb') {
     return new HomeKitDeviceBulb(
+      platform,
+      config,
+      homebridgeAccessory,
+      tplinkDevice
+    );
+  } else if (powerStripModels.includes(tplinkDevice.model.slice(0,-4)) && config.powerStrip) {
+    return new HomeKitDevicePowerStrip(
       platform,
       config,
       homebridgeAccessory,
