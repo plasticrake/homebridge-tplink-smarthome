@@ -93,10 +93,14 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     );
 
     onCharacteristic
-      .onGet(() => {
-        this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        this.log.debug(`Current State of On is: ${childDevice.state === 1 ? true : false} for ${childDevice.alias}`);
-        return childDevice.state; // immediately returned cached value
+      .onGet(async () => {
+        const sysInfo = await this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
+        if (sysInfo) {
+          const childState = sysInfo.children?.find(child => child.id === childDevice.id)?.state;
+          this.log.debug(`Current State of On is: ${childState === 1 ? true : false} for ${childDevice.alias}`);
+          return childState ?? 0; // immediately returned cached value
+        }
+        return 0;
       })
       .onSet(async (value) => {
         this.log.info(`Setting On to: ${value} for ${childDevice.alias}`);
