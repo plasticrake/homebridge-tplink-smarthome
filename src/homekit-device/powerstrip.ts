@@ -94,8 +94,8 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
 
     onCharacteristic
       .onGet(() => {
-        this.tplinkDevice.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        this.log.debug(`Current State of ${childDevice.alias} is ${childDevice.state}`);
+        this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
+        this.log.debug(`Current State of On is: ${childDevice.state === 1 ? true : false} for ${childDevice.alias}`);
         return childDevice.state; // immediately returned cached value
       })
       .onSet(async (value) => {
