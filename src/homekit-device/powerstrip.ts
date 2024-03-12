@@ -27,16 +27,16 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
       Categories.OUTLET
     );
 
+    this.getSysInfo = deferAndCombine((requestCount) => {
+      this.log.debug(`executing deferred getSysInfo count: ${requestCount}`);
+      return this.tplinkDevice.getSysInfo();
+    }, platform.config.waitTimeUpdate);
+
     this.tplinkDevice.sysInfo.children?.forEach((child, index) => {
       const outletService = this.addOutletService(child, index);
 
       this.configureOutletService(outletService, child);
     });
-
-    this.getSysInfo = deferAndCombine((requestCount) => {
-      this.log.debug(`executing deferred getSysInfo count: ${requestCount}`);
-      return this.tplinkDevice.getSysInfo();
-    }, platform.config.waitTimeUpdate);
 
     this.getRealtime = deferAndCombine((requestCount) => {
       this.log.debug(`executing deferred getRealtime count: ${requestCount}`);
@@ -95,7 +95,8 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     onCharacteristic
       .onGet(() => {
         this.tplinkDevice.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
-        return this.tplinkDevice.sysInfo.children?.find(childDevice => childDevice.id === childDevice.id)?.state ?? false; // immediately returned cached value
+        this.log.debug(`Current State of ${childDevice.alias} is ${childDevice.state}`);
+        return childDevice.state; // immediately returned cached value
       })
       .onSet(async (value) => {
         this.log.info(`Setting On to: ${value} for ${childDevice.alias}`);
@@ -118,11 +119,13 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
       
       if (newChildState) {
         if (newChildState !== oldChildState) {
-          oldChildState = newChildState;
           this.updateChildValue(outletService, onCharacteristic, newChildState, childDevice);
         }
       }
+
+      oldChildState = newChildState ?? 0;
     });
+
 
     return outletService;
   }
