@@ -110,7 +110,18 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
         throw new Error(`setValue: Invalid On: ${value}`);
       });
 
-    onCharacteristic.updateValue(childDevice.state);
+    let oldChildState = childDevice.state;
+
+    this.tplinkDevice.on('power-update', () => {
+      const newChildState = this.tplinkDevice.sysInfo.children?.find(childDevice => childDevice.id === childDevice.id)?.state;
+      
+      if (newChildState) {
+        if (newChildState !== oldChildState) {
+          oldChildState = newChildState;
+          this.updateChildValue(outletService, onCharacteristic, newChildState);
+        }
+      }
+    });
 
     return outletService;
   }
