@@ -113,13 +113,13 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     let oldChildState = childDevice.state;
 
     this.tplinkDevice.on('power-update', async () => {
-      await this.tplinkDevice.getSysInfo().catch(this.logRejection.bind(this));;
-      const newChildState = this.tplinkDevice.sysInfo.children?.find(childDevice => childDevice.id === childDevice.id)?.state;
+      const sysInfo = await this.tplinkDevice.getSysInfo();
+      const newChildState = sysInfo.children?.find(childDevice => childDevice.id === childDevice.id)?.state;
       
       if (newChildState) {
         if (newChildState !== oldChildState) {
           oldChildState = newChildState;
-          this.updateChildValue(outletService, onCharacteristic, newChildState);
+          this.updateChildValue(outletService, onCharacteristic, newChildState, childDevice);
         }
       }
     });

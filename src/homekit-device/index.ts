@@ -12,6 +12,8 @@ import type {
   WithUUID,
 } from 'homebridge';
 
+import type { PlugChild } from 'tplink-smarthome-api';
+
 import chalk from 'chalk';
 
 import AccessoryInformation from '../accessory-information';
@@ -157,9 +159,10 @@ export default abstract class HomekitDevice {
   updateChildValue(
     service: Service,
     characteristic: Characteristic,
-    value: Nullable<CharacteristicValue> | Error | HapStatusError
+    value: Nullable<CharacteristicValue> | Error | HapStatusError,
+    childDevice: PlugChild
   ) {
-    this.log.debug(`Updating ${this.lsc(service, characteristic)} on ${this.lsc(service)} to ${value}`);
+    this.log.debug(`Updating ${this.lsc(service, characteristic)} on ${childDevice.alias} to ${value}`);
     characteristic.updateValue(value);
   }
 
