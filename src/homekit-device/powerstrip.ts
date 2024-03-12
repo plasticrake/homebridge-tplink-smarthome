@@ -28,7 +28,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     );
 
     this.tplinkDevice.sysInfo.children?.forEach((child, index) => {
-      const outletService = this.addAndConfigureOutletService(child, index);
+      this.addAndConfigureOutletService(child, index);
     });
 
     this.getSysInfo = deferAndCombine((requestCount) => {
