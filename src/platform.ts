@@ -341,8 +341,6 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
     const existingAccessory = this.homekitDevicesById.get(deviceId);
     if (existingAccessory !== undefined) {
-      this.log.debug('Device already added: %s', existingAccessory.name);
-      existingAccessory.tplinkDevice.getSysInfo();
       return;
     }
 

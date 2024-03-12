@@ -111,19 +111,17 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
         throw new Error(`setValue: Invalid On: ${value}`);
       });
 
-    let oldChildState = childDevice.state;
+      let oldChildState = childDevice.state;
 
-    this.tplinkDevice.on('power-update', async () => {
-      const newChildState = this.tplinkDevice.sysInfo.children?.find(childDevice => childDevice.id === childDevice.id)?.state;
+      setInterval(async () => {
+        const sysInfo = await this.tplinkDevice.getSysInfo();
+        const newChildState = sysInfo.children?.find(child => child.id === childDevice.id)?.state;
       
-      if (newChildState) {
-        if (newChildState !== oldChildState) {
+        if (newChildState !== undefined && newChildState !== oldChildState) {
           this.updateChildValue(outletService, onCharacteristic, newChildState, childDevice);
+          oldChildState = newChildState;
         }
-      }
-
-      oldChildState = newChildState ?? 0;
-    });
+      }, 5000); // Poll every 5 seconds
 
 
     return outletService;
