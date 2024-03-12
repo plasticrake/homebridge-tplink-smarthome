@@ -28,19 +28,12 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     );
 
     this.tplinkDevice.sysInfo.children?.forEach((child, index) => {
-      const outletService = this.addOutletService(child, index);
-
-      this.configureOutletService(outletService, child);
+      const outletService = this.addAndConfigureOutletService(child, index);
     });
 
     this.getSysInfo = deferAndCombine((requestCount) => {
       this.log.debug(`executing deferred getSysInfo count: ${requestCount}`);
       return this.tplinkDevice.getSysInfo();
-    }, platform.config.waitTimeUpdate);
-
-    this.getRealtime = deferAndCombine((requestCount) => {
-      this.log.debug(`executing deferred getRealtime count: ${requestCount}`);
-      return this.tplinkDevice.emeter.getRealtime();
     }, platform.config.waitTimeUpdate);
   }
 
@@ -51,37 +44,16 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
    */
   private getSysInfo: () => Promise<PlugSysinfo>;
 
-  /**
-   * Aggregates getRealtime requests
-   *
-   * @private
-   */
-  private getRealtime: () => Promise<unknown>;
-
-  private addOutletService(child: PlugChild, index: number) {
+  private addAndConfigureOutletService(child: PlugChild, index: number) {
     const { Outlet } = this.platform.Service;
 
     const outletService =
       this.homebridgeAccessory.getServiceById(Outlet, `outlet-${index + 1}`) ??
       this.addService(Outlet, child.alias, `outlet-${index + 1}`);
 
-    return outletService;
-  }
+      this.addOnCharacteristic(outletService, child);
 
-  private configureOutletService(outletService: Service, child: PlugChild) {
-
-    this.addOnCharacteristic(outletService, child);
-
-    this.addOutletInUseCharacteristic(outletService, child);
-
-    if (
-      this.platform.config.addCustomCharacteristics &&
-      this.tplinkDevice.supportsEmeter
-    ) {
-      this.addEnergyCharacteristics(outletService);
-    } else {
-      this.removeEnergyCharacteristics(outletService);
-    }
+      this.addOutletInUseCharacteristic(outletService, child);
 
     return outletService;
   }
@@ -145,89 +117,6 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
       outletInUseCharacteristic.updateValue(childDevice.state);
 
     return outletService;
-  }
-
-  private addEnergyCharacteristics(outletService: Service): void {
-    const { Amperes, KilowattHours, VoltAmperes, Volts, Watts } =
-      this.platform.customCharacteristics;
-
-    const amperesCharacteristic = getOrAddCharacteristic(outletService, Amperes);
-    amperesCharacteristic.onGet(() => {
-      this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
-      return this.tplinkDevice.emeter.realtime.current ?? 0; // immediately returned cached value
-    });
-
-    const kilowattCharacteristic = getOrAddCharacteristic(
-      outletService,
-      KilowattHours
-    );
-    kilowattCharacteristic.onGet(() => {
-      this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
-      return this.tplinkDevice.emeter.realtime.total ?? 0; // immediately returned cached value
-    });
-
-    const voltAmperesCharacteristic = getOrAddCharacteristic(
-      outletService,
-      VoltAmperes
-    );
-    voltAmperesCharacteristic.onGet(() => {
-      this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
-      const { realtime } = this.tplinkDevice.emeter;
-      return (realtime.voltage ?? 0) * (realtime.voltage ?? 0); // immediately returned cached value
-    });
-
-    const voltsCharacteristic = getOrAddCharacteristic(outletService, Volts);
-    voltsCharacteristic.onGet(() => {
-      this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
-      return this.tplinkDevice.emeter.realtime.voltage ?? 0; // immediately returned cached value
-    });
-
-    const wattsCharacteristic = getOrAddCharacteristic(outletService, Watts);
-    wattsCharacteristic.onGet(() => {
-      this.getRealtime().catch(this.logRejection.bind(this)); // this will eventually trigger update
-      return this.tplinkDevice.emeter.realtime.power ?? 0; // immediately returned cached value
-    });
-
-    this.tplinkDevice.on('emeter-realtime-update', (emeterRealtime) => {
-      this.updateValue(
-        outletService,
-        amperesCharacteristic,
-        emeterRealtime.current ?? null
-      );
-      this.updateValue(
-        outletService,
-        kilowattCharacteristic,
-        emeterRealtime.total ?? null
-      );
-      this.updateValue(
-        outletService,
-        voltAmperesCharacteristic,
-        emeterRealtime.voltage != null && emeterRealtime.current != null
-          ? emeterRealtime.voltage * emeterRealtime.current
-          : null
-      );
-      this.updateValue(
-        outletService,
-        voltsCharacteristic,
-        emeterRealtime.voltage ?? null
-      );
-      this.updateValue(
-        outletService,
-        wattsCharacteristic,
-        emeterRealtime.power ?? null
-      );
-    });
-  }
-
-  private removeEnergyCharacteristics(outletService: Service) {
-    const { Amperes, KilowattHours, VoltAmperes, Volts, Watts } =
-      this.platform.customCharacteristics;
-
-    [Amperes, KilowattHours, VoltAmperes, Volts, Watts].forEach(
-      (characteristic) => {
-        this.removeCharacteristicIfExists(outletService, characteristic);
-      }
-    );
   }
 
   identify(): void {
