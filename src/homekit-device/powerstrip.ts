@@ -27,16 +27,16 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
       Categories.OUTLET
     );
 
-    this.getSysInfo = deferAndCombine((requestCount) => {
-      this.log.debug(`executing deferred getSysInfo count: ${requestCount}`);
-      return this.tplinkDevice.getSysInfo();
-    }, platform.config.waitTimeUpdate);
-
     this.tplinkDevice.sysInfo.children?.forEach((child, index) => {
       const outletService = this.addOutletService(child, index);
 
       this.configureOutletService(outletService, child);
     });
+
+    this.getSysInfo = deferAndCombine((requestCount) => {
+      this.log.debug(`executing deferred getSysInfo count: ${requestCount}`);
+      return this.tplinkDevice.getSysInfo();
+    }, platform.config.waitTimeUpdate);
 
     this.getRealtime = deferAndCombine((requestCount) => {
       this.log.debug(`executing deferred getRealtime count: ${requestCount}`);
