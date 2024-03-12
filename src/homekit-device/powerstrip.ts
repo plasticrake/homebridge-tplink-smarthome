@@ -94,7 +94,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
 
     onCharacteristic
       .onGet(() => {
-        this.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
+        this.tplinkDevice.getSysInfo().catch(this.logRejection.bind(this)); // this will eventually trigger update
         return this.tplinkDevice.sysInfo.children?.find(childDevice => childDevice.id === childDevice.id)?.state ?? false; // immediately returned cached value
       })
       .onSet(async (value) => {
@@ -113,7 +113,7 @@ export default class HomeKitDevicePowerStrip extends HomekitDevice {
     let oldChildState = childDevice.state;
 
     this.tplinkDevice.on('power-update', async () => {
-      await this.getSysInfo().catch(this.logRejection.bind(this));;
+      await this.tplinkDevice.getSysInfo().catch(this.logRejection.bind(this));;
       const newChildState = this.tplinkDevice.sysInfo.children?.find(childDevice => childDevice.id === childDevice.id)?.state;
       
       if (newChildState) {
