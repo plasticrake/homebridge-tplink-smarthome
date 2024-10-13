@@ -74,7 +74,7 @@
       },
       "macAddresses": {
         "title": "Allow MAC Addresses",
-        "description": "Allow-list of mac addresses to include. If specified will ignore other devices. Supports glob-style patterns",
+        "description": "Allow-list of MAC addresses to include. If specified will ignore other devices. Supports glob-style patterns",
         "type": "array",
         "items": {
           "title": "Mac Address",
@@ -83,7 +83,7 @@
       },
       "excludeMacAddresses": {
         "title": "Exclude MAC Addresses",
-        "description": "Deny-list of mac addresses to exclude. Supports glob-style patterns",
+        "description": "Deny-list of MAC addresses to exclude. Supports glob-style patterns",
         "type": "array",
         "items": {
           "title": "Mac Address",
