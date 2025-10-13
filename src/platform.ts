@@ -49,6 +49,8 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
 
   private readonly homekitDevicesById: Map<string, HomekitDevice> = new Map();
 
+  private readonly categories: Map<Categories, string> = new Map();
+
   constructor(
     public readonly log: Logging,
     config: PlatformConfig,
@@ -88,6 +90,10 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
     this.log.debug('config: %j', this.config);
 
     this.customCharacteristics = Characteristics(api.hap.Characteristic);
+
+    this.categories.set(Categories.LIGHTBULB, 'LIGHTBULB');
+    this.categories.set(Categories.OUTLET, 'OUTLET');
+    this.categories.set(Categories.SWITCH, 'SWITCH');
 
     const tplinkApiLogger: Logging = Object.assign(() => {}, this.log, {
       prefix: `${this.log.prefix || PLATFORM_NAME}.API`,
@@ -257,9 +263,7 @@ export default class TplinkSmarthomePlatform implements DynamicPlatformPlugin {
   }
 
   getCategoryName(category: Categories): string | undefined {
-    // @ts-expect-error: this should work
-    // eslint-disable-next-line deprecation/deprecation
-    return this.api.hap.Accessory.Categories[category];
+    return this.categories.get(category);
   }
 
   getServiceName(service: { UUID: string }): string | undefined {
