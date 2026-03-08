@@ -16,6 +16,7 @@ log.prefix = '';
 log.debug = () => {};
 log.error = () => {};
 log.info = () => {};
+log.success = () => {};
 log.log = () => {};
 log.warn = () => {};
 
