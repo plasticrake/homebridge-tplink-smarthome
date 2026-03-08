@@ -82,12 +82,12 @@ See [config.ts](src/config.ts) for documention on these options. It is recommend
   "broadcast": "255.255.255.255",
   "pollingInterval": 10,
   "deviceTypes": ["bulb", "plug"],
-  "macAddresses": undefined,
-  "excludeMacAddresses": undefined,
-  "devices": undefined,
+  "macAddresses": [],
+  "excludeMacAddresses": [],
+  "devices": [],
 
   "timeout": 15,
-  "transport": 'tcp',
+  "transport": "tcp",
   "waitTimeUpdate": 100
 }]
 ```

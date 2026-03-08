@@ -99,13 +99,13 @@ export interface TplinkSmarthomeConfigInput {
    */
   deviceTypes?: Array<'plug' | 'bulb'>;
   /**
-   * Allow-list of mac addresses to include. If specified will ignore other devices.
+   * Allow-list of MAC addresses to include. If specified will ignore other devices.
    * MAC Addresses are normalized, special characters are removed and made uppercase for comparison.
    * Supports glob-style patterns
    */
   macAddresses?: Array<string>;
   /**
-   * Deny-list of mac addresses to exclude.
+   * Deny-list of MAC addresses to exclude.
    * MAC Addresses are normalized, special characters are removed and made uppercase for comparison.
    * Supports glob-style patterns
    */
