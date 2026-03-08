@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [8.0.4](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.3...v8.0.4) (2026-03-08)
+
+
+### Bug Fixes
+
+* **homebridge:** hardcode lightbulb/outlet/switch categories to get out of infinite loop with hap.Accessory.Categories being randomly undefined ([#376](https://github.com/plasticrake/homebridge-tplink-smarthome/issues/376)) ([fafe9a5](https://github.com/plasticrake/homebridge-tplink-smarthome/commit/fafe9a51063d686174faa0a3d9024946069c238b))
+
 ## [8.0.3](https://github.com/plasticrake/homebridge-tplink-smarthome/compare/v8.0.2...v8.0.3) (2024-02-27)
 
 
