@@ -7,6 +7,14 @@
 
 TPLink Smart Home Plugin for [Homebridge](https://github.com/nfarina/homebridge). (formerly `homebridge-hs100`)
 
+## Looking for Maintainer
+
+I haven't actively used Homebridge or TP-Link devices in several years and lack the time and resources to test or maintain this project properly.
+
+I'm open to transferring repository ownership to an individual or organization with a strong track record in open-source contributions. Alternatively, anyone is welcome to fork the project under the MIT license. If you maintain an active fork, feel free to reach out so I can add a link here for others to find it.
+
+Please see [this discussion](https://github.com/plasticrake/homebridge-tplink-smarthome/discussions/380).
+
 ## Models Supported
 
 - **Plugs:** EP25, EP40, HS100, HS103, HS105, HS107, HS110, HS300, KP105, KP115, KP303, KP400
