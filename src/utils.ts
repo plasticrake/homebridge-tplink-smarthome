@@ -39,7 +39,7 @@ export function deferAndCombine<T, U>(
   timeout: number,
   runNowFn?: (arg: U) => void
 ): (arg?: U) => Promise<T> {
-  const requests: {
+  let requests: {
     resolve: (value: T | PromiseLike<T>) => void;
     reject: (reason?: unknown) => void;
   }[] = [];
@@ -58,14 +58,17 @@ export function deferAndCombine<T, U>(
 
       setTimeout(() => {
         isWaiting = false;
-        fn(requests.length)
+        const pendingRequests = requests;
+        requests = [];
+
+        fn(pendingRequests.length)
           .then((value) => {
-            for (const d of requests) {
+            for (const d of pendingRequests) {
               d.resolve(value);
             }
           })
           .catch((error) => {
-            for (const d of requests) {
+            for (const d of pendingRequests) {
               d.reject(error);
             }
           });

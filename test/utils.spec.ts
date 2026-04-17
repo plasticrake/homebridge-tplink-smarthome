@@ -66,6 +66,32 @@ describe('utils', function () {
       },
       deferTime * 4
     );
+
+    it(
+      'should reset requestCount across batches',
+      async function () {
+        const requestCounts: number[] = [];
+        deferredFn = deferAndCombine((requestCount) => {
+          requestCounts.push(requestCount);
+          return Promise.resolve(requestCount);
+        }, deferTime);
+
+        const resultsOne = await Promise.all([
+          deferredFn(),
+          deferredFn(),
+          deferredFn(),
+        ]);
+
+        await delay(deferTime);
+
+        const resultsTwo = await Promise.all([deferredFn(), deferredFn()]);
+
+        expect(requestCounts).toEqual([3, 2]);
+        expect(resultsOne).toEqual([3, 3, 3]);
+        expect(resultsTwo).toEqual([2, 2]);
+      },
+      deferTime * 4
+    );
   });
 
   describe('lookup', function () {
