@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { PlatformAccessoryEvent } from 'homebridge'; // enum
+import { HAPStatus, PlatformAccessoryEvent } from 'homebridge'; // enum
 import type {
   Categories,
   Characteristic,
@@ -167,6 +167,17 @@ export default abstract class HomekitDevice {
 
   protected logRejection(reason: unknown): void {
     this.log.error(JSON.stringify(reason));
+  }
+
+  protected async handleDeviceWrite(write: Promise<unknown>): Promise<void> {
+    try {
+      await write;
+    } catch (error) {
+      this.log.warn(`Device write failed: ${String(error)}`);
+      throw new this.platform.api.hap.HapStatusError(
+        HAPStatus.SERVICE_COMMUNICATION_FAILURE
+      );
+    }
   }
 
   protected removeServiceIfExists(service: WithUUID<typeof Service>) {

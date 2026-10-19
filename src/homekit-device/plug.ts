@@ -207,7 +207,7 @@ export default class HomeKitDevicePlug extends HomekitDevice {
       .onSet(async (value) => {
         this.log.info(`Setting On to: ${value}`);
         if (typeof value === 'boolean') {
-          await this.setPowerState(value);
+          await this.handleDeviceWrite(this.setPowerState(value));
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
@@ -237,9 +237,13 @@ export default class HomeKitDevicePlug extends HomekitDevice {
         this.log.info(`Setting Brightness to: ${value}`);
         if (typeof value === 'number') {
           if (value > 0) {
-            await this.tplinkDevice.dimmer.setBrightness(value);
+            await this.handleDeviceWrite(
+              this.tplinkDevice.dimmer.setBrightness(value)
+            );
           } else {
-            await this.tplinkDevice.setPowerState(false);
+            await this.handleDeviceWrite(
+              this.tplinkDevice.setPowerState(false)
+            );
           }
           return;
         }

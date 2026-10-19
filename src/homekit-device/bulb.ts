@@ -134,7 +134,9 @@ export default class HomeKitDeviceBulb extends HomekitDevice {
       .onSet(async (value) => {
         this.log.info(`Setting On to: ${value}`);
         if (typeof value === 'boolean') {
-          await this.setLightState({ on_off: value ? 1 : 0 });
+          await this.handleDeviceWrite(
+            this.setLightState({ on_off: value ? 1 : 0 })
+          );
           return;
         }
         this.log.warn('setValue: Invalid On:', value);
@@ -202,7 +204,9 @@ export default class HomeKitDeviceBulb extends HomekitDevice {
       .onSet(async (value) => {
         this.log.info(`Setting Brightness to: ${value}`);
         if (typeof value === 'number') {
-          await this.setLightState({ brightness: value });
+          await this.handleDeviceWrite(
+            this.setLightState({ brightness: value })
+          );
           return;
         }
         this.log.warn('setValue: Invalid Brightness:', value);
@@ -276,9 +280,11 @@ export default class HomeKitDeviceBulb extends HomekitDevice {
       .onSet(async (value) => {
         this.log.info(`Setting ColorTemperature to: ${value}`);
         if (typeof value === 'number') {
-          await this.setLightState({
-            color_temp: Math.round(miredToKelvin(value)),
-          });
+          await this.handleDeviceWrite(
+            this.setLightState({
+              color_temp: Math.round(miredToKelvin(value)),
+            })
+          );
           return;
         }
         this.log.warn('setValue: Invalid ColorTemperature:', value);
@@ -328,7 +334,9 @@ export default class HomeKitDeviceBulb extends HomekitDevice {
       .onSet(async (value) => {
         this.log.info(`Setting Hue to: ${value}`);
         if (typeof value === 'number') {
-          await this.setLightState({ hue: value, color_temp: 0 });
+          await this.handleDeviceWrite(
+            this.setLightState({ hue: value, color_temp: 0 })
+          );
           return;
         }
         this.log.warn('setValue: Invalid Hue:', value);
@@ -348,7 +356,9 @@ export default class HomeKitDeviceBulb extends HomekitDevice {
       .onSet(async (value) => {
         this.log.info(`Setting Saturation to: ${value}`);
         if (typeof value === 'number') {
-          await this.setLightState({ saturation: value, color_temp: 0 });
+          await this.handleDeviceWrite(
+            this.setLightState({ saturation: value, color_temp: 0 })
+          );
           return;
         }
         this.log.warn('setValue: Invalid Saturation:', value);
